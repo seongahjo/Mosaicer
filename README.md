@@ -4,7 +4,9 @@ Using OpenCV & Tensorflow Digitize Your face on Video or Picture
 # How To Train
 ```
 1. Put your 32x32 Images on 'data' folder
+
 2. RUN python convert.py
+
 3. RUN python train.py
 ```
 
