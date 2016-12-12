@@ -2,7 +2,8 @@
 Using OpenCV & Tensorflow Digitize Your face on Video or Picture
 
 # Requirement
-OpenCV & Tensorflow & Flask & PIL
++ OpenCV & Tensorflow & PIL
++ Flask (web.py)
 
 # How To Train
 ```
