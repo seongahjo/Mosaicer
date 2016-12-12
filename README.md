@@ -1,6 +1,9 @@
 # Mosaicer
 Using OpenCV & Tensorflow Digitize Your face on Video or Picture
 
+# Requirement
+OpenCV & Tensorflow & Flask & PIL
+
 # How To Train
 ```
 1. Put your 32x32 Images on 'data' folder
@@ -12,7 +15,7 @@ Using OpenCV & Tensorflow Digitize Your face on Video or Picture
 
 # How To 
 ``` 
-1. If you want to digitize you face on the video
+1. If you want to digitize one's face on the video
 
 2. Put the video on 'movie' folder
 
