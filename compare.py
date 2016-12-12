@@ -12,7 +12,7 @@ import numpy as np
 FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('eval_dir','/tmp/seongah_eval',
                            """Directory where to evaluate""")
-tf.app.flags.DEFINE_integer('num_examples',10000,
+tf.app.flags.DEFINE_integer('num_examples',1,
                            """Number of examples to run.""")
 tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
                            """Directory where to read model checkpoints.""")

@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 from PIL import Image
 import glob
+import sys
 import numpy as np
 import tensorflow as tf
 
@@ -14,7 +15,7 @@ def convert():
   imgs=glob.glob("data/*.jpg")
   output=[]
   output.append(FLAGS.data_dir+"/")
-  output.append("train")
+  output.append("train"+sys.argv[1])
   output.append('.bin')
   outputstr=''.join(output)
   result=np.array([],np.uint8)
@@ -24,7 +25,7 @@ def convert():
     r = im[:,:,0].flatten()
     g = im[:,:,1].flatten()
     b = im[:,:,2].flatten()
-    label = [0]
+    label = [sys.argv[1]]
     out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
     if result.size==0:
       result=out
