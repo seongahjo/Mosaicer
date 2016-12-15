@@ -17,6 +17,9 @@ tf.app.flags.DEFINE_integer('num_examples',1,
 tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
                            """Directory where to read model checkpoints.""")
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
+tf.app.flags.DEFINE_integer('label_size',2,"""Labeel size""")
+
+
 def convert(img):
   output=[]
   im = Image.open(img)
@@ -26,15 +29,15 @@ def convert(img):
   g = im[:,:,1].flatten()
   b = im[:,:,2].flatten()
   label = [0]
+  filename=img.split('/')[1]
   output.append(FLAGS.eval_dir)
   output.append('/')
-  output.append(img)
+  output.append(filename)
   output.append('.bin')
   outputstr=''.join(output)
   out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
   out.tofile(outputstr)
   return outputstr
-
 
 
 def eval_once(saver, top_k_op):
@@ -88,7 +91,7 @@ def evaluate(output):
     # inference model.
     logits = core.inference(images)
     # Calculate predictions.
-    top_k_op = tf.nn.top_k(tf.nn.softmax(logits), k=2)
+    top_k_op = tf.nn.top_k(tf.nn.softmax(logits), k=FLAGS.label_size)
 
     # Restore the moving average version of the learned variables for eval.
     variable_averages = tf.train.ExponentialMovingAverage(

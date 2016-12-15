@@ -6,14 +6,14 @@ from flask import Flask, jsonify,request
 import compare
 import os
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER']='/root/mosaicer32/'
+app.config['UPLOAD_FOLDER']='/root/mosaicer32/image'
 @app.route('/',methods=['POST'])
 def api():
   results=[]
   for image in request.files.getlist('images'):
     path=os.path.join(app.config['UPLOAD_FOLDER'],image.filename)
     image.save(path)
-    output=compare.convert(image.filename)
+    output=compare.convert('image/'+image.filename)
     precision=compare.evaluate(output)
     results.append({'precision':precision})
   return jsonify(results=results)

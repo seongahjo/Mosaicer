@@ -1,10 +1,14 @@
 import cv2
 import numpy as nu
 import compare
-
+import sys
 
 def main():
-    data='movie/test.avi'
+    if len(sys.argv)<2:
+      print 'default input : test.avi'
+      data='movie/test.avi'
+    else:
+      data=sys.argv[1]
     cap = cv2.VideoCapture(data)
     fps = 20.0
     width = int(cap.get(3))
@@ -31,7 +35,7 @@ def main():
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
-            cv2.imwrite("test_data.jpg", img_output2)
+            cv2.imwrite("image/test_data.jpg", img_output2)
 		
             if test_db():
                 avg_r = 0
@@ -82,7 +86,7 @@ def main():
 
 def test_db():
     threshold=0.6
-    output=compare.convert("test_data.jpg")
+    output=compare.convert("image/test_data.jpg")
     precision=compare.evaluate(output)
     #print(precision[0],precision[1])
     if precision[0] > threshold :
