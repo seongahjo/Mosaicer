@@ -1,4 +1,5 @@
-data/*
-movie/*
-image/*
 *.pyc
+*.jpg
+*.avi
+*.png
+*.zip
