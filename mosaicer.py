@@ -8,7 +8,7 @@ def main():
       print 'default input : test.avi'
       data='movie/test.avi'
     else:
-      data=sys.argv[1]
+      data='movie/'+sys.argv[1]
     cap = cv2.VideoCapture(data)
     fps = 20.0
     width = int(cap.get(3))

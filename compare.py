@@ -17,12 +17,13 @@ tf.app.flags.DEFINE_integer('num_examples',1,
 tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
                            """Directory where to read model checkpoints.""")
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
-tf.app.flags.DEFINE_integer('label_size',2,"""Labeel size""")
+tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
 
 
 def convert(img):
   output=[]
   im = Image.open(img)
+  im= im.resize([32,32],Image.ANTIALIAS)
   im = (np.array(im))
 
   r = im[:,:,0].flatten()
