@@ -86,7 +86,7 @@ def main():
 
 def test_db():
     threshold=0.6
-    output=compare.convert("image/test_data.jpg")
+    output=convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output)
     #print(precision[0],precision[1])
     if precision[0] > threshold :
