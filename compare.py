@@ -10,8 +10,6 @@ import numpy as np
 
 
 FLAGS = tf.app.flags.FLAGS
-tf.app.flags.DEFINE_string('eval_dir','/tmp/seongah_eval',
-                           """Directory where to evaluate""")
 tf.app.flags.DEFINE_integer('num_examples',1,
                            """Number of examples to run.""")
 tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
@@ -19,26 +17,6 @@ tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
 tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
 
-
-def convert(img):
-  output=[]
-  im = Image.open(img)
-  im= im.resize([32,32],Image.ANTIALIAS)
-  im = (np.array(im))
-
-  r = im[:,:,0].flatten()
-  g = im[:,:,1].flatten()
-  b = im[:,:,2].flatten()
-  label = [0]
-  filename=img.split('/')[1]
-  output.append(FLAGS.eval_dir)
-  output.append('/')
-  output.append(filename)
-  output.append('.bin')
-  outputstr=''.join(output)
-  out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
-  out.tofile(outputstr)
-  return outputstr
 
 
 def eval_once(saver, top_k_op):

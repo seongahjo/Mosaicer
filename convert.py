@@ -7,14 +7,12 @@ import sys
 import numpy as np
 import tensorflow as tf
 
-FLAGS =tf.app.flags.FLAGS
-tf.app.flags.DEFINE_string('data_dir','/tmp/seongah_data',
-                          """Directory where to store data""")
-
+data_dir='/tmp/seongah_data'
+eval_dir='/tmp/seongah_eval'
 def convert():
   imgs=glob.glob("data/*.jpg")
   output=[]
-  output.append(FLAGS.data_dir+"/")
+  output.append(data_dir+"/")
   output.append("train"+sys.argv[1])
   output.append('.bin')
   outputstr=''.join(output)
@@ -33,6 +31,30 @@ def convert():
       result=np.vstack([result,out])
   print(result)
   result.tofile(outputstr)
+
+
+def convert(img):
+  output=[]
+  im= Image.open(img)
+  im= im.resize([32,32],Image.ANTIALIAS)
+  im = (np.array(im))
+  
+  r = im[:,:,0].flatten()
+  g = im[:,:,1].flatten()
+  b = im[:,:,2].flatten()
+  
+  label=[0]
+  filename=img.split('/')[1]
+  output.append(eval_dir)
+  output.append('/')
+  output.append(filename)
+  output.append('bin')
+  outputstr=''.join(output)
+  out = np.array(list(label) + list(r) + list(g) + list(b), np.uint8)
+  out.tofile(outputstr)
+  return outputstr
+
+
 
 
 def main(argv=None):
