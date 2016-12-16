@@ -27,7 +27,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
 3. RUN python mosaicer.py with your video name
 
-JUST LIKE [python mosacier.py test.avi]
+  JUST LIKE [python mosacier.py test.avi]
 
 4. WATCH YOUR VIDEO 'result.avi'
 ```
@@ -35,7 +35,8 @@ JUST LIKE [python mosacier.py test.avi]
 ```
 1. If you want to serve a Mosaic Server, RUN web.py
 
-2. Let Clients upload 32x32 image to your server
+2. Let Clients upload image to your server
+  image should be one's face if not, it'll come out strange results.
 
 3. Then It'll be tell you the results in JSON format
 ```
