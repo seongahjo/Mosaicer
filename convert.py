@@ -45,10 +45,11 @@ def convert(img):
   
   label=[0]
   filename=img.split('/')[1]
+  filename=filename.split('.')[0]
   output.append(eval_dir)
   output.append('/')
   output.append(filename)
-  output.append('bin')
+  output.append('.bin')
   outputstr=''.join(output)
   out = np.array(list(label) + list(r) + list(g) + list(b), np.uint8)
   out.tofile(outputstr)
