@@ -14,18 +14,19 @@ FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
                            """Directory where to write event logs """
                            """and checkpoint.""")
+
 tf.app.flags.DEFINE_integer('max_steps', 100,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 
 
-def train():
+def train(data_dir):
   with tf.Graph().as_default():
     global_step = tf.contrib.framework.get_or_create_global_step()
 
     # Get images and labels for CIFAR-10.
-    images, labels = core.distorted_inputs()
+    images, labels = core.distorted_inputs(data_dir=data_dir)
     # Build a Graph that computes the logits predictions from the
     # inference model.
     logits = core.inference(images)
@@ -75,7 +76,7 @@ def main(argv=None):  # pylint: disable=unused-argument
   if tf.gfile.Exists(FLAGS.train_dir):
     tf.gfile.DeleteRecursively(FLAGS.train_dir)
   tf.gfile.MakeDirs(FLAGS.train_dir)
-  train()
+  train(FLAGS.data_dir)
 
 
 if __name__ == '__main__':
