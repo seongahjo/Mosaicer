@@ -7,9 +7,12 @@ import sys
 import numpy as np
 import tensorflow as tf
 
-data_dir='/tmp/seongah_data'
-eval_dir='/tmp/seongah_eval'
 
+# Directory that stores images to convert
+data_dir='/tmp/seongah_data'
+
+# Driectory that stores image binary file which is converted
+eval_dir='/tmp/seongah_eval'
 
 def convert():
     """Convert All Images in 'data'
@@ -93,12 +96,8 @@ def convert(img):
 
   return outputstr
 
-
-
-
 def main(argv=None):
   convert()
-
 
 if __name__ =='__main__':
   tf.app.run()
