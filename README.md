@@ -23,7 +23,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 ```
 1. If you want to digitize one's face on the video
 
-2. Put the video on 'MOVIE' folder
+2. Put the video on 'VIDEO' folder
 
 3. RUN python mosaicer.py with your video name
 
