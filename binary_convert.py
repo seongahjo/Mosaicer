@@ -18,6 +18,16 @@ temp_data_dir='/tmp/seongah_data'
 temp_dir='/tmp/seongah_temp'
 
 def convert(image_dir,data_dir,label):
+
+    """
+    Convert All Images in 'data'
+    Args:
+       nothing
+    Returns:
+       Directory stores images binary file
+     """
+
+
   # Load all images which extension is 'jpg'
     imgs=glob.glob(image_dir+"/*.jpg")
     result=np.array([],np.uint8)
@@ -52,6 +62,14 @@ def convert(image_dir,data_dir,label):
 
 
 def convert(img):
+
+    """
+    Convert Image
+     Args:
+       img : Image
+     Returns:
+       Directory stores image binary file
+     """
 
     im= Image.open(img)
     # Resize image to (32,32)
