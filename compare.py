@@ -60,7 +60,7 @@ def evaluate(output):
     #resized_image= tf.image.resize_image_with_crop_or_pad(reshaped_image,24,24)
     resized_image=tf.image.resize_images(read_input.uint8image,[FLAGS.input_size,FLAGS.input_size])
     float_image=tf.image.per_image_standardization(resized_image)
-    
+
     min_fraction_of_examples_in_queue=0.4
     num_examples_per_epoch=FLAGS.num_examples
     min_queue_examples = int(num_examples_per_epoch * min_fraction_of_examples_in_queue)

@@ -21,7 +21,7 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 
 
-def train(data_dir):
+def train(data_dir,train_dir):
   with tf.Graph().as_default():
     global_step = tf.contrib.framework.get_or_create_global_step()
 
@@ -61,7 +61,7 @@ def train(data_dir):
                                examples_per_sec, sec_per_batch))
 
     with tf.train.MonitoredTrainingSession(
-        checkpoint_dir=FLAGS.train_dir,
+        checkpoint_dir=train_dir,
         hooks=[tf.train.StopAtStepHook(last_step=FLAGS.max_steps),
                tf.train.NanTensorHook(loss),
                _LoggerHook()],
@@ -76,7 +76,7 @@ def main(argv=None):  # pylint: disable=unused-argument
   if tf.gfile.Exists(FLAGS.train_dir):
     tf.gfile.DeleteRecursively(FLAGS.train_dir)
   tf.gfile.MakeDirs(FLAGS.train_dir)
-  train(FLAGS.data_dir)
+  train(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
 
 
 if __name__ == '__main__':
