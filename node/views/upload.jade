@@ -1,0 +1,47 @@
+extends layout
+
+block content
+  // page content
+  .right_col(role='main')
+    div
+      .page-title
+        .title_left
+          h3 Upload 
+        .title_right
+          .col-md-5.col-sm-5.col-xs-12.form-group.pull-right.top_search
+            .input-group
+              input.form-control(type='text', placeholder='Search for...')
+              span.input-group-btn
+                button.btn.btn-default(type='button') Go!
+      .clearfix
+      .row
+        .col-md-12.col-sm-12.col-xs-12
+          .x_panel
+            .x_title
+              h2 Upload Image File
+              ul.nav.navbar-right.panel_toolbox
+                li
+                  a
+                    i.fa.fa-2x.fa-angle-left(onClick='goLeft()')
+                li
+                  a
+                    i.fa.fa-2x.fa-angle-right
+                
+                li
+                  a.collapse-link
+                    i.fa.fa-chevron-up
+                    
+              .clearfix
+            .x_content
+                .fileview
+                  ul.files#files
+              //form.dropzone(action='form_upload.html')
+              br
+              br
+              br
+              br
+              
+  
+    script.
+      readFile(defaultId,defaultDir)
+    //page content

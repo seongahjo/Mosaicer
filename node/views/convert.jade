@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  .right_col(role='main')
+    .col-md-12.col-sm-12.col-xs-12
+    .x_panel
+      .x_title
+        h2
+          | Convert 
+          small Image to binary
+        ul.nav.navbar-right.panel_toolbox
+          li
+            a.collapse-link
+              i.fa.fa-chevron-up
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+              i.fa.fa-wrench
+            ul.dropdown-menu(role='menu')
+              li
+                a(href='#') Settings 1
+              li
+                a(href='#') Settings 2
+          li
+            a.close-link
+              i.fa.fa-close
+        .clearfix
+      .x_content
+        p
+          | Convert 
+          code images
+          |  to binary file to train
+        .table-responsive
+          table.table.table-striped.jambo_table.bulk_action
+            thead
+              tr.headings
+                th.column-title Folder Name 
+                th.column-title File Amount 
+                th.column-title Label 
+                th.column-title.no-link.last
+                  span.nobr Action
+              tbody#file-list
+           
+  script.
+    getConvert(defaultId)
+//             

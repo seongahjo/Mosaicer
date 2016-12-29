@@ -1,0 +1,48 @@
+.fileview {
+    background: #FFF;
+    -webkit-border-radius: 2px;
+    margin: -5px 1px 0 -19px;
+    height: 100%;
+    overflow: auto
+}
+
+.files {
+    margin: 5px;
+}
+img{
+  max-width: 100%;
+  vertical-align: middle;
+  border: 0;
+}
+.file {
+    padding: 2px;
+    margin: 10px;
+    width: 80px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+}
+
+.file .icon {
+    margin: auto;
+    margin-top: 0;
+    width: 60px;
+}
+
+.file .name {
+    width: 80px;
+    word-wrap: break-word;
+}
+
+.file.focus .name {
+  color: white;
+}
+
+.file.focus .icon {
+  -webkit-filter: invert(20%);
+}
+
+.file.focus {
+  background-color: #08C;
+  -webkit-border-radius: 4px;
+}
