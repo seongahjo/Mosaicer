@@ -7,6 +7,7 @@ import sys
 import os
 import numpy as np
 import tensorflow as tf
+import shutil
 
 
 # Directory that stores image to convert
@@ -57,6 +58,7 @@ def convertGlobal(image_dir,data_dir,label):
           result=out
         else:
           result=np.vstack([result,out])
+    #once or repeat?
     if os.path.exists(outputstr+".bin"):
         print(outputstr)
         print ('already exists create new one')
@@ -64,7 +66,9 @@ def convertGlobal(image_dir,data_dir,label):
         outputstr=''.join(output)
         print(outputstr)
     print(result)
+    shutil.move(image_dir,temp_dir)
     result.tofile(outputstr+".bin")
+
 
 
 def convert(img):
