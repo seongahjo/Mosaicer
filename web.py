@@ -52,13 +52,12 @@ def convert():
     image_dir=request.args.get('image_dir')
     data_dir=request.args.get('data_dir')
     label = request.args.get('label')
-
     #if not os.path.exists(image_dir)
     #    return status.HTTP_400_BAD_REQUEST
 
     data_dir=makeDir(data_dir)
-    bc.convert(image_dir=image_dir,data_dir=data_dir,label=label)
-    return True
+    bc.convertGlobal(image_dir=image_dir,data_dir=data_dir,label=label)
+    return 'good'
 
 
 

@@ -4,6 +4,7 @@ from __future__ import print_function
 from PIL import Image
 import glob
 import sys
+import os
 import numpy as np
 import tensorflow as tf
 
@@ -17,7 +18,7 @@ temp_data_dir='/tmp/seongah_data'
 # Driectory that stores image binary file which is converted
 temp_dir='/tmp/seongah_temp'
 
-def convert(image_dir,data_dir,label):
+def convertGlobal(image_dir,data_dir,label):
 
     """
     Convert All Images in 'data'
@@ -35,7 +36,7 @@ def convert(image_dir,data_dir,label):
   # Directory that stores image binary file
     output=[]
     output.append(data_dir+"/")
-    output.append("train"+label+".bin")
+    output.append("train"+label)
     outputstr=''.join(output)
 
   # Single file
@@ -47,7 +48,7 @@ def convert(image_dir,data_dir,label):
         g = im[:,:,1].flatten()
         b = im[:,:,2].flatten()
 
-        label = [label]
+        #label = [input_label]
 
         out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
 
@@ -56,9 +57,14 @@ def convert(image_dir,data_dir,label):
           result=out
         else:
           result=np.vstack([result,out])
-
+    if os.path.exists(outputstr+".bin"):
+        print(outputstr)
+        print ('already exists create new one')
+        output.append(label)
+        outputstr=''.join(output)
+        print(outputstr)
     print(result)
-    result.tofile(outputstr)
+    result.tofile(outputstr+".bin")
 
 
 def convert(img):
@@ -103,7 +109,7 @@ def convert(img):
     return outputstr
 
 def main(argv=None):
-  convert(image_dir=temp_image_dir,data_dir=temp_data_dir,label=sys.argv[1])
+  convertGlobal(image_dir=temp_image_dir,data_dir=temp_data_dir,label=sys.argv[1])
 
 if __name__ =='__main__':
   tf.app.run()
