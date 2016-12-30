@@ -94,7 +94,14 @@ function convert(id,folder){
     'folder' : folder,
     'label' : $("#btn_"+folder).val()
   }
-  console.log(data)
+  $.ajax({
+    url:'api/convert',
+    method:'GET',
+    data:data
+  }).done(function(){
+    console.log('good')
+  })
+
 }
 $(document).ajaxStart(function() {
     console.log('ajaxstart')
