@@ -21,7 +21,7 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 
 
-def train(data_dir,train_dir):
+def train_data(data_dir,train_dir):
   with tf.Graph().as_default():
     global_step = tf.contrib.framework.get_or_create_global_step()
 

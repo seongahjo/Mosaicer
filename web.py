@@ -6,7 +6,7 @@ from flask import Flask, jsonify,request
 import compare
 #from convert import convert_image, convert_images
 import binary_convert as bc
-import train
+from train import train_data
 import os
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']='/root/mosaicer32/image'
@@ -33,8 +33,8 @@ def train():
     #    return status.HTTP_400_BAD_REQUEST
 
     train_dir=makeDir(train_dir)
-    train.train(data_dir=data_dir,train_dir=train_dir)
-    return True
+    if train_data(data_dir=data_dir,train_dir=train_dir):
+        return 'true'
 
 @app.route('/upload',methods=['POST'])
 def upload():
