@@ -69,7 +69,8 @@ def train(data_dir,train_dir):
             log_device_placement=FLAGS.log_device_placement)) as mon_sess:
       while not mon_sess.should_stop():
         mon_sess.run(train_op)
-
+      if mon_sess.should_stop():
+        return True
 
 def main(argv=None):  # pylint: disable=unused-argument
   #core.maybe_download_and_extract()

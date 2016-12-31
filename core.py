@@ -105,7 +105,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd):
   return var
 
 
-def distorted_inputs():
+def distorted_inputs(data_dir):
   """Construct distorted input for CIFAR training using the Reader ops.
 
   Returns:
@@ -117,7 +117,6 @@ def distorted_inputs():
   """
   if not FLAGS.data_dir:
     raise ValueError('Please supply a data_dir')
-  data_dir = FLAGS.data_dir
   images, labels = input.distorted_inputs(data_dir=data_dir,
                                                   batch_size=FLAGS.batch_size)
   if FLAGS.use_fp16:
