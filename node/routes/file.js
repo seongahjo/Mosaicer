@@ -51,7 +51,7 @@ var convert_view = jade.compile([
 
 router.get('/convert', function(req, res, next) {
     var id = req.query.id
-    var Path = path.join('/tmp/', id,'upload')
+    var Path = path.join('/tmp/', id, 'upload')
     var result = []
     fs.readdir(Path, function(error, files) {
         async.eachSeries(files, function iteratee(file, callback) {
@@ -86,7 +86,10 @@ var train_view = jade.compile([
     '    td',
     '      |#{file.label}',
     '    td.last',
-    '      button.btn.btn-warning.btn-xs(type="button") Wait',
+    '      -  if (file.state === "train")',
+    '        button.btn.btn-success.btn-xs(type="button") train',
+    '      -  else',
+    '        button.btn.btn-warning.btn-xs(type="button",value=\'#{file.state}\') Wait',
 ].join('\n'))
 
 
@@ -95,8 +98,15 @@ var train_view = jade.compile([
 router.get('/train', function(req, res, next) {
     var id = req.query.id
     var Path = path.join('/tmp/', id, 'data')
+    var statePath = path.join(Path, 'state.json')
+    var state = {}
     var result = []
     fs.existsSync(Path) || fs.mkdirSync(Path);
+    fs.existsSync(statePath) || fs.writeFileSync(statePath, {})
+    stateData = fs.readFileSync(statePath, 'utf8')
+    if (stateData != '')
+        state = JSON.parse(stateData)
+
     fs.readdir(Path, function(error, files) {
         async.eachSeries(files, function iteratee(file, callback) {
             var filedetail = {} // file detail info
@@ -108,6 +118,16 @@ router.get('/train', function(req, res, next) {
                     filedetail.name = file
                     filedetail.size = stat["size"]
                     filedetail.label = 1
+                        //if (Object.keys(state).length != 0) {
+                    async.eachSeries(state.names, function iteratee(key, inside) {
+                            if (key.name == file) {
+                                filedetail.state = 'train'
+                            }
+                            inside(null)
+                        })
+                        //  }
+                }
+                if (Object.keys(filedetail).length != 0) {
                     result.push(filedetail)
                 }
                 callback(null)

@@ -98,8 +98,23 @@ function convert(id,folder){
     url:'api/convert',
     method:'GET',
     data:data
-  }).done(function(){
-    console.log('good')
+  }).done(function(response){
+    getConvert(id)
+  })
+}
+
+function train(id){
+  var data={
+    'id' :id,
+  }
+  $.ajax({
+    url:'api/train',
+    method:'GET',
+    data:data,
+    timeout: 60000,
+  }).done(function(response){
+    console.log('finish')
+    getTrain(id)
   })
 
 }
