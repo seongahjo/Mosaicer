@@ -8,6 +8,7 @@ import compare
 import binary_convert as bc
 from train import train_data
 import os
+import json
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']='/root/mosaicer32/image'
 
@@ -28,12 +29,18 @@ def api():
 def train():
     data_dir=request.args.get('data_dir')
     train_dir=request.args.get('train_dir')
-
-    #if not os.path.exists(data_dir)
-    #    return status.HTTP_400_BAD_REQUEST
-
     train_dir=makeDir(train_dir)
     if train_data(data_dir=data_dir,train_dir=train_dir):
+        json_path=os.path.join(data_dir,'state.json')
+        json_state={"names":[]}
+        filenames=os.listdir(data_dir)
+        for filename in filenames:
+            extension = os.path.splitext(filename)[1][1:].strip()
+            if extension=='bin':
+                json_temp={"name":filename}
+                json_state['names'].append(json_temp)
+        with open(json_path,"w") as outfile :
+            json.dump(json_state,outfile)
         return 'true'
 
 @app.route('/upload',methods=['POST'])
@@ -52,8 +59,6 @@ def convert():
     image_dir=request.args.get('image_dir')
     data_dir=request.args.get('data_dir')
     label = request.args.get('label')
-    #if not os.path.exists(image_dir)
-    #    return status.HTTP_400_BAD_REQUEST
 
     data_dir=makeDir(data_dir)
     bc.convertGlobal(image_dir=image_dir,data_dir=data_dir,label=label)
