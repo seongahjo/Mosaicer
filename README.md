@@ -129,3 +129,8 @@ Directory that stores converted bianry files
 type : `string`
 Directory that stores model which is result of train
 
+
+## License
+Mosaicer is released under [MIT License]
+
+[MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
