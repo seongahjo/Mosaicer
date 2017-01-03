@@ -63,7 +63,7 @@ def convert():
     label = request.args.get('label')
 
     data_dir=makeDir(data_dir)
-    bc.convertGlobal(image_dir=image_dir,data_dir=data_dir,label=label)
+    bc.convert_global(image_dir=image_dir,data_dir=data_dir,label=label)
     return 'good'
 
 
