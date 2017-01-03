@@ -10,7 +10,7 @@ from train import train_data
 import os
 import json
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER']='/root/mosaicer32/image'
+app.config['UPLOAD_FOLDER']=os.path.join(os.getcwd(),'image')
 
 @app.route('/',methods=['POST'])
 def api():
@@ -20,7 +20,9 @@ def api():
     image.save(path)
     filename='image/'+image.filename
     output=bc.convert(img=filename)
-    precision=compare.evaluate(output)
+    imagepath=os.path.join('/tmp/',request.form['id'],'train')
+    print (imagepath)
+    precision=compare.evaluate(output,imagepath)
     results.append({'precision':precision})
   return jsonify(results=results)
 
