@@ -17,8 +17,9 @@ var storage = multer.diskStorage({
 
 var uploadstorage = multer.diskStorage({
   destination : function(req,file,cb){
-    console.log(req)
+    console.log(req.body.folder)
     var folder = path.join('/tmp/',req.body.id,req.body.folder)
+    console.log(folder)
     cb(null,folder)
   },
   filename : function(req,file,cb){

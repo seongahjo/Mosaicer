@@ -64,7 +64,10 @@ router.get('/convert', function(req, res, next) {
                     result.push(filedetail)
                     callback(null)
                 })
+            } else {
+                callback(null)
             }
+
         }, function() {
             res.send(convert_view({
                 files: result
@@ -86,10 +89,10 @@ var train_view = jade.compile([
     '    td',
     '      |#{file.label}',
     '    td.last',
-    '      -  if (file.state === "train")',
-    '        button.btn.btn-success.btn-xs(type="button") train',
+    '      -  if (file.state === "Trained")',
+    '        button.btn.btn-success.btn-xs(type="button") #{file.state}',
     '      -  else',
-    '        button.btn.btn-warning.btn-xs(type="button",value=\'#{file.state}\') Wait',
+    '        button.btn.btn-warning.btn-xs(type="button") #{file.state}',
 ].join('\n'))
 
 
@@ -117,11 +120,16 @@ router.get('/train', function(req, res, next) {
                 if (ext == 'bin') {
                     filedetail.name = file
                     filedetail.size = stat["size"]
-                    filedetail.label = 1
+                    filedetail.label = file.split('train')[1].charAt(0)
                         //if (Object.keys(state).length != 0) {
+                      //Optimization 필요
                     async.eachSeries(state.names, function iteratee(key, inside) {
-                            if (key.name == file) {
-                                filedetail.state = 'train'
+                            if (filedetail.state!='Trained') {
+                                if (key.name == file) {
+                                    filedetail.state = 'Trained'
+                                } else {
+                                    filedetail.state = 'Wait'
+                                }
                             }
                             inside(null)
                         })
@@ -140,5 +148,22 @@ router.get('/train', function(req, res, next) {
 
     })
 })
+
+var mosaic_view = jade.compile([
+    '- each file in files',
+    '  tr',
+    '    td',
+    '      i.fa.fa-file-video-o',
+    '      |#{file.name}',
+    '    td',
+    '      |#{file.size}',
+    '    td.last',
+    '      -  if (file.state === "train")',
+    '        button.btn.btn-success.btn-xs(type="button") Mosaic',
+    '      -  else',
+    '        button.btn.btn-warning.btn-xs(type="button") Download',
+].join('\n'))
+
+
 
 module.exports = router

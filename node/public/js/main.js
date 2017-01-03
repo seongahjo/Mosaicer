@@ -18,15 +18,15 @@ $(function() {
         });
 
     $(document).on('dragenter', function() {
-            $("#upload-label").removeClass('hidden')
-        })
+        $("#upload-label").removeClass('hidden')
+    })
 
     $("#uploader").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
             e.preventDefault();
             e.stopPropagation();
         })
         .on('dragover dragenter', function() {
-            
+            $("#upload-label").removeClass('hidden')
             $("#uploader").addClass('is-dragover');
         })
         .on('dragleave dragend drop', function() {
@@ -35,7 +35,7 @@ $(function() {
         })
         .on('drop', function(e) {
             $("#upload-label").addClass('hidden')
-            //  droppedFiles = e.originalEvent.dataTransfer.files;
+                //  droppedFiles = e.originalEvent.dataTransfer.files;
         });
 
     var upload = $("#uploader").dmUploader({
@@ -136,7 +136,10 @@ function readFile(id, dir) {
             'dblclick': function(e) {
                 currentfolder = $(this).attr("dir")
                 readFile(defaultId, currentfolder)
-                console.log(currentfolder)
+                $('#uploader').data('dmUploader').settings.extraData = {
+                    id : defaultId,
+                    folder : currentfolder
+                };
             },
         })
     })
