@@ -19,10 +19,10 @@ tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
 
 
 
-def eval_once(saver, top_k_op):
+def eval_once(saver, top_k_op,train_dir):
   result={}
   with tf.Session() as sess:
-    ckpt = tf.train.get_checkpoint_state(FLAGS.checkpoint_dir)
+    ckpt = tf.train.get_checkpoint_state(train_dir)
     if ckpt and ckpt.model_checkpoint_path:
       # Restores from checkpoint
       saver.restore(sess, ckpt.model_checkpoint_path)
@@ -52,7 +52,7 @@ def eval_once(saver, top_k_op):
     coord.join(threads, stop_grace_period_secs=10)
     return result
 
-def evaluate(output):
+def evaluate(output, train_dir):
   with tf.Graph().as_default() as g:
     filename_queue=tf.train.string_input_producer([output])
     read_input=input.read_cifar10(filename_queue)
@@ -78,4 +78,4 @@ def evaluate(output):
     variables_to_restore = variable_averages.variables_to_restore()
     saver = tf.train.Saver(variables_to_restore)
 
-    return eval_once(saver, top_k_op)
+    return eval_once(saver, top_k_op,train_dir)
