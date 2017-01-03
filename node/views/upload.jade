@@ -6,7 +6,7 @@ block content
     div
       .page-title
         .title_left
-          h3 Upload 
+          h3 Upload
         .title_right
           .col-md-5.col-sm-5.col-xs-12.form-group.pull-right.top_search
             .input-group
@@ -26,22 +26,24 @@ block content
                 li
                   a
                     i.fa.fa-2x.fa-angle-right
-                
+
                 li
                   a.collapse-link
                     i.fa.fa-chevron-up
-                    
+
               .clearfix
             .x_content
-                .fileview
-                  ul.files#files
+                #uploader.upload
+                  p.hidden#upload-label Drag and Drop Files Here
+                  .fileview
+                    ul.files#files
               //form.dropzone(action='form_upload.html')
               br
               br
               br
               br
-              
-  
+
+
     script.
       readFile(defaultId,defaultDir)
     //page content

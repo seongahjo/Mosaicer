@@ -14,8 +14,19 @@ var storage = multer.diskStorage({
     cb(null,Date.now() + '.jpg')
   }
 })
-var upload = multer({storage : storage})
 
+var uploadstorage = multer.diskStorage({
+  destination : function(req,file,cb){
+    console.log(req)
+    var folder = path.join('/tmp/',req.body.id,req.body.folder)
+    cb(null,folder)
+  },
+  filename : function(req,file,cb){
+    cb(null,file.originalname)
+  }
+})
+var compareupload = multer({storage : storage})
+var upload = multer({storage : uploadstorage})
 router.get('/convert',function(req,res,next){
     var id=req.query.id
     var folder = req.query.folder
@@ -59,8 +70,12 @@ var upload_view = jade.compile([
     '     span #{precision.label}',
 ].join('\n'))
 
-
 router.post('/upload',upload.single('file'),function(req,res,next){
+    res.json('good')
+})
+
+
+router.post('/transfer',compareupload.single('file'),function(req,res,next){
   var file = req.file;
   var form = new FormData()
   form.append('id',req.body.id)
