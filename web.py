@@ -64,6 +64,17 @@ def convert():
 
     data_dir=makeDir(data_dir)
     bc.convert_global(image_dir=image_dir,data_dir=data_dir,label=label)
+
+    json_path=os.path.join(data_dir,'label.json')
+    json_state={"names":[]}
+    filenames=os.listdir(data_dir)
+    for filename in filenames:
+        extension = os.path.splitext(filename)[1][1:].strip()
+        if extension=='bin':
+            json_temp={"name":filename}
+            json_state['names'].append(json_temp)
+    with open(json_path,"w") as outfile :
+        json.dump(json_state,outfile)
     return 'good'
 
 
