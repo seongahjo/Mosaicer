@@ -1,0 +1,40 @@
+extends layout
+block content
+  .right_col(role='main')
+    .col-md-12.col-sm-12.col-xs-12
+    .x_panel
+      .x_title
+        h2
+          | Mosaic
+          small mosaic video
+        ul.nav.navbar-right.panel_toolbox
+          li
+            a.collapse-link
+              i.fa.fa-chevron-up
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+              i.fa.fa-wrench
+            ul.dropdown-menu(role='menu')
+              li
+                a(href='#') Settings 1
+              li
+                a(href='#') Settings 2
+          li
+            a.close-link
+              i.fa.fa-close
+        .clearfix
+      .x_content
+        p
+          | Mosaic 
+          code video
+        .table-responsive
+          table.table.table-striped.jambo_table.bulk_action
+            thead
+              tr.headings
+                th.column-title File Name
+                th.column-title Size
+                th.column-title.no-link.last
+                  span.nobr Status
+              tbody#lists
+  script.
+    console.log('test')

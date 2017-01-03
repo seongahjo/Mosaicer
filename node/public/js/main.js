@@ -14,14 +14,49 @@ $(function() {
             $("#drop-area-div").removeClass('is-dragover');
         })
         .on('drop', function(e) {
-          //  droppedFiles = e.originalEvent.dataTransfer.files;
+            //  droppedFiles = e.originalEvent.dataTransfer.files;
         });
 
+    $(document).on('dragenter', function() {
+            $("#upload-label").removeClass('hidden')
+        })
 
+    $("#uploader").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+        .on('dragover dragenter', function() {
+            
+            $("#uploader").addClass('is-dragover');
+        })
+        .on('dragleave dragend drop', function() {
+            $("#uploader").removeClass('is-dragover');
+
+        })
+        .on('drop', function(e) {
+            $("#upload-label").addClass('hidden')
+            //  droppedFiles = e.originalEvent.dataTransfer.files;
+        });
+
+    var upload = $("#uploader").dmUploader({
+        url: 'api/upload',
+        method: 'POST',
+        extraData: {
+            id: defaultId,
+            folder: currentfolder
+        },
+        allowedTypes: 'image/*',
+        onInit: function() {
+            console.log('good')
+        },
+        onUploadSuccess: function(id, data) {
+            readFile(defaultId, currentfolder)
+        }
+    });
 
 
     var uploader = $("#drop-area-div").dmUploader({
-        url: 'api/upload',
+        url: 'api/transfer',
         method: 'POST',
         extraData: {
             id: defaultId
@@ -49,8 +84,8 @@ $(function() {
             console.log('Upload of #' + id + ' is at %' + percent);
             // do something cool here!
         },
-        onUploadSuccess: function(id, data){
-          $('#progress-lists').html(data)
+        onUploadSuccess: function(id, data) {
+            $('#progress-lists').html(data)
         }
 
     });
