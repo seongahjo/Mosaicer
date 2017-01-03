@@ -10,34 +10,13 @@ import numpy as np
 
 
 FLAGS = tf.app.flags.FLAGS
-tf.app.flags.DEFINE_string('eval_dir','/tmp/seongah_eval',
-                           """Directory where to evaluate""")
 tf.app.flags.DEFINE_integer('num_examples',1,
                            """Number of examples to run.""")
 tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
                            """Directory where to read model checkpoints.""")
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
-tf.app.flags.DEFINE_integer('label_size',2,"""Labeel size""")
+tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
 
-
-def convert(img):
-  output=[]
-  im = Image.open(img)
-  im = (np.array(im))
-
-  r = im[:,:,0].flatten()
-  g = im[:,:,1].flatten()
-  b = im[:,:,2].flatten()
-  label = [0]
-  filename=img.split('/')[1]
-  output.append(FLAGS.eval_dir)
-  output.append('/')
-  output.append(filename)
-  output.append('.bin')
-  outputstr=''.join(output)
-  out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
-  out.tofile(outputstr)
-  return outputstr
 
 
 def eval_once(saver, top_k_op):
@@ -81,7 +60,7 @@ def evaluate(output):
     #resized_image= tf.image.resize_image_with_crop_or_pad(reshaped_image,24,24)
     resized_image=tf.image.resize_images(read_input.uint8image,[FLAGS.input_size,FLAGS.input_size])
     float_image=tf.image.per_image_standardization(resized_image)
-    
+
     min_fraction_of_examples_in_queue=0.4
     num_examples_per_epoch=FLAGS.num_examples
     min_queue_examples = int(num_examples_per_epoch * min_fraction_of_examples_in_queue)

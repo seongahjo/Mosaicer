@@ -14,18 +14,19 @@ FLAGS = tf.app.flags.FLAGS
 tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
                            """Directory where to write event logs """
                            """and checkpoint.""")
+
 tf.app.flags.DEFINE_integer('max_steps', 100,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 
 
-def train():
+def train_data(data_dir,train_dir):
   with tf.Graph().as_default():
     global_step = tf.contrib.framework.get_or_create_global_step()
 
     # Get images and labels for CIFAR-10.
-    images, labels = core.distorted_inputs()
+    images, labels = core.distorted_inputs(data_dir=data_dir)
     # Build a Graph that computes the logits predictions from the
     # inference model.
     logits = core.inference(images)
@@ -60,7 +61,7 @@ def train():
                                examples_per_sec, sec_per_batch))
 
     with tf.train.MonitoredTrainingSession(
-        checkpoint_dir=FLAGS.train_dir,
+        checkpoint_dir=train_dir,
         hooks=[tf.train.StopAtStepHook(last_step=FLAGS.max_steps),
                tf.train.NanTensorHook(loss),
                _LoggerHook()],
@@ -68,14 +69,15 @@ def train():
             log_device_placement=FLAGS.log_device_placement)) as mon_sess:
       while not mon_sess.should_stop():
         mon_sess.run(train_op)
-
+      if mon_sess.should_stop():
+        return True
 
 def main(argv=None):  # pylint: disable=unused-argument
   #core.maybe_download_and_extract()
   if tf.gfile.Exists(FLAGS.train_dir):
     tf.gfile.DeleteRecursively(FLAGS.train_dir)
   tf.gfile.MakeDirs(FLAGS.train_dir)
-  train()
+  train(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
 
 
 if __name__ == '__main__':

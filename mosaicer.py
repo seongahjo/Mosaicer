@@ -6,15 +6,15 @@ import sys
 def main():
     if len(sys.argv)<2:
       print 'default input : test.avi'
-      data='movie/test.avi'
+      data='video/test.avi'
     else:
-      data=sys.argv[1]
+      data='video/'+sys.argv[1]
     cap = cv2.VideoCapture(data)
     fps = 20.0
     width = int(cap.get(3))
     height = int(cap.get(4))
     foc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('movie/result.avi', foc, fps, (width, height))
+    out = cv2.VideoWriter('video/result.avi', foc, fps, (width, height))
 
     cascade = cv2.CascadeClassifier("opencv/haarcascade_frontalface_alt.xml")
     #cap.isOpened()
@@ -86,7 +86,7 @@ def main():
 
 def test_db():
     threshold=0.6
-    output=compare.convert("image/test_data.jpg")
+    output=convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output)
     #print(precision[0],precision[1])
     if precision[0] > threshold :

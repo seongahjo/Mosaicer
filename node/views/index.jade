@@ -1,0 +1,581 @@
+extends layout
+
+block content
+  .right_col(role='main')
+    // top tiles
+    .row.tile_count
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-user
+          |  Total Users
+        .count 2500
+        span.count_bottom
+          i.green 4% 
+          |  From last Week
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-clock-o
+          |  Average Time
+        .count 123.50
+        span.count_bottom
+          i.green
+            i.fa.fa-sort-asc
+            | 3%
+          |  From last Week
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-user
+          |  Total Males
+        .count.green 2,500
+        span.count_bottom
+          i.green
+            i.fa.fa-sort-asc
+            | 34%
+          |  From last Week
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-user
+          |  Total Females
+        .count 4,567
+        span.count_bottom
+          i.red
+            i.fa.fa-sort-desc
+            | 12%
+          |  From last Week
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-user
+          |  Total Collections
+        .count 2,315
+        span.count_bottom
+          i.green
+            i.fa.fa-sort-asc
+            | 34%
+          |  From last Week
+      .col-md-2.col-sm-4.col-xs-6.tile_stats_count
+        span.count_top
+          i.fa.fa-user
+          |  Total Connections
+        .count 7,325
+        span.count_bottom
+          i.green
+            i.fa.fa-sort-asc
+            | 34%
+          |  From last Week
+    // /top tiles
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        .dashboard_graph
+          .row.x_title
+            .col-md-6
+              h3
+                | Network Activities 
+                small Graph title sub-title
+            .col-md-6
+              #reportrange.pull-right(style='background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc')
+                i.glyphicon.glyphicon-calendar.fa.fa-calendar
+                span December 30, 2014 - January 28, 2015
+                b.caret
+          .col-md-9.col-sm-9.col-xs-12
+            #placeholder33.demo-placeholder(style='height: 260px; display: none')
+            div(style='width: 100%;')
+              #canvas_dahs.demo-placeholder(style='width: 100%; height:270px;')
+          .col-md-3.col-sm-3.col-xs-12.bg-white
+            .x_title
+              h2 Top Campaign Performance
+              .clearfix
+            .col-md-12.col-sm-12.col-xs-6
+              div
+                p Facebook Campaign
+                div
+                  .progress.progress_sm(style='width: 76%;')
+                    .progress-bar.bg-green(role='progressbar', data-transitiongoal='80')
+              div
+                p Twitter Campaign
+                div
+                  .progress.progress_sm(style='width: 76%;')
+                    .progress-bar.bg-green(role='progressbar', data-transitiongoal='60')
+            .col-md-12.col-sm-12.col-xs-6
+              div
+                p Conventional Media
+                div
+                  .progress.progress_sm(style='width: 76%;')
+                    .progress-bar.bg-green(role='progressbar', data-transitiongoal='40')
+              div
+                p Bill boards
+                div
+                  .progress.progress_sm(style='width: 76%;')
+                    .progress-bar.bg-green(role='progressbar', data-transitiongoal='50')
+          .clearfix
+    br
+    .row
+      .col-md-4.col-sm-4.col-xs-12
+        .x_panel.tile.fixed_height_320
+          .x_title
+            h2 App Versions
+            ul.nav.navbar-right.panel_toolbox
+              li
+                a.collapse-link
+                  i.fa.fa-chevron-up
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                  i.fa.fa-wrench
+                ul.dropdown-menu(role='menu')
+                  li
+                    a(href='#') Settings 1
+                  li
+                    a(href='#') Settings 2
+              li
+                a.close-link
+                  i.fa.fa-close
+            .clearfix
+          .x_content
+            h4 App Usage across versions
+            .widget_summary
+              .w_left.w_25
+                span 0.1.5.2
+              .w_center.w_55
+                .progress
+                  .progress-bar.bg-green(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 66%;')
+                    span.sr-only 60% Complete
+              .w_right.w_20
+                span 123k
+              .clearfix
+            .widget_summary
+              .w_left.w_25
+                span 0.1.5.3
+              .w_center.w_55
+                .progress
+                  .progress-bar.bg-green(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 45%;')
+                    span.sr-only 60% Complete
+              .w_right.w_20
+                span 53k
+              .clearfix
+            .widget_summary
+              .w_left.w_25
+                span 0.1.5.4
+              .w_center.w_55
+                .progress
+                  .progress-bar.bg-green(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 25%;')
+                    span.sr-only 60% Complete
+              .w_right.w_20
+                span 23k
+              .clearfix
+            .widget_summary
+              .w_left.w_25
+                span 0.1.5.5
+              .w_center.w_55
+                .progress
+                  .progress-bar.bg-green(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 5%;')
+                    span.sr-only 60% Complete
+              .w_right.w_20
+                span 3k
+              .clearfix
+            .widget_summary
+              .w_left.w_25
+                span 0.1.5.6
+              .w_center.w_55
+                .progress
+                  .progress-bar.bg-green(role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', style='width: 2%;')
+                    span.sr-only 60% Complete
+              .w_right.w_20
+                span 1k
+              .clearfix
+      .col-md-4.col-sm-4.col-xs-12
+        .x_panel.tile.fixed_height_320.overflow_hidden
+          .x_title
+            h2 Device Usage
+            ul.nav.navbar-right.panel_toolbox
+              li
+                a.collapse-link
+                  i.fa.fa-chevron-up
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                  i.fa.fa-wrench
+                ul.dropdown-menu(role='menu')
+                  li
+                    a(href='#') Settings 1
+                  li
+                    a(href='#') Settings 2
+              li
+                a.close-link
+                  i.fa.fa-close
+            .clearfix
+          .x_content
+            table(style='width:100%')
+              tr
+                th(style='width:37%;')
+                  p Top 5
+                th
+                  .col-lg-7.col-md-7.col-sm-7.col-xs-7
+                    p Device
+                  .col-lg-5.col-md-5.col-sm-5.col-xs-5
+                    p Progress
+              tr
+                td
+                  canvas#canvas1(height='140', width='140', style='margin: 15px 10px 10px 0')
+                td
+                  table.tile_info
+                    tr
+                      td
+                        p
+                          i.fa.fa-square.blue
+                          | IOS
+                      td 30%
+                    tr
+                      td
+                        p
+                          i.fa.fa-square.green
+                          | Android
+                      td 10%
+                    tr
+                      td
+                        p
+                          i.fa.fa-square.purple
+                          | Blackberry
+                      td 20%
+                    tr
+                      td
+                        p
+                          i.fa.fa-square.aero
+                          | Symbian
+                      td 15%
+                    tr
+                      td
+                        p
+                          i.fa.fa-square.red
+                          | Others
+                      td 30%
+      .col-md-4.col-sm-4.col-xs-12
+        .x_panel.tile.fixed_height_320
+          .x_title
+            h2 Quick Settings
+            ul.nav.navbar-right.panel_toolbox
+              li
+                a.collapse-link
+                  i.fa.fa-chevron-up
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                  i.fa.fa-wrench
+                ul.dropdown-menu(role='menu')
+                  li
+                    a(href='#') Settings 1
+                  li
+                    a(href='#') Settings 2
+              li
+                a.close-link
+                  i.fa.fa-close
+            .clearfix
+          .x_content
+            .dashboard-widget-content
+              ul.quick-list
+                li
+                  i.fa.fa-calendar-o
+                  a(href='#') Settings
+                li
+                  i.fa.fa-bars
+                  a(href='#') Subscription
+                li
+                  i.fa.fa-bar-chart
+                  a(href='#') Auto Renewal
+                li
+                  i.fa.fa-line-chart
+                  a(href='#') Achievements
+                li
+                  i.fa.fa-bar-chart
+                  a(href='#') Auto Renewal
+                li
+                  i.fa.fa-line-chart
+                  a(href='#') Achievements
+                li
+                  i.fa.fa-area-chart
+                  a(href='#') Logout
+              .sidebar-widget
+                h4 Profile Completion
+                canvas#foo(width='150', height='80', style='width: 160px; height: 100px;')
+                .goal-wrapper
+                  span.gauge-value.pull-left $
+                  span#gauge-text.gauge-value.pull-left 3,200
+                  span#goal-text.goal-value.pull-right $5,000
+    .row
+      .col-md-4.col-sm-4.col-xs-12
+        .x_panel
+          .x_title
+            h2
+              | Recent Activities 
+              small Sessions
+            ul.nav.navbar-right.panel_toolbox
+              li
+                a.collapse-link
+                  i.fa.fa-chevron-up
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                  i.fa.fa-wrench
+                ul.dropdown-menu(role='menu')
+                  li
+                    a(href='#') Settings 1
+                  li
+                    a(href='#') Settings 2
+              li
+                a.close-link
+                  i.fa.fa-close
+            .clearfix
+          .x_content
+            .dashboard-widget-content
+              ul.list-unstyled.timeline.widget
+                li
+                  .block
+                    .block_content
+                      h2.title
+                        a Who Needs Sundance When You’ve Got Crowdfunding?
+                      .byline
+                        span 13 hours ago
+                        |  by 
+                        a Jane Smith
+                      p.excerpt
+                        | Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… 
+                        a Read More
+                li
+                  .block
+                    .block_content
+                      h2.title
+                        a Who Needs Sundance When You’ve Got Crowdfunding?
+                      .byline
+                        span 13 hours ago
+                        |  by 
+                        a Jane Smith
+                      p.excerpt
+                        | Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… 
+                        a Read More
+                li
+                  .block
+                    .block_content
+                      h2.title
+                        a Who Needs Sundance When You’ve Got Crowdfunding?
+                      .byline
+                        span 13 hours ago
+                        |  by 
+                        a Jane Smith
+                      p.excerpt
+                        | Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… 
+                        a Read More
+                li
+                  .block
+                    .block_content
+                      h2.title
+                        a Who Needs Sundance When You’ve Got Crowdfunding?
+                      .byline
+                        span 13 hours ago
+                        |  by 
+                        a Jane Smith
+                      p.excerpt
+                        | Film festivals used to be do-or-die moments for movie makers. They were where you met the producers that could fund your project, and if the buyers liked your flick, they’d pay to Fast-forward and… 
+                        a Read More
+      .col-md-8.col-sm-8.col-xs-12
+        .row
+          .col-md-12.col-sm-12.col-xs-12
+            .x_panel
+              .x_title
+                h2
+                  | Visitors location 
+                  small geo-presentation
+                ul.nav.navbar-right.panel_toolbox
+                  li
+                    a.collapse-link
+                      i.fa.fa-chevron-up
+                  li.dropdown
+                    a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                      i.fa.fa-wrench
+                    ul.dropdown-menu(role='menu')
+                      li
+                        a(href='#') Settings 1
+                      li
+                        a(href='#') Settings 2
+                  li
+                    a.close-link
+                      i.fa.fa-close
+                .clearfix
+              .x_content
+                .dashboard-widget-content
+                  .col-md-4.hidden-small
+                    h2.line_30 125.7k Views from 60 countries
+                    table.countries_list
+                      tbody
+                        tr
+                          td United States
+                          td.fs15.fw700.text-right 33%
+                        tr
+                          td France
+                          td.fs15.fw700.text-right 27%
+                        tr
+                          td Germany
+                          td.fs15.fw700.text-right 16%
+                        tr
+                          td Spain
+                          td.fs15.fw700.text-right 11%
+                        tr
+                          td Britain
+                          td.fs15.fw700.text-right 10%
+                  #world-map-gdp.col-md-8.col-sm-12.col-xs-12(style='height:230px;')
+        .row
+          // Start to do list
+          .col-md-6.col-sm-6.col-xs-12
+            .x_panel
+              .x_title
+                h2
+                  | To Do List 
+                  small Sample tasks
+                ul.nav.navbar-right.panel_toolbox
+                  li
+                    a.collapse-link
+                      i.fa.fa-chevron-up
+                  li.dropdown
+                    a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                      i.fa.fa-wrench
+                    ul.dropdown-menu(role='menu')
+                      li
+                        a(href='#') Settings 1
+                      li
+                        a(href='#') Settings 2
+                  li
+                    a.close-link
+                      i.fa.fa-close
+                .clearfix
+              .x_content
+                div
+                  ul.to_do
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Schedule meeting with new client
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Create email address for new intern
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Have IT fix the network printer
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Copy backups to offsite location
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Food truck fixie locavors mcsweeney
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Food truck fixie locavors mcsweeney
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Create email address for new intern
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Have IT fix the network printer
+                    li
+                      p
+                        input.flat(type='checkbox')
+                        |  Copy backups to offsite location
+          // End to do list
+          // start of weather widget
+          .col-md-6.col-sm-6.col-xs-12
+            .x_panel
+              .x_title
+                h2
+                  | Daily active users 
+                  small Sessions
+                ul.nav.navbar-right.panel_toolbox
+                  li
+                    a.collapse-link
+                      i.fa.fa-chevron-up
+                  li.dropdown
+                    a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                      i.fa.fa-wrench
+                    ul.dropdown-menu(role='menu')
+                      li
+                        a(href='#') Settings 1
+                      li
+                        a(href='#') Settings 2
+                  li
+                    a.close-link
+                      i.fa.fa-close
+                .clearfix
+              .x_content
+                .row
+                  .col-sm-12
+                    .temperature
+                      b Monday
+                      | , 07:30 AM
+                      span F
+                      span
+                        b C
+                .row
+                  .col-sm-4
+                    .weather-icon
+                      canvas#partly-cloudy-day(height='84', width='84')
+                  .col-sm-8
+                    .weather-text
+                      h2
+                        | Texas 
+                        br
+                        i Partly Cloudy Day
+                .col-sm-12
+                  .weather-text.pull-right
+                    h3.degrees 23
+                .clearfix
+                .row.weather-days
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Mon
+                      h3.degrees 25
+                      canvas#clear-day(width='32', height='32')
+                      h5
+                        | 15 
+                        i km/h
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Tue
+                      h3.degrees 25
+                      canvas#rain(height='32', width='32')
+                      h5
+                        | 12 
+                        i km/h
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Wed
+                      h3.degrees 27
+                      canvas#snow(height='32', width='32')
+                      h5
+                        | 14 
+                        i km/h
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Thu
+                      h3.degrees 28
+                      canvas#sleet(height='32', width='32')
+                      h5
+                        | 15 
+                        i km/h
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Fri
+                      h3.degrees 28
+                      canvas#wind(height='32', width='32')
+                      h5
+                        | 11 
+                        i km/h
+                  .col-sm-2
+                    .daily-weather
+                      h2.day Sat
+                      h3.degrees 26
+                      canvas#cloudy(height='32', width='32')
+                      h5
+                        | 10 
+                        i km/h
+                  .clearfix
+          // end of weather widget
+  // /page content
