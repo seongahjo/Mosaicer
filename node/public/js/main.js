@@ -1,7 +1,61 @@
 var currentfolder = 'upload';
-var defaultId = 'test'
+//var defaultId = 'test'
 var defaultDir = 'upload'
 $(function() {
+
+    $("#drop-area-div").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+        .on('dragover dragenter', function() {
+            $("#drop-area-div").addClass('is-dragover');
+        })
+        .on('dragleave dragend drop', function() {
+            $("#drop-area-div").removeClass('is-dragover');
+        })
+        .on('drop', function(e) {
+          //  droppedFiles = e.originalEvent.dataTransfer.files;
+        });
+
+
+
+
+    var uploader = $("#drop-area-div").dmUploader({
+        url: 'api/upload',
+        method: 'POST',
+        extraData: {
+            id: defaultId
+        },
+        allowedTypes: 'image/*',
+        onInit: function() {
+            console.log('good')
+        },
+        onNewFile: function(id, file) {
+            /* Fields available are:
+               - file.name
+               - file.type
+               - file.size (in bytes)
+            */
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            console.log(file)
+        },
+        onUploadProgress: function(id, percent) {
+            console.log('Upload of #' + id + ' is at %' + percent);
+            // do something cool here!
+        },
+        onUploadSuccess: function(id, data){
+          $('#progress-lists').html(data)
+        }
+
+    });
+
+
     /*  $.contextMenu({
           selector: "[type=folder]",
           callback: function(key, options) {
@@ -88,34 +142,33 @@ function getTrain(id) {
     })
 }
 
-function convert(id,folder){
-  var data={
-    'id' :id,
-    'folder' : folder,
-    'label' : $("#btn_"+folder).val()
-  }
-  $.ajax({
-    url:'api/convert',
-    method:'GET',
-    data:data
-  }).done(function(response){
-    getConvert(id)
-  })
+function convert(id, folder) {
+    var data = {
+        'id': id,
+        'folder': folder,
+        'label': $("#btn_" + folder).val()
+    }
+    $.ajax({
+        url: 'api/convert',
+        method: 'GET',
+        data: data
+    }).done(function(response) {
+        getConvert(id)
+    })
 }
 
-function train(id){
-  var data={
-    'id' :id,
-  }
-  $.ajax({
-    url:'api/train',
-    method:'GET',
-    data:data,
-    timeout: 60000,
-  }).done(function(response){
-    console.log('finish')
-    getTrain(id)
-  })
+function train(id) {
+    var data = {
+        'id': id,
+    }
+    $.ajax({
+        url: 'api/train',
+        method: 'GET',
+        data: data,
+        timeout: 60000,
+    }).done(function(response) {
+        getTrain(id)
+    })
 
 }
 $(document).ajaxStart(function() {
@@ -125,8 +178,7 @@ $(document).ajaxStop(function() {
     console.log('ajaxstop')
 })
 
-function maxLengthCheck(object)
-  {
+function maxLengthCheck(object) {
     if (object.value.length > object.maxLength)
-      object.value = object.value.slice(0, object.maxLength)
-  }
+        object.value = object.value.slice(0, object.maxLength)
+}

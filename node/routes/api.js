@@ -2,9 +2,19 @@ var express= require('express')
 var router = express.Router()
 var path= require('path')
 var axios = require('axios')
-
+var multer = require('multer')
 var pythonServer='http://localhost:9999/'
-
+var fs=require('fs')
+var FormData = require('form-data')
+var async = require('async')
+var jade=require('jade')
+var wreck=require('wreck')
+var storage = multer.diskStorage({
+  filename : function(req,file,cb){
+    cb(null,Date.now() + '.jpg')
+  }
+})
+var upload = multer({storage : storage})
 
 router.get('/convert',function(req,res,next){
     var id=req.query.id
@@ -42,5 +52,40 @@ router.get('/train',function(req,res,next){
 	})
 })
 
+var upload_view = jade.compile([
+    '- each precision in precisions',
+    ' .progress',
+    '   .progress-bar.progress-bar-success.progress-bar-striped(role="progressbar", aria-valuenow="#{precision.value}", aria-valuemin="0", aria-valuemax="100", style="width: #{precision.value}%")',
+    '     span #{precision.label}',
+].join('\n'))
+
+
+router.post('/upload',upload.single('file'),function(req,res,next){
+  var file = req.file;
+  var form = new FormData()
+  form.append('id',req.body.id)
+  form.append('images',fs.createReadStream(file.path))
+  form.submit('http://localhost:9999',function(err,response){
+    console.log('submit')
+    wreck.read(response,{
+      json:true
+    },function(error,data){
+      var value=data.results[0].precision
+      var precisions=[]
+      async.eachOf(value, function iteratee(item,key, cb) {
+        var jsontemp={}
+        jsontemp.label=key
+        jsontemp.value=item*100
+        precisions.push(jsontemp)
+        cb()
+      },function(){
+        res.send(upload_view({
+            precisions: precisions
+        }))
+      })
+
+    })
+  })
+})
 
 module.exports=router
