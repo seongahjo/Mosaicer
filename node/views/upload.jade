@@ -22,11 +22,23 @@ block content
               ul.nav.navbar-right.panel_toolbox
                 li
                   a
-                    i.fa.fa-2x.fa-angle-left(onClick='goLeft()')
+                    i.fa.fa-folder(data-toggle='modal', data-target='.bs-example-modal-sm')
+                    .modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-hidden='true', style='display: none;')
+                      .modal-dialog.modal-sm
+                        .modal-content
+                          .modal-header
+                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                              span(aria-hidden='true') ×
+                            h4#myModalLabel2.modal-title New Folder
+                          .modal-body
+                            input.form-control#folder-id(type='text',placeholder='untitled folder')
+                          
+                          .modal-footer
+                            button.btn.btn-default(type='button', data-dismiss='modal') Close
+                            button.btn.btn-primary(type='button', onClick='makeFolder()', data-dismiss='modal') Save
                 li
                   a
-                    i.fa.fa-2x.fa-angle-right
-
+                    i.fa.fa-chevron-left(onClick='goLeft()')
                 li
                   a.collapse-link
                     i.fa.fa-chevron-up

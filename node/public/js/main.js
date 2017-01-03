@@ -209,6 +209,22 @@ function train(id) {
     })
 
 }
+
+function makeFolder(){
+  var data = {
+    'id' : defaultId,
+    'folder' : $("#folder-id").val()
+  }
+  $.ajax({
+      url: 'api/makeFolder',
+      method: 'GET',
+      data: data,
+  }).done(function(response) {
+      $("#folder-id").val('')
+      readFile(defaultId,defaultDir)
+
+  })
+}
 $(document).ajaxStart(function() {
     console.log('ajaxstart')
 })
