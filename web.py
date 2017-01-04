@@ -9,6 +9,7 @@ import binary_convert as bc
 from train import train_data
 import os
 import json
+import mosaicer
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']=os.path.join(os.getcwd(),'image')
 
@@ -78,6 +79,12 @@ def convert():
     return 'good'
 
 
+@app.route('/mosaic')
+def mosaic():
+    video_path=request.args.get('video_path')
+    train_dir=request.args.get('train_dir')
+    return mosaicer.main(video_path=video_path,train_dir=train_dir)
+    
 
 
 
