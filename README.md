@@ -33,6 +33,8 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
   images with label 1 is digitized by default
 
+  You should do this step twice by different label
+
 3. RUN python train.py
 ```
 

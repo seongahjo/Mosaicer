@@ -97,7 +97,7 @@ def test_db(train_dir):
     output=binary_convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output,train_dir)
     #print(precision[0],precision[1])
-    if precision[1] > threshold :
+    if precision[FLAGS.mosaic_label] > threshold :
       return True
     else :
       return False
