@@ -83,8 +83,8 @@ def convert():
 def mosaic():
     video_path=request.args.get('video_path')
     train_dir=request.args.get('train_dir')
-    return mosaicer.main(video_path=video_path,train_dir=train_dir)
-    
+    return mosaicer.mosaic(video_path=video_path,train_dir=train_dir)
+
 
 
 

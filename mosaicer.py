@@ -9,7 +9,7 @@ import config
 
 FLAGS = tf.app.flags.FLAGS
 
-def main(video_path,train_dir):
+def mosaic(video_path,train_dir):
     data=video_path
     video_dir,filename=os.path.split(video_path)
     result_dir= os.path.join(video_dir,'result')
@@ -104,4 +104,4 @@ def test_db(train_dir):
 
 if __name__ == "__main__":
     video_path=os.path.join(FLAGS.video_path,sys.argv[1])
-    main(video_path=video_path,train_dir=FLAGS.train_dir)
+    mosaic(video_path=video_path,train_dir=FLAGS.train_dir)
