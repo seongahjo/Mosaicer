@@ -18,7 +18,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 * Mosaic
  * Digitize your video by model
 * Web
- * Support above functions by REST API request
+ * Support above functions on REST API request
 
 
 ### How To Train
