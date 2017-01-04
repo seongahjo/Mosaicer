@@ -1,19 +1,25 @@
 # Mosaicer
 Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
-Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
+* Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
+* Youtube : https://youtu.be/qifwKGzVR4c
 
-Youtube : https://youtu.be/qifwKGzVR4c
 ## Requirement
 + OpenCV & Tensorflow & PIL
 + Flask (web.py)
 
 ## Modules
 * Convert
+ * Image files to Labeled Binary file
 * Train
+ * Make model by labeled binary files
 * Evaluate
-* Web
+ * Classify image by model which is a result of Train
 * Mosaic
+ * Digitize your video by model 
+* Web
+ * Support above functions by REST API request
+
 
 ### How To Train
 ```
@@ -42,102 +48,16 @@ Youtube : https://youtu.be/qifwKGzVR4c
 4. WATCH YOUR VIDEO 'result.avi'
 ```
 
-# API
-
-## Binary_Convert
-
-### convert_global(image_dir,data_dir,label)
-
-#### image_dir
-type : `string`
-Directory that stores image to convert
-
-#### data_dir
-type : `string`
-Directory that stores converted binary file which is result of convert
-
-#### label
-type : `integer`
-Label that you want to attach
-<br>
-
-### convert(img) : string
-
-#### img
-type : `image`
-image to convert binary file
-
-<br>
-## Train
-
-### train(data_dir, train_dir) : boolean
-
-#### data_dir
-type : `string`
-Directory that stores converted bianry files
-
-#### train_dir
-type : `string`
-Directory that stores model which is result of train
-
-<br>
-## Compare
-### evaluate(output, train_dir)
-
-#### output
-type : `string`
-Path of binary file
-
-#### train_dir
-type : `string`
-Directory that stores model which is result of train
-<br>
+## [API]
 
 
-# Web Module
-
-## REST API
-
-### upload(image_dir, images)
-
-#### image_dir
-type : `string`
-Directory that stores image to convert
-
-#### images
-type : `file`
-Images that you want to convert
-
-
-<br>
-### convert(image_dir, data_dir, label)
-
-#### image_dir
-type : `string`
-Directory that stores image to convert
-
-#### data_dir
-type : `string`
-Directory that stores converted binary file which is result of convert
-
-#### label
-type : `integer`
-Label that you want to attach
-
-
-<br>
-### train(data_dir, train_dir) : boolean
-
-#### data_dir
-type : `string`
-Directory that stores converted bianry files
-
-#### train_dir
-type : `string`
-Directory that stores model which is result of train
+## [REST API]
+For Web Module
 
 
 ## License
 Mosaicer is released under [MIT License]
 
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
+[API]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
+[REST API]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
