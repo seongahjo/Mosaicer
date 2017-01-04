@@ -1,6 +1,8 @@
 # Mosaicer
 Using OpenCV & Tensorflow Digitize One's face on Video or Picture
+
 Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
+
 Youtube : https://youtu.be/qifwKGzVR4c
 ## Requirement
 + OpenCV & Tensorflow & PIL
