@@ -22,7 +22,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
 
 ### How To Train
-You should check your directory
+<strong>Before RUN you should configure your directory on 'config.py'</strong>
 
 ```
 1. Put your 32x32 Images on 'DATA' folder
