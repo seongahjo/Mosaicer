@@ -30,13 +30,13 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
 
 
 #directory
-tf.app.flags.DEFINE_string('image_dir', '/tmp/seongah_image',
+tf.app.flags.DEFINE_string('image_dir', 'image',
                            """Path to the image data directory.""")
-tf.app.flags.DEFINE_string('data_dir', '/tmp/seongah_data',
+tf.app.flags.DEFINE_string('data_dir', 'data',
                            """Path to the binary data directory.""")
 tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
                            """Path to the train data directory.""")
 tf.app.flags.DEFINE_string('temp_dir', '/tmp/seongah_temp',
                            """Path to the temp data directory.""")
-tf.app.flags.DEFINE_string('video_dir', '/tmp/seongah_video',
+tf.app.flags.DEFINE_string('video_dir', 'video',
                            """Path to the video data directory.""")
