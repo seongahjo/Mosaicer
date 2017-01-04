@@ -18,8 +18,11 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 * Mosaic
  * Digitize your video by model
 * Web
- * Support above functions by REST API request
+ * Support above functions on REST API request
 
+
+## Demo
+* [Mosaicer Cloud]
 
 ### How To Train
 <strong>Before RUN you should configure your directory on 'config.py'</strong>
@@ -65,3 +68,4 @@ Mosaicer is released under [MIT License]
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
 [REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST%20API.md
+[Mosaicer Cloud]: https://github.com/seongahjo/Mosaicer/tree/master/node
