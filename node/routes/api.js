@@ -17,8 +17,17 @@ var storage = multer.diskStorage({
 
 var uploadstorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        console.log(req.body.folder)
         var folder = path.join('/tmp/', req.body.id, req.body.folder)
+        cb(null, folder)
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.originalname)
+    }
+})
+
+var videostorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        var folder = path.join('/tmp/', req.body.id,'video')
         console.log(folder)
         cb(null, folder)
     },
@@ -31,6 +40,10 @@ var compareupload = multer({
 })
 var upload = multer({
     storage: uploadstorage
+})
+
+var videoupload = multer({
+    storage: videostorage
 })
 router.get('/convert', function(req, res, next) {
     var id = req.query.id
@@ -54,9 +67,7 @@ router.get('/convert', function(req, res, next) {
 router.get('/makeFolder', function(req, res, next) {
   var id = req.query.id
   var folder = req.query.folder
-  console.log('test' + folder)
   var dir= path.join('/tmp/', id, 'upload',folder)
-  console.log(dir)
   fs.existsSync(dir) || fs.mkdirSync(dir)
   res.json('good')
 })
@@ -88,6 +99,27 @@ router.post('/upload', upload.single('file'), function(req, res, next) {
     res.json('good')
 })
 
+router.post('/videoUpload',videoupload.single('file'),function(req,res,next){
+    res.json('good')
+})
+
+router.get('/mosaic', function(req, res, next) {
+    var id = req.query.id
+    var filename=req.query.filename
+    var trainDir = path.join('/tmp/', id, 'train')
+    var videoPath = path.join('/tmp/', id, 'video',filename)
+    var data = {
+        'train_dir': trainDir,
+        'video_path': videoPath
+    }
+    axios.get(pythonServer + 'mosaic', {
+        params: data
+    }).then(function(response) {
+        console.log(response.data)
+        res.json(response.data)
+    })
+})
+
 
 router.post('/transfer', compareupload.single('file'), function(req, res, next) {
     var file = req.file;
@@ -95,7 +127,6 @@ router.post('/transfer', compareupload.single('file'), function(req, res, next) 
     form.append('id', req.body.id)
     form.append('images', fs.createReadStream(file.path))
     form.submit('http://localhost:9999', function(err, response) {
-        console.log('submit')
         // 파이썬 서버가 켜있을 때
         if (response) {
             wreck.read(response, {

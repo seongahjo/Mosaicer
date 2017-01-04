@@ -17,9 +17,48 @@ $(function() {
             //  droppedFiles = e.originalEvent.dataTransfer.files;
         });
 
+    var uploader = $("#drop-area-div").dmUploader({
+        url: 'api/transfer',
+        method: 'POST',
+        extraData: {
+            id: defaultId
+        },
+        allowedTypes: 'image/*',
+        onInit: function() {
+            console.log('good')
+        },
+        onNewFile: function(id, file) {
+            /* Fields available are:
+               - file.name
+               - file.type
+               - file.size (in bytes)
+            */
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#preview').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(file);
+            console.log(file)
+        },
+        onUploadProgress: function(id, percent) {
+            console.log('Upload of #' + id + ' is at %' + percent);
+            // do something cool here!
+        },
+        onUploadSuccess: function(id, data) {
+            $('#progress-lists').html(data)
+        }
+
+    });
+
+
     $(document).on('dragenter', function() {
         $("#upload-label").removeClass('hidden')
     })
+
+
+
 
     $("#uploader").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
             e.preventDefault();
@@ -55,40 +94,42 @@ $(function() {
     });
 
 
-    var uploader = $("#drop-area-div").dmUploader({
-        url: 'api/transfer',
+
+    $("#video-upload").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        })
+        .on('dragover dragenter', function() {
+            $("#video-upload").addClass('is-dragover');
+        })
+        .on('dragleave dragend drop', function() {
+            $("#video-upload").removeClass('is-dragover');
+        })
+        .on('drop', function(e) {
+            //  droppedFiles = e.originalEvent.dataTransfer.files;
+        });
+
+    var videoUpload = $("#video-upload").dmUploader({
+        url: 'api/videoUpload',
         method: 'POST',
         extraData: {
             id: defaultId
         },
-        allowedTypes: 'image/*',
+        allowedTypes: 'video/*',
         onInit: function() {
             console.log('good')
         },
-        onNewFile: function(id, file) {
-            /* Fields available are:
-               - file.name
-               - file.type
-               - file.size (in bytes)
-            */
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                $('#preview').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(file);
-            console.log(file)
+        onUploadSuccess: function(id, data) {
+            console.log(data)
+            //readFile(defaultId, currentfolder)
         },
         onUploadProgress: function(id, percent) {
             console.log('Upload of #' + id + ' is at %' + percent);
             // do something cool here!
-        },
-        onUploadSuccess: function(id, data) {
-            $('#progress-lists').html(data)
         }
-
     });
+
+
 
 
     /*  $.contextMenu({
@@ -137,8 +178,8 @@ function readFile(id, dir) {
                 currentfolder = $(this).attr("dir")
                 readFile(defaultId, currentfolder)
                 $('#uploader').data('dmUploader').settings.extraData = {
-                    id : defaultId,
-                    folder : currentfolder
+                    id: defaultId,
+                    folder: currentfolder
                 };
             },
         })
@@ -203,27 +244,53 @@ function train(id) {
         url: 'api/train',
         method: 'GET',
         data: data,
-        timeout: 60000,
+        timeout: 200000,
     }).done(function(response) {
         getTrain(id)
     })
 
 }
 
-function makeFolder(){
+function mosaic(id,filename){
   var data = {
-    'id' : defaultId,
-    'folder' : $("#folder-id").val()
+    'id' : id,
+    'filename' : filename
   }
   $.ajax({
-      url: 'api/makeFolder',
-      method: 'GET',
-      data: data,
-  }).done(function(response) {
-      $("#folder-id").val('')
-      readFile(defaultId,defaultDir)
-
+    url: 'api/mosaic',
+    method:'GET',
+    data : data,
   })
+}
+
+
+function getMosaic(id) {
+    var data = {
+        'id': id
+    }
+    $.ajax({
+        url: 'file/mosaic',
+        method: 'GET',
+        data: data,
+    }).done(function(data) {
+        $("#lists").html(data)
+    })
+}
+
+function makeFolder() {
+    var data = {
+        'id': defaultId,
+        'folder': $("#folder-id").val()
+    }
+    $.ajax({
+        url: 'api/makeFolder',
+        method: 'GET',
+        data: data,
+    }).done(function(response) {
+        $("#folder-id").val('')
+        readFile(defaultId, defaultDir)
+
+    })
 }
 $(document).ajaxStart(function() {
     console.log('ajaxstart')

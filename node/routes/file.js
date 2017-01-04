@@ -105,9 +105,9 @@ router.get('/train', function(req, res, next) {
     var state = {}
     var result = []
     fs.existsSync(Path) || fs.mkdirSync(Path);
-    fs.existsSync(statePath) || fs.writeFileSync(statePath, {})
+    fs.existsSync(statePath) || fs.writeFileSync(statePath, '{}')
     stateData = fs.readFileSync(statePath, 'utf8')
-    if (stateData != '')
+    if (stateData !=undefined && stateData != '')
         state = JSON.parse(stateData)
 
     fs.readdir(Path, function(error, files) {
@@ -123,6 +123,7 @@ router.get('/train', function(req, res, next) {
                     filedetail.label = file.split('train')[1].charAt(0)
                         //if (Object.keys(state).length != 0) {
                       //Optimization 필요
+                    filedetail.state = 'Wait'
                     async.eachSeries(state.names, function iteratee(key, inside) {
                             if (filedetail.state!='Trained') {
                                 if (key.name == file) {
@@ -158,11 +159,36 @@ var mosaic_view = jade.compile([
     '    td',
     '      |#{file.size}',
     '    td.last',
-    '      -  if (file.state === "train")',
-    '        button.btn.btn-success.btn-xs(type="button") Mosaic',
+    '      -  if (file.state === "Mosaic")',
+    '        button.btn.btn-success.btn-xs(type="button" onClick="mosaic(defaultId,\'#{file.name}\')") Mosaic',
     '      -  else',
     '        button.btn.btn-warning.btn-xs(type="button") Download',
 ].join('\n'))
+
+router.get('/mosaic',function(req,res,next){
+  var id = req.query.id
+  var Path = path.join('/tmp/', id, 'video')
+  var result=[]
+
+  fs.readdir(Path, function(error, files) {
+      async.eachSeries(files, function iteratee(file, callback) {
+          var filedetail = {} // file detail info
+          var stat = fs.statSync(path.join(Path, file))
+          if(!stat.isDirectory()){
+          filedetail.name = file
+          filedetail.size = stat["size"]
+          filedetail.state= 'Mosaic'
+          result.push(filedetail)
+          }
+          callback()
+      }, function() {
+          res.send(mosaic_view({
+              files: result
+          }))
+      });
+
+  })
+})
 
 
 
