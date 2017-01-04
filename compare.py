@@ -7,15 +7,10 @@ import input
 import core
 from PIL import Image
 import numpy as np
-
+import config
 
 FLAGS = tf.app.flags.FLAGS
-tf.app.flags.DEFINE_integer('num_examples',1,
-                           """Number of examples to run.""")
-tf.app.flags.DEFINE_string('checkpoint_dir', '/tmp/seongah_train',
-                           """Directory where to read model checkpoints.""")
-tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
-tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
+
 
 
 

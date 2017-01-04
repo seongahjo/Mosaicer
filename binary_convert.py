@@ -8,16 +8,10 @@ import os
 import numpy as np
 import tensorflow as tf
 import shutil
+import config
 
+FLAGS = tf.app.flags.FLAGS
 
-# Directory that stores image to convert
-temp_image_dir='/tmp/seongah_image'
-
-# Directory that stores images converted
-temp_data_dir='/tmp/seongah_data'
-
-# Driectory that stores image binary file which is converted
-temp_dir='/tmp/seongah_temp'
 
 def convert_global(image_dir,data_dir,label):
 
@@ -66,7 +60,7 @@ def convert_global(image_dir,data_dir,label):
         outputstr=''.join(output)
         print(outputstr)
     print(result)
-    shutil.move(image_dir,temp_dir)
+    shutil.move(image_dir,FLAGS.temp_dir)
     result.tofile(outputstr+".bin")
 
 
@@ -101,7 +95,7 @@ def convert(img):
 
     # Directory that stores image binary file
     output=[]
-    output.append(temp_dir)
+    output.append(FLAGS.temp_dir)
     output.append('/')
     output.append(filename)
     output.append('.bin')
@@ -113,7 +107,7 @@ def convert(img):
     return outputstr
 
 def main(argv=None):
-  convert_global(image_dir=temp_image_dir,data_dir=temp_data_dir,label=sys.argv[1])
+  convert_global(image_dir=FLAGS.image_dir,data_dir=FLAGS.data_dir,label=sys.argv[1])
 
 if __name__ =='__main__':
   tf.app.run()

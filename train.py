@@ -11,14 +11,6 @@ import core
 
 FLAGS = tf.app.flags.FLAGS
 
-tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
-                           """Directory where to write event logs """
-                           """and checkpoint.""")
-
-tf.app.flags.DEFINE_integer('max_steps', 100,
-                            """Number of batches to run.""")
-tf.app.flags.DEFINE_boolean('log_device_placement', False,
-                            """Whether to log device placement.""")
 
 
 def train_data(data_dir,train_dir):
@@ -77,7 +69,7 @@ def main(argv=None):  # pylint: disable=unused-argument
   if tf.gfile.Exists(FLAGS.train_dir):
     tf.gfile.DeleteRecursively(FLAGS.train_dir)
   tf.gfile.MakeDirs(FLAGS.train_dir)
-  train(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
+  train_data(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
 
 
 if __name__ == '__main__':

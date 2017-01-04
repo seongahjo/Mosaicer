@@ -4,6 +4,10 @@ import binary_convert
 import compare
 import os
 import sys
+import tensorflow as tf
+import config
+
+FLAGS = tf.app.flags.FLAGS
 
 def main(video_path,train_dir):
     data=video_path
@@ -99,4 +103,5 @@ def test_db(train_dir):
       return False
 
 if __name__ == "__main__":
-    main()
+    video_path=os.path.join(FLAGS.video_path,sys.argv[1])
+    main(video_path=video_path,train_dir=FLAGS.train_dir)

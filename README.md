@@ -16,18 +16,20 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 * Evaluate
  * Classify image by model which is a result of Train
 * Mosaic
- * Digitize your video by model 
+ * Digitize your video by model
 * Web
  * Support above functions by REST API request
 
 
 ### How To Train
+<strong>Before RUN you should configure your directory on 'config.py'</strong>
+
 ```
 1. Put your 32x32 Images on 'DATA' folder
 
-2. RUN python convert.py with label
+2. RUN python binary_convert.py with label
 
-  EX) [python convert.py 1] or [python convert.py 0]
+  EX) [python binary_convert.py 1] or [python binary_convert.py 0]
 
   images with label 1 is digitized by default
 
