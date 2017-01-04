@@ -1,6 +1,9 @@
 # Mosaicer
 Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
+Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
+
+Youtube : https://youtu.be/qifwKGzVR4c
 ## Requirement
 + OpenCV & Tensorflow & PIL
 + Flask (web.py)
@@ -19,14 +22,14 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 2. RUN python convert.py with label
 
   EX) [python convert.py 1] or [python convert.py 0]
-  
+
   images with label 1 is digitized by default
 
 3. RUN python train.py
 ```
 
 
-### How To 
+### How To
 ```
 1. If you want to digitize one's face on the video
 
@@ -79,17 +82,21 @@ Directory that stores model which is result of train
 
 <br>
 ## Compare
-### evaluate(output)
+### evaluate(output, train_dir)
 
 #### output
 type : `string`
 Path of binary file
+
+#### train_dir
+type : `string`
+Directory that stores model which is result of train
 <br>
 
 
 # Web Module
 
-## REST API 
+## REST API
 
 ### upload(image_dir, images)
 

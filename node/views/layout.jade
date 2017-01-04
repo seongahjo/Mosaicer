@@ -6,7 +6,7 @@ html(lang='en')
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title  Mosaicer 
+    title  Mosaicer
     // Bootstrap
     link(href='css/bootstrap.min.css', rel='stylesheet')
     // Font Awesome
@@ -29,13 +29,16 @@ html(lang='en')
     link(href='css/file.css', rel='stylesheet')
     // Dropzone
     link(href='css/dropzone.min.css' rel='stylesheet')
-    
+
     // jQuery
     script(src='js/jquery.min.js')
     // Bootstrap
     script(src='js/bootstrap.min.js')
+    script.
+      var defaultId='#{user.id}'
     // Main
     script(src='js/main.js')
+
   body.nav-md
     .container.body
       .main_container
@@ -44,7 +47,7 @@ html(lang='en')
             .navbar.nav_title(style='border: 0;')
               a.site_title(href='/')
                 i.fa.fa-cloud-upload
-                span  Mosaicer 
+                span  Mosaicer
             .clearfix
             // menu profile quick info
             .profile.clearfix
@@ -52,7 +55,7 @@ html(lang='en')
                 img.img-circle.profile_img(src='img/img.jpg', alt='...')
               .profile_info
                 span Welcome,
-                h2 John Doe
+                h2 #{user.id}
             // /menu profile quick info
             br
             // sidebar menu
@@ -73,11 +76,11 @@ html(lang='en')
                       i.fa.fa-graduation-cap
                       |  Train
                   li
-                    a
+                    a(href='compare')
                       i.fa.fa-space-shuttle
                       |  Compare
                   li
-                    a
+                    a(href='mosaic')
                       i.fa.fa-magic
                       |  Mosaic
                   li
@@ -107,7 +110,7 @@ html(lang='en')
                 li
                   a.user-profile.dropdown-toggle(href='javascript:;', data-toggle='dropdown', aria-expanded='false')
                     img(src='img/img.jpg', alt='')
-                    | John Doe
+                    | #{user.id}
                     span.fa.fa-angle-down
                   ul.dropdown-menu.dropdown-usermenu.pull-right
                     li
@@ -124,10 +127,10 @@ html(lang='en')
                         |  Log Out
         //top navigation
         block content
-          
+
         footer
           .pull-right
-          | Gentelella - Bootstrap Admin Template by 
+          | Gentelella - Bootstrap Admin Template by
           a(href='https://colorlib.com') Colorlib
           .clearfix
 // /footer content
@@ -168,8 +171,8 @@ script(src='js/jquery.vmap.sampledata.js')
 // bootstrap-daterangepicker
 script(src='js/moment.min.js')
 script(src='js/daterangepicker.js')
-// Dropzone
-script(src='js/dropzone.min.js')
+// dmuploader
+script(src='js/dmuploader.min.js')
 // Main
 //script(src='js/main.js')
 // Custom Theme Scripts

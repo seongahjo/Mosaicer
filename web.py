@@ -9,6 +9,7 @@ import binary_convert as bc
 from train import train_data
 import os
 import json
+import mosaicer
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']=os.path.join(os.getcwd(),'image')
 
@@ -63,10 +64,27 @@ def convert():
     label = request.args.get('label')
 
     data_dir=makeDir(data_dir)
-    bc.convertGlobal(image_dir=image_dir,data_dir=data_dir,label=label)
+    bc.convert_global(image_dir=image_dir,data_dir=data_dir,label=label)
+
+    json_path=os.path.join(data_dir,'label.json')
+    json_state={"names":[]}
+    filenames=os.listdir(data_dir)
+    for filename in filenames:
+        extension = os.path.splitext(filename)[1][1:].strip()
+        if extension=='bin':
+            json_temp={"name":filename}
+            json_state['names'].append(json_temp)
+    with open(json_path,"w") as outfile :
+        json.dump(json_state,outfile)
     return 'good'
 
 
+@app.route('/mosaic')
+def mosaic():
+    video_path=request.args.get('video_path')
+    train_dir=request.args.get('train_dir')
+    return mosaicer.main(video_path=video_path,train_dir=train_dir)
+    
 
 
 

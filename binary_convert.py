@@ -19,7 +19,7 @@ temp_data_dir='/tmp/seongah_data'
 # Driectory that stores image binary file which is converted
 temp_dir='/tmp/seongah_temp'
 
-def convertGlobal(image_dir,data_dir,label):
+def convert_global(image_dir,data_dir,label):
 
     """
     Convert All Images in 'data'
@@ -113,7 +113,7 @@ def convert(img):
     return outputstr
 
 def main(argv=None):
-  convertGlobal(image_dir=temp_image_dir,data_dir=temp_data_dir,label=sys.argv[1])
+  convert_global(image_dir=temp_image_dir,data_dir=temp_data_dir,label=sys.argv[1])
 
 if __name__ =='__main__':
   tf.app.run()

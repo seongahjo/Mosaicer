@@ -1,20 +1,23 @@
 import cv2
 import numpy as nu
+import binary_convert
 import compare
+import os
 import sys
 
-def main():
-    if len(sys.argv)<2:
-      print 'default input : test.avi'
-      data='video/test.avi'
-    else:
-      data='video/'+sys.argv[1]
+def main(video_path,train_dir):
+    data=video_path
+    video_dir,filename=os.path.split(video_path)
+    result_dir= os.path.join(video_dir,'result')
+    if not os.path.exists(result_dir):
+        os.makedirs(result_dir)
+
     cap = cv2.VideoCapture(data)
     fps = 20.0
     width = int(cap.get(3))
     height = int(cap.get(4))
     foc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter('video/result.avi', foc, fps, (width, height))
+    out = cv2.VideoWriter(os.path.join(result_dir,filename), foc, fps, (width, height))
 
     cascade = cv2.CascadeClassifier("opencv/haarcascade_frontalface_alt.xml")
     #cap.isOpened()
@@ -36,8 +39,8 @@ def main():
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
             cv2.imwrite("image/test_data.jpg", img_output2)
-		
-            if test_db():
+
+            if test_db(train_dir):
                 avg_r = 0
                 avg_g = 0
                 avg_b = 0
@@ -83,13 +86,14 @@ def main():
 
     cap.release()
     out.release()
+    return 'finish'
 
-def test_db():
+def test_db(train_dir):
     threshold=0.6
-    output=convert.convert("image/test_data.jpg")
-    precision=compare.evaluate(output)
+    output=binary_convert.convert("image/test_data.jpg")
+    precision=compare.evaluate(output,train_dir)
     #print(precision[0],precision[1])
-    if precision[0] > threshold :
+    if precision[1] > threshold :
       return True
     else :
       return False
