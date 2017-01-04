@@ -103,5 +103,5 @@ def test_db(train_dir):
       return False
 
 if __name__ == "__main__":
-    video_path=os.path.join('video',sys.argv[1])
+    video_path=os.path.join(FLAGS.video_path,sys.argv[1])
     main(video_path=video_path,train_dir=FLAGS.train_dir)

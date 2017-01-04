@@ -38,3 +38,5 @@ tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
                            """Path to the train data directory.""")
 tf.app.flags.DEFINE_string('temp_dir', '/tmp/seongah_temp',
                            """Path to the temp data directory.""")
+tf.app.flags.DEFINE_string('video_dir', '/tmp/seongah_video',
+                           """Path to the video data directory.""")
