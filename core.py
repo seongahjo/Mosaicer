@@ -11,16 +11,10 @@ from six.moves import urllib
 import tensorflow as tf
 
 import input
-
+import config
 FLAGS = tf.app.flags.FLAGS
 
-# Basic model parameters.
-tf.app.flags.DEFINE_integer('batch_size', 128,
-                            """Number of images to process in a batch.""")
-tf.app.flags.DEFINE_string('data_dir', '/tmp/seongah_data',
-                           """Path to the CIFAR-10 data directory.""")
-tf.app.flags.DEFINE_boolean('use_fp16', False,
-                            """Train the model using fp16.""")
+
 
 # Global constants describing the CIFAR-10 data set.
 IMAGE_SIZE = input.IMAGE_SIZE
@@ -222,8 +216,8 @@ def inference(images):
     _activation_summary(local4)
 
   # linear layer(WX + b),
-  # We don't apply softmax here because 
-  # tf.nn.sparse_softmax_cross_entropy_with_logits accepts the unscaled logits 
+  # We don't apply softmax here because
+  # tf.nn.sparse_softmax_cross_entropy_with_logits accepts the unscaled logits
   # and performs the softmax internally for efficiency.
   with tf.variable_scope('softmax_linear') as scope:
     weights = _variable_with_weight_decay('weights', [192, NUM_CLASSES],
@@ -341,5 +335,3 @@ def train(total_loss, global_step):
     train_op = tf.no_op(name='train')
 
   return train_op
-
-
