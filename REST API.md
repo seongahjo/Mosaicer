@@ -41,4 +41,12 @@ type : `string`
 Directory that stores model which is result of train
 
 
+### mosaic(video_path, train_dir)
 
+#### video_path
+type : `string`
+Path of your video
+
+#### train_dir
+type : `string`
+Directory that stores model which is result of train

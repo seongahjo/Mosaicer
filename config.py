@@ -29,6 +29,11 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 
 
+# mosaic
+tf.app.flags.DEFINE_integer('mosaic_label', 1,
+                            """label you want to digitize""")
+
+
 #directory
 tf.app.flags.DEFINE_string('image_dir', 'image',
                            """Path to the image data directory.""")

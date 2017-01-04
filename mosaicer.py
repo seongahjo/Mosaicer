@@ -9,7 +9,7 @@ import config
 
 FLAGS = tf.app.flags.FLAGS
 
-def main(video_path,train_dir):
+def mosaic(video_path,train_dir):
     data=video_path
     video_dir,filename=os.path.split(video_path)
     result_dir= os.path.join(video_dir,'result')
@@ -97,11 +97,11 @@ def test_db(train_dir):
     output=binary_convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output,train_dir)
     #print(precision[0],precision[1])
-    if precision[1] > threshold :
+    if precision[FLAGS.mosaic_label] > threshold :
       return True
     else :
       return False
 
 if __name__ == "__main__":
     video_path=os.path.join(FLAGS.video_path,sys.argv[1])
-    main(video_path=video_path,train_dir=FLAGS.train_dir)
+    mosaic(video_path=video_path,train_dir=FLAGS.train_dir)
