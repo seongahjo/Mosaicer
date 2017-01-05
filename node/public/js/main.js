@@ -113,9 +113,11 @@ function train(id) {
 }
 
 function mosaic(id,filename){
+  var label=$("#btn_"+filename).val()
   var data = {
     'id' : id,
-    'filename' : filename
+    'filename' : filename,
+    'label' : label
   }
   $.ajax({
     url: 'api/mosaic',

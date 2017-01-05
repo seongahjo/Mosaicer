@@ -106,11 +106,13 @@ router.post('/videoUpload',videoupload.single('file'),function(req,res,next){
 router.get('/mosaic', function(req, res, next) {
     var id = req.query.id
     var filename=req.query.filename
+    var label =req.query.label
     var trainDir = path.join('/tmp/', id, 'train')
     var videoPath = path.join('/tmp/', id, 'video',filename)
     var data = {
         'train_dir': trainDir,
-        'video_path': videoPath
+        'video_path': videoPath,
+        'label' : label
     }
     axios.get(pythonServer + 'mosaic', {
         params: data

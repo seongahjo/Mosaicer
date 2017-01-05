@@ -156,6 +156,8 @@ var mosaic_view = jade.compile([
     '      |#{file.name}',
     '    td',
     '      |#{file.size}',
+    '    td',
+    '      input(id="btn_#{file.name}",type="number", min="0", max="9",maxlength = "1",oninput="maxLengthCheck(this)")',
     '    td.last',
     '      -  if (file.state === "Mosaic")',
     '        button.btn.btn-success.btn-xs(type="button" onClick="mosaic(defaultId,\'#{file.name}\')") Mosaic',
