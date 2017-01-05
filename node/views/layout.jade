@@ -49,7 +49,7 @@ html(lang='en')
             // menu profile quick info
             .profile.clearfix
               .profile_pic
-                img.img-circle.profile_img(src='img/img.jpg', alt='...')
+                img.img-circle.profile_img(src='img/default.jpg', alt='...')
               .profile_info
                 span Welcome,
                 h2 #{user.id}
@@ -106,16 +106,10 @@ html(lang='en')
               ul.nav.navbar-nav.navbar-right
                 li
                   a.user-profile.dropdown-toggle(href='javascript:;', data-toggle='dropdown', aria-expanded='false')
-                    img(src='img/img.jpg', alt='')
+                    img(src='img/default.jpg', alt='')
                     | #{user.id}
                     span.fa.fa-angle-down
                   ul.dropdown-menu.dropdown-usermenu.pull-right
-                    li
-                      a(href='javascript:;')  Profile
-                    li
-                      a(href='javascript:;')
-                        span.badge.bg-red.pull-right 50%
-                        span Settings
                     li
                       a(href='javascript:;') Help
                     li
@@ -127,8 +121,8 @@ html(lang='en')
 
         footer
           .pull-right
-          | Gentelella - Bootstrap Admin Template by
-          a(href='https://colorlib.com') Colorlib
+          | Mosaicer Cloud by 
+          a(href='https://github.com/seongahjo') seongahjo
           .clearfix
 // /footer content
 
@@ -155,26 +149,26 @@ script(src='js/custom.min.js')
 // script for Mosaic
 script(src='js/uploader.js')
 script(src='js/util.js')
-/*
-// Chart.js
-script(src='js/Chart.min.js')
-// Skycons
-script(src='js/skycons.js')
-// Flot
-script(src='js/jquery.flot.js')
-script(src='js/jquery.flot.pie.js')
-script(src='js/jquery.flot.time.js')
-script(src='js/jquery.flot.stack.js')
-script(src='js/jquery.flot.resize.js')
-// context-menu
-script(src='js/jquery.ui.position.js')
-script(src='js/jquery.contextMenu.js')
-// Flot plugins
-script(src='js/jquery.flot.orderBars.js')
-script(src='js/jquery.flot.spline.min.js')
-script(src='js/curvedLines.js')
-// JQVMap
-script(src='js/jquery.vmap.js')
-script(src='js/jquery.vmap.world.js')
-script(src='js/jquery.vmap.sampledata.js')
-*/
+// 
+  Not used now
+  // Chart.js
+  script(src='js/Chart.min.js')
+  // Skycons
+  script(src='js/skycons.js')
+  // Flot
+  script(src='js/jquery.flot.js')
+  script(src='js/jquery.flot.pie.js')
+  script(src='js/jquery.flot.time.js')
+  script(src='js/jquery.flot.stack.js')
+  script(src='js/jquery.flot.resize.js')
+  // context-menu
+  script(src='js/jquery.ui.position.js')
+  script(src='js/jquery.contextMenu.js')
+  // Flot plugins
+  script(src='js/jquery.flot.orderBars.js')
+  script(src='js/jquery.flot.spline.min.js')
+  script(src='js/curvedLines.js')
+  // JQVMap
+  script(src='js/jquery.vmap.js')
+  script(src='js/jquery.vmap.world.js')
+  script(src='js/jquery.vmap.sampledata.js')
