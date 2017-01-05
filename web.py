@@ -90,7 +90,8 @@ def mosaic():
     print('mosaic start')
     video_path=request.args.get('video_path')
     train_dir=request.args.get('train_dir')
-    value=mosaicer.mosaic(video_path=video_path,train_dir=train_dir)
+    label = request.args.get('label')
+    value=mosaicer.mosaic(video_path=video_path,train_dir=train_dir, label=label)
     print('mosaic end')
     return value
 
