@@ -30,6 +30,7 @@ def api():
 
 @app.route('/train')
 def train():
+    print('train start')
     data_dir=request.args.get('data_dir')
     train_dir=request.args.get('train_dir')
     train_dir=makeDir(train_dir)
@@ -44,6 +45,8 @@ def train():
                 json_state['names'].append(json_temp)
         with open(json_path,"w") as outfile :
             json.dump(json_state,outfile)
+            print(json_state)
+        print('train end')
         return 'true'
 
 @app.route('/upload',methods=['POST'])
@@ -59,6 +62,7 @@ def upload():
 #Convert Images to binary files
 @app.route('/convert')
 def convert():
+    print ('convert start')
     image_dir=request.args.get('image_dir')
     data_dir=request.args.get('data_dir')
     label = request.args.get('label')
@@ -76,15 +80,19 @@ def convert():
             json_state['names'].append(json_temp)
     with open(json_path,"w") as outfile :
         json.dump(json_state,outfile)
+        print(json_state)
+    print ('convert finished')
     return 'good'
 
 
 @app.route('/mosaic')
 def mosaic():
+    print('mosaic start')
     video_path=request.args.get('video_path')
     train_dir=request.args.get('train_dir')
-    return mosaicer.mosaic(video_path=video_path,train_dir=train_dir)
-
+    value=mosaicer.mosaic(video_path=video_path,train_dir=train_dir)
+    print('mosaic end')
+    return value
 
 
 
