@@ -83,10 +83,13 @@ function getMosaic(id) {
 
 
 function convert(id, folder) {
+  var label=$("#btn_" + folder).val()
+  if(label===undefined)
+    return
     var data = {
         'id': id,
         'folder': folder,
-        'label': $("#btn_" + folder).val()
+        'label': label
     }
     $.ajax({
         url: 'api/convert',
@@ -116,6 +119,8 @@ function train(id) {
 
 function mosaic(id,filename){
   var label=$("#btn_"+filename).val()
+  if(label===undefined)
+    return
   var data = {
     'id' : id,
     'filename' : filename,
