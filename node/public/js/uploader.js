@@ -117,7 +117,7 @@ $(function() {
             console.log('good')
         },
         onUploadSuccess: function(id, data) {
-            console.log(data)
+            getMosaic(defaultId)
                 //readFile(defaultId, currentfolder)
         },
         onUploadProgress: function(id, percent) {
