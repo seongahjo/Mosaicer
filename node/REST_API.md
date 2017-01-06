@@ -4,9 +4,9 @@
 ### POST /api/upload
 
 #### Parameters
-* <strong>file</strong> : file to upload
-* <strong>id</strong> : service id
-* <strong>folder</strong> : folder to upload
+* <strong>file</strong> : File to upload
+* <strong>id</strong> : Service id
+* <strong>folder</strong> : Folder to upload
 
 #### Output
 * good
@@ -21,8 +21,8 @@
 ### POST /api/makeFolder
 
 #### Parameters
-* <strong>id</strong> : service id
-* <strong>folder</strong> : folder to make
+* <strong>id</strong> : Service id
+* <strong>folder</strong> : Folder to make
 
 #### Output
 * good
@@ -37,8 +37,8 @@
 ### GET /api/convert
 
 #### Parameters
-* <strong>id</strong> : service id
-* <strong>folder</strong> : directory to convert
+* <strong>id</strong> : Service id
+* <strong>folder</strong> : Folder to convert
 
 #### Output
 * good
@@ -53,7 +53,7 @@
 ### GET /api/train
 
 #### Parameters
-* <strong>id</strong> : service id
+* <strong>id</strong> : Service id
 
 #### Output
 * good
@@ -68,8 +68,8 @@
 ### POST /api/compare
 
 #### Parameters
-* <strong>id</strong> : service id
-* <strong>images</strong> : name of file to download
+* <strong>id</strong> : Service id
+* <strong>images</strong> : Images to classification
 
 #### Output
 * label : label
@@ -88,9 +88,9 @@
 ### GET /api/mosaic
 
 #### Parameters
-* <strong>id</strong> : service id
-* <strong>filename</strong> : name of file to mosaic
-* <strong>label</strong> : label to mosaic
+* <strong>id</strong> : Service id
+* <strong>filename</strong> : Name of file to mosaic
+* <strong>label</strong> : Label to mosaic
 
 #### Output
 * good
@@ -106,8 +106,8 @@
 ### POST /api/donwload
 
 #### Parameters
-* <strong>id</strong> : service id
-* <strong>filename</strong> : name of file to download
+* <strong>id</strong> : Service id
+* <strong>filename</strong> : Name of file to download
 
 #### Output
 * download file
