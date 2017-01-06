@@ -15,4 +15,7 @@ http://skel.o-r.kr (not usually open)
 
 If You want to Run Demo Contact Me seongside@naver.com
 
+## [REST API]
+
 [Mosaicer]: https://github.com/seongahjo/Mosaicer
+[REST API]: https://github.com/seongahjo/Mosaicer/blob/node/node/REST_API.md
