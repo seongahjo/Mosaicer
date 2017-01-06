@@ -25,7 +25,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 ## Demo
 * [Mosaicer Cloud]
 
-### How To Train
+## How To Train
 <strong>Before RUN you should configure your directory on 'config.py'</strong>
 
 ```
@@ -43,7 +43,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 ```
 
 
-### How To
+## How To
 ```
 1. If you want to digitize one's face on the video
 
