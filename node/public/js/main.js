@@ -130,18 +130,13 @@ function mosaic(id,filename){
 
 
 
+
 function download(id,filename){
   var data = {
     'id' : id,
     'filename' : filename
   }
-  $.ajax({
-    url: 'api/download',
-    method:'GET',
-    data : data,
-  }).done(function(response){
-    alert(response)
-  })
+  location.href='api/download?'+$.param(data)
 }
 
 function makeFolder() {
