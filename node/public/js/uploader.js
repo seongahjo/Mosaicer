@@ -15,7 +15,7 @@ $(function() {
         });
 
     var uploader = $("#drop-area-div").dmUploader({
-        url: 'api/transfer',
+        url: 'api/compare',
         method: 'POST',
         extraData: {
             id: defaultId

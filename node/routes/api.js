@@ -122,8 +122,15 @@ router.get('/mosaic', function(req, res, next) {
     })
 })
 
+router.get('/download',function(req,res,next){
+  var id= req.query.id
+  var filename = req.query.filename
+  var Path= path.join('/tmp/',id,'video','result',filename)
+  console.log(Path)
+  res.download(Path);
+})
 
-router.post('/transfer', compareupload.single('file'), function(req, res, next) {
+router.post('/compare', compareupload.single('file'), function(req, res, next) {
     var file = req.file;
     var form = new FormData()
     form.append('id', req.body.id)
