@@ -25,16 +25,7 @@ var uploadstorage = multer.diskStorage({
     }
 })
 
-var videostorage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        var folder = path.join('/tmp/', req.body.id,'video')
-        console.log(folder)
-        cb(null, folder)
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname)
-    }
-})
+
 var compareupload = multer({
     storage: storage
 })
@@ -42,9 +33,6 @@ var upload = multer({
     storage: uploadstorage
 })
 
-var videoupload = multer({
-    storage: videostorage
-})
 router.get('/convert', function(req, res, next) {
     var id = req.query.id
     var folder = req.query.folder
@@ -99,7 +87,7 @@ router.post('/upload', upload.single('file'), function(req, res, next) {
     res.json('good')
 })
 
-router.post('/videoUpload',videoupload.single('file'),function(req,res,next){
+router.post('/videoUpload',upload.single('file'),function(req,res,next){
     res.json('good')
 })
 

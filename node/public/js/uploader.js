@@ -109,7 +109,8 @@ $(function() {
         url: 'api/videoUpload',
         method: 'POST',
         extraData: {
-            id: defaultId
+            id: defaultId,
+            folder : 'video'
         },
         allowedTypes: 'video/*',
         onInit: function() {
