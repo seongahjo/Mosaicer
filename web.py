@@ -56,7 +56,7 @@ def upload():
     for image in request.files.getlist('images'):
         path=os.path.join(directory,image.filename)
         image.save(path)
-    return True
+    return 'true'
 
 
 #Convert Images to binary files
@@ -82,7 +82,7 @@ def convert():
         json.dump(json_state,outfile)
         print(json_state)
     print ('convert finished')
-    return 'good'
+    return 'true'
 
 
 @app.route('/mosaic')

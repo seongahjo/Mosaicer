@@ -25,13 +25,11 @@
 * <strong>folder</strong> : Folder to make
 
 #### Output
-* good
+* directory
 
 #### Example Result
 ```
-{
-  good
-}
+/tmp/test/upload/folder
 ```
 
 ### GET /api/convert
@@ -41,13 +39,11 @@
 * <strong>folder</strong> : Folder to convert
 
 #### Output
-* good
+* true
 
 #### Example Result
 ```
-{
-  good
-}
+true
 ```
 
 ### GET /api/train
@@ -56,13 +52,11 @@
 * <strong>id</strong> : Service id
 
 #### Output
-* good
+* true
 
 #### Example Result
 ```
-{
-  good
-}
+true
 ```
 
 ### POST /api/compare
@@ -93,13 +87,11 @@
 * <strong>label</strong> : Label to mosaic
 
 #### Output
-* good
+* true
 
 #### Example Result
 ```
-{
-  good
-}
+true
 ```
 
 

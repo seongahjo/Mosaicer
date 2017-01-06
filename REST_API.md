@@ -8,13 +8,11 @@
 * <strong>file</strong> : Images that you want to convert
 
 #### Output
-* good
+* true
 
 #### Example Result
 ```
-{
-  good
-}
+true
 ```
 
 ### GET /convert
@@ -25,13 +23,11 @@
 * <strong>label</strong> : Label that you want to attach
 
 #### Output
-* good
+* true
 
 #### Example Result
 ```
-{
-  good
-}
+true
 ```
 
 ### GET /train
@@ -45,9 +41,7 @@
 
 #### Example Result
 ```
-{
-  result : 'true'
-}
+true
 ```
 
 ### GET /mosaic
@@ -57,11 +51,13 @@
 * <strong>train_dir</strong> : Directory that stores model which is result of train
 
 #### Output
-* good
+* label
+* precision
 
 #### Example Result
 ```
 {
-  good
+  '1' : 0.8765432,
+  '0' : 0.1234568
 }
 ```
