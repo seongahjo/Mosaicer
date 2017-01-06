@@ -1,52 +1,67 @@
 ## REST API
 
-### upload(image_dir, images)
 
-#### image_dir
-type : `string`
-Directory that stores image to convert
+### POST /upload
 
-#### images
-type : `file`
-Images that you want to convert
+#### Parameters
+* <strong>image_dir</strong> : Directory that stores image to convert
+* <strong>file</strong> : Images that you want to convert
 
+#### Output
+* good
 
+#### Example Result
+```
+{
+  good
+}
+```
 
+### GET /convert
 
-### convert(image_dir, data_dir, label)
+#### Parameters
+* <strong>image_dir</strong> : Directory that stores image to convert
+* <strong>data_dir</strong> : Directory that stores converted binary file which is result of convert
+* <strong>label</strong> : Label that you want to attach
 
-#### image_dir
-type : `string`
-Directory that stores image to convert
+#### Output
+* good
 
-#### data_dir
-type : `string`
-Directory that stores converted binary file which is result of convert
+#### Example Result
+```
+{
+  good
+}
+```
 
-#### label
-type : `integer`
-Label that you want to attach
+### GET /train
 
+#### Parameters
+* <strong>data_dir</strong> : Directory that stores converted binary files
+* <strong>train_dir</strong> : Directory that stores model which is result of train
 
+#### Output
+* result
 
+#### Example Result
+```
+{
+  result : 'true'
+}
+```
 
-### train(data_dir, train_dir) : boolean
+### GET /mosaic
 
-#### data_dir
-type : `string`
-Directory that stores converted bianry files
+#### Parameters
+* <strong>video_path</strong> : Path of your video
+* <strong>train_dir</strong> : Directory that stores model which is result of train
 
-#### train_dir
-type : `string`
-Directory that stores model which is result of train
+#### Output
+* good
 
-
-### mosaic(video_path, train_dir)
-
-#### video_path
-type : `string`
-Path of your video
-
-#### train_dir
-type : `string`
-Directory that stores model which is result of train
+#### Example Result
+```
+{
+  good
+}
+```
