@@ -67,5 +67,5 @@ Mosaicer is released under [MIT License]
 
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
-[REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST%20API.md
+[REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST_API.md
 [Mosaicer Cloud]: https://github.com/seongahjo/Mosaicer/tree/master/node
