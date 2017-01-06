@@ -57,7 +57,7 @@ router.get('/makeFolder', function(req, res, next) {
   var folder = req.query.folder
   var dir= path.join('/tmp/', id, 'upload',folder)
   fs.existsSync(dir) || fs.mkdirSync(dir)
-  res.json('good')
+  res.send(dir)
 })
 
 router.get('/train', function(req, res, next) {
