@@ -24,8 +24,15 @@ def convert_global(image_dir,data_dir,label):
      """
 
 
-  # Load all images which extension is 'jpg'
-    imgs=glob.glob(image_dir+"/*.jpg")
+  # Load all images which is image
+    imgs=[]
+    temp_imgs = [glob.glob(os.path.join(image_dir, e)) for e in ['*.jpeg','*.png','*.jpg']]
+    temp_imgs = [x for x in temp_imgs if x != []]
+    for img in temp_imgs:
+        imgs += img
+    if not imgs:
+        print('null')
+        return
     result=np.array([],np.uint8)
 
   # Directory that stores image binary file
@@ -60,9 +67,14 @@ def convert_global(image_dir,data_dir,label):
         outputstr=''.join(output)
         print(outputstr)
     print(result)
-    shutil.move(image_dir,FLAGS.temp_dir)
-    result.tofile(outputstr+".bin")
+    #move all images
+    #shutil.move(image_dir,FLAGS.temp_dir)
+    for lists in [glob.glob(os.path.join(image_dir, e)) for e in ['*.jpeg','*.png','*.jpg']] :
+        for f in lists:
+            os.remove(f)
 
+    result.tofile(outputstr+".bin")
+    print('saved at '+ outputstr+'.bin')
 
 
 def convert(img):
