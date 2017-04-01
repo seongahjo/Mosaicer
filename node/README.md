@@ -10,6 +10,10 @@ Cloud Service for Deep learning With Node.js & [Mosaicer]
   * Upload your image and see a result of classification
   * Upload your video and see a result of digitization
 
+## Architecture
+![archi](https://cloud.githubusercontent.com/assets/10272119/21736295/f66ef49a-d4b2-11e6-988b-737066564bae.png)
+
+
 ## Demo
 http://skel.o-r.kr (not usually open)
 
