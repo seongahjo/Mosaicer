@@ -6,6 +6,7 @@ import os
 import sys
 import tensorflow as tf
 import config
+import face_recognition as fr
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -28,9 +29,11 @@ def mosaic(video_path,train_dir, label):
     #for num in range(1,10):
     while(cap.isOpened()):
         ret, frame = cap.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.equalizeHist(gray)
-        faces = cascade.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 3, minSize = (40, 40), flags = 0)
+        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #gray = cv2.equalizeHist(gray)
+        faces = fr.load_image_file(frame)
+
+        #cascade.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 3, minSize = (40, 40), flags = 0)
 
         for (x,y,w,h) in faces:
             imgFace = frame[y:y+h, x:x+w]
@@ -103,5 +106,8 @@ def test_db(train_dir, label):
       return False
 
 if __name__ == "__main__":
-    video_path=os.path.join(FLAGS.video_path,sys.argv[1])
-    mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)
+    if len(sys.argv) < 2 :
+            print 'wrong'
+    else:
+        video_path=os.path.join(FLAGS.video_path,sys.argv[1])
+        mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)
