@@ -24,19 +24,19 @@ def mosaic(video_path,train_dir, label):
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir,filename), foc, fps, (width, height))
 
-    cascade = cv2.CascadeClassifier("opencv/haarcascade_frontalface_alt.xml")
+    #cascade = cv2.CascadeClassifier("opencv/haarcascade_frontalface_alt.xml")
     #cap.isOpened()
     #for num in range(1,10):
     while(cap.isOpened()):
         ret, frame = cap.read()
         #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         #gray = cv2.equalizeHist(gray)
-        faces = fr.load_image_file(frame)
+        faces = fr.face_locations(frame)
 
         #cascade.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 3, minSize = (40, 40), flags = 0)
 
-        for (x,y,w,h) in faces:
-            imgFace = frame[y:y+h, x:x+w]
+        for (top,right,bottom,left) in faces:
+            imgFace = frame[top:bottom, left:right]
             img_yuv = cv2.cvtColor(imgFace, cv2.COLOR_BGR2YUV)
 
             # equalize the histogram of the Y channel
@@ -48,43 +48,12 @@ def mosaic(video_path,train_dir, label):
             cv2.imwrite("image/test_data.jpg", img_output2)
 
             if test_db(train_dir=train_dir, label=label):
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
                 avg_r = 0
                 avg_g = 0
                 avg_b = 0
 
-                temp = w % 30
-                if temp != 0:
-                  w = w + (30-temp)
-                  temp = h % 30
-                  if temp != 0:
-                    h = h + (30-temp)
-                  tx = w / 30
-                  ty = h / 30
 
-                  for time_x in range(0,tx):
-                      for time_y in range(0,ty):
-                          for m in range(0,30):
-                              for n in range(0,30):
-                                  if time_y*30+y+m < height:
-                                      if time_x*30+x+n < width:
-                                          if time_y*30+y+m > 0:
-                                              if time_x*30+x+n > 0:
-                                                  avg_r = avg_r + frame[time_y*30+y+m,time_x*30+x+n,2]
-                                                  avg_g = avg_g + frame[time_y*30+y+m,time_x*30+x+n,1]
-                                                  avg_b = avg_b + frame[time_y*30+y+m,time_x*30+x+n,0]
-                          avg_r = avg_r / 900
-                          avg_g = avg_g / 900
-                          avg_b = avg_b / 900
-
-                          for m in range(0,30):
-                              for n in range(0,30):
-                                  if time_y*30+y+m < height:
-                                      if time_x*30+x+n < width:
-                                          if time_y*30+y+m > 0:
-                                              if time_x*30+x+n > 0:
-                                                  frame[time_y*30+y+m,time_x*30+x+n,2] = avg_r
-                                                  frame[time_y*30+y+m,time_x*30+x+n,1] = avg_g
-                                                  frame[time_y*30+y+m,time_x*30+x+n,0] = avg_b
 
         out.write(frame)
 
@@ -100,6 +69,8 @@ def test_db(train_dir, label):
     output=binary_convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output,train_dir)
     #print(precision[0],precision[1])
+    #No checkpoint file found Exception
+    print (precision)
     if precision[label] > threshold :
       return True
     else :
@@ -107,7 +78,7 @@ def test_db(train_dir, label):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 :
-            print 'wrong'
+            print ('wrong')
     else:
-        video_path=os.path.join(FLAGS.video_path,sys.argv[1])
+        video_path=os.path.join(FLAGS.video_dir,sys.argv[1])
         mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)
