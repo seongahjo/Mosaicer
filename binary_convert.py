@@ -119,7 +119,9 @@ def convert(img):
     return outputstr
 
 def main(argv=None):
-  convert_global(image_dir=FLAGS.image_dir,data_dir=FLAGS.data_dir,label=sys.argv[1])
-
+    if len(sys.argv)==2 :
+        convert_global(image_dir=FLAGS.image_dir,data_dir=FLAGS.data_dir,label=sys.argv[1])
+    if len(sys.argv)==3:
+        convert_global(image_dir=sys.argv[2],data_dir=FLAGS.data_dir,label=sys.argv[1])
 if __name__ =='__main__':
   tf.app.run()
