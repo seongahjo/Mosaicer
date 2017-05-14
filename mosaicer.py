@@ -24,16 +24,9 @@ def mosaic(video_path,train_dir, label):
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir,filename), foc, fps, (width, height))
 
-    #cascade = cv2.CascadeClassifier("opencv/haarcascade_frontalface_alt.xml")
-    #cap.isOpened()
-    #for num in range(1,10):
     while(cap.isOpened()):
         ret, frame = cap.read()
-        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        #gray = cv2.equalizeHist(gray)
         faces = fr.face_locations(frame)
-
-        #cascade.detectMultiScale(gray, scaleFactor = 1.1, minNeighbors = 3, minSize = (40, 40), flags = 0)
 
         for (top,right,bottom,left) in faces:
             imgFace = frame[top:bottom, left:right]
@@ -46,9 +39,9 @@ def mosaic(video_path,train_dir, label):
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
             cv2.imwrite("image/test_data.jpg", img_output2)
-
-            if test_db(train_dir=train_dir, label=label):
+            if check_image(train_dir=train_dir, label=label):
                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
                 avg_r = 0
                 avg_g = 0
                 avg_b = 0
@@ -64,13 +57,13 @@ def mosaic(video_path,train_dir, label):
     out.release()
     return 'finish'
 
-def test_db(train_dir, label):
-    threshold=0.6
+def check_image(train_dir, label):
+    threshold=FLAGS.threshold
+    threshold=0.47
     output=binary_convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output,train_dir)
-    #print(precision[0],precision[1])
-    #No checkpoint file found Exception
     print (precision)
+    #No checkpoint file found Exception
     if precision[label] > threshold :
       return True
     else :
@@ -78,7 +71,7 @@ def test_db(train_dir, label):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 :
-            print ('wrong')
+            print ('[Error] ./%s filename' %sys.argv[0])
     else:
         video_path=os.path.join(FLAGS.video_dir,sys.argv[1])
         mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)
