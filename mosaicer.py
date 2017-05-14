@@ -59,7 +59,6 @@ def mosaic(video_path,train_dir, label):
 
 def check_image(train_dir, label):
     threshold=FLAGS.threshold
-    threshold=0.47
     output=binary_convert.convert("image/test_data.jpg")
     precision=compare.evaluate(output,train_dir)
     print (precision)
