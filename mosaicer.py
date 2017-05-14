@@ -71,7 +71,7 @@ def check_image(train_dir, label):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 :
-            print ('[Error] ./%s filename' %sys.argv[0])
+            print ('[Error] ./%s [filename]' %sys.argv[0])
     else:
         video_path=os.path.join(FLAGS.video_dir,sys.argv[1])
         mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)

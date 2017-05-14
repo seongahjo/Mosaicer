@@ -121,7 +121,10 @@ def convert(img):
 def main(argv=None):
     if len(sys.argv)==2 :
         convert_global(image_dir=FLAGS.image_dir,data_dir=FLAGS.data_dir,label=sys.argv[1])
-    if len(sys.argv)==3:
-        convert_global(image_dir=sys.argv[2],data_dir=FLAGS.data_dir,label=sys.argv[1])
+    else if len(sys.argv)==3:
+        convert_global(image_dir=os.path.join(FLAGS.image_dir,sys.argv[2]),data_dir=FLAGS.data_dir,label=sys.argv[1])
+    else
+        print ('[Error] ./%s [label] (directory)' %sys.argv[0])
+
 if __name__ =='__main__':
   tf.app.run()
