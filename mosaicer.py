@@ -6,9 +6,51 @@ import os
 import sys
 import tensorflow as tf
 import config
-import face_recognition as fr
+import dlib
 
 FLAGS = tf.app.flags.FLAGS
+
+face_detector = dlib.get_frontal_face_detector()
+
+
+def _trim_css_to_bounds(css, image_shape):
+    """
+    Make sure a tuple in (top, right, bottom, left) order is within the bounds of the image.
+    :param css:  plain tuple representation of the rect in (top, right, bottom, left) order
+    :param image_shape: numpy shape of the image array
+    :return: a trimmed plain tuple representation of the rect in (top, right, bottom, left) order
+    """
+    return max(css[0], 0), min(css[1], image_shape[1]), min(css[2], image_shape[0]), max(css[3], 0)
+
+def _raw_face_locations(img, number_of_times_to_upsample=1):
+    """
+    Returns an array of bounding boxes of human faces in a image
+    :param img: An image (as a numpy array)
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :return: A list of dlib 'rect' objects of found face locations
+    """
+    return face_detector(img, number_of_times_to_upsample)
+
+def _rect_to_css(rect):
+    """
+    Convert a dlib 'rect' object to a plain tuple in (top, right, bottom, left) order
+    :param rect: a dlib 'rect' object
+    :return: a plain tuple representation of the rect in (top, right, bottom, left) order
+    """
+    return rect.top(), rect.right(), rect.bottom(), rect.left()
+
+
+def face_locations(img, number_of_times_to_upsample=1):
+    """
+    Returns an array of bounding boxes of human faces in a image
+    :param img: An image (as a numpy array)
+    :param number_of_times_to_upsample: How many times to upsample the image looking for faces. Higher numbers find smaller faces.
+    :return: A list of tuples of found face locations in css (top, right, bottom, left) order
+    """
+    return [_trim_css_to_bounds(_rect_to_css(face), img.shape) for face in _raw_face_locations(img, number_of_times_to_upsample)]
+
+
+
 
 def mosaic(video_path,train_dir, label):
     data=video_path
@@ -26,7 +68,7 @@ def mosaic(video_path,train_dir, label):
 
     while(cap.isOpened()):
         ret, frame = cap.read()
-        faces = fr.face_locations(frame)
+        faces = face_locations(frame)
 
         for (top,right,bottom,left) in faces:
             imgFace = frame[top:bottom, left:right]
