@@ -82,12 +82,48 @@ def mosaic(video_path,train_dir, label):
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
             cv2.imwrite("image/test_data.jpg", img_output2)
             if check_image(train_dir=train_dir, label=label):
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                x=left
+                y=top
+                w=right-left
+                h=bottom-top
 
                 avg_r = 0
                 avg_g = 0
                 avg_b = 0
 
+                temp = w % 30
+                if temp != 0:
+                  w = w + (30-temp)
+                  temp = h % 30
+                  if temp != 0:
+                    h = h + (30-temp)
+                  tx = int(w / 30)
+                  ty = int(h / 30)
+
+                  for time_x in range(0,tx):
+                      for time_y in range(0,ty):
+                          for m in range(0,30):
+                              for n in range(0,30):
+                                  if time_y*30+y+m < height:
+                                      if time_x*30+x+n < width:
+                                          if time_y*30+y+m > 0:
+                                              if time_x*30+x+n > 0:
+                                                  avg_r = avg_r + frame[time_y*30+y+m,time_x*30+x+n,2]
+                                                  avg_g = avg_g + frame[time_y*30+y+m,time_x*30+x+n,1]
+                                                  avg_b = avg_b + frame[time_y*30+y+m,time_x*30+x+n,0]
+                          avg_r = avg_r / 900
+                          avg_g = avg_g / 900
+                          avg_b = avg_b / 900
+
+                          for m in range(0,30):
+                              for n in range(0,30):
+                                  if time_y*30+y+m < height:
+                                      if time_x*30+x+n < width:
+                                          if time_y*30+y+m > 0:
+                                              if time_x*30+x+n > 0:
+                                                  frame[time_y*30+y+m,time_x*30+x+n,2] = avg_r
+                                                  frame[time_y*30+y+m,time_x*30+x+n,1] = avg_g
+                                                  frame[time_y*30+y+m,time_x*30+x+n,0] = avg_b
 
 
         out.write(frame)
