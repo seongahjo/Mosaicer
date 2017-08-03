@@ -34,6 +34,7 @@ def train():
     data_dir=request.args.get('data_dir')
     train_dir=request.args.get('train_dir')
     train_dir=makeDir(train_dir)
+    
     if train_data(data_dir=data_dir,train_dir=train_dir):
         json_path=os.path.join(data_dir,'state.json')
         json_state={"names":[]}
