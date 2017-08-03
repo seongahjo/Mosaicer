@@ -4,6 +4,7 @@ from __future__ import print_function
 from PIL import Image
 import glob
 import sys
+from time import strftime
 import os
 import numpy as np
 import tensorflow as tf
@@ -44,37 +45,48 @@ def convert_global(image_dir,data_dir,label):
   # Single file
     for img in imgs:
         im = Image.open(img)
+        im= im.resize([32,32],Image.ANTIALIAS)
         im = (np.array(im))
+
 
         r = im[:,:,0].flatten()
         g = im[:,:,1].flatten()
         b = im[:,:,2].flatten()
-
         #label = [input_label]
 
         out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
-
         #if result is empty
         if result.size==0:
           result=out
         else:
           result=np.vstack([result,out])
     #once or repeat?
-    if os.path.exists(outputstr+".bin"):
+    filename=outputstr+".bin"
+    if os.path.exists(filename):
         print(outputstr)
-        print ('already exists create new one')
-        output.append(label)
-        outputstr=''.join(output)
-        print(outputstr)
+        #append
+        old=np.fromfile(file=filename, dtype=np.uint8).reshape(-1,3073)
+        result=np.vstack([result,old])
+
+
+        #output.append(label)
+        #outputstr=''.join(output)
+        #print(outputstr)
+    result.tofile(outputstr+".bin")
+
+    print('saved at '+ outputstr+'.bin')
     print(result)
+
+
     #move all images
     #shutil.move(image_dir,FLAGS.temp_dir)
-    for lists in [glob.glob(os.path.join(image_dir, e)) for e in ['*.jpeg','*.png','*.jpg']] :
-        for f in lists:
-            os.remove(f)
 
-    result.tofile(outputstr+".bin")
-    print('saved at '+ outputstr+'.bin')
+    #for lists in [glob.glob(os.path.join(image_dir, e)) for e in ['*.jpeg','*.png','*.jpg']] :
+    #    for f in lists:
+    #        os.remove(f)
+
+
+
 
 
 def convert(img):
