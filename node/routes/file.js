@@ -12,6 +12,11 @@ var file_view = jade.compile([
     '    div.icon',
     '      img(src="img/#{file.type}.png")',
     '    div.name #{file.name}',
+    '-  if(folder==="upload")',
+    '     div.file(type="makeDir", dir="#{folder}")',
+    '       div.icon',
+    '         a(href="#",data-toggle="modal", data-target=".bs-example-modal-sm")',
+    '           i.max.fa.fa-plus-square-o'
 ].join('\n'))
 
 router.get('/', function(req, res, next) {
@@ -26,8 +31,10 @@ router.get('/', function(req, res, next) {
         for (var i = 0; i < files.length; i++) {
             files[i] = mime.stat(folder, files[i])
         }
+
         res.send(file_view({
-            files: files
+            files: files,
+            folder:folder
         }))
     })
 
@@ -82,17 +89,17 @@ var train_view = jade.compile([
     '- each file in files',
     '  tr',
     '    td',
-    '      i.fa.fa-file-archive-o',
+    '      i.fa.fa-folder',
     '      |#{file.name}',
     '    td',
-    '      |#{file.size}',
+    '      |#{file.amount}',
     '    td',
-    '      |#{file.label}',
+    '      |#{file.size} MB',
     '    td.last',
     '      -  if (file.state === "Trained")',
     '        button.btn.btn-success.btn-xs(type="button") #{file.state}',
     '      -  else',
-    '        button.btn.btn-warning.btn-xs(type="button") #{file.state}',
+    '        button.btn.btn-warning.btn-xs(type="button") #{file.state}'
 ].join('\n'))
 
 
@@ -100,16 +107,54 @@ var train_view = jade.compile([
 
 router.get('/train', function(req, res, next) {
     var id = req.query.id
-    var Path = path.join('/tmp/', id, 'data')
+    var Path = path.join('/tmp/', id, 'upload')
     var statePath = path.join(Path, 'state.json')
     var state = {}
     var result = []
+    var size=0;
     fs.existsSync(Path) || fs.mkdirSync(Path);
     fs.existsSync(statePath) || fs.writeFileSync(statePath, '{}')
     stateData = fs.readFileSync(statePath, 'utf8')
     if (stateData != undefined && stateData != '')
         state = JSON.parse(stateData)
+    fs.readdir(Path, function(error, files) {
+        async.eachSeries(files, function iteratee(file, callback) {
+            var filedetail = {} // file detail info
+            var stat = fs.statSync(path.join(Path, file))
+            if (stat.isDirectory()) {
+                filedetail.name = file
+                fs.readdir(path.join(Path, file), function(error, filess) {
+                    filedetail.amount = filess.length;
+                    for(i=0; i<filess.length;i++){
+                      var filestat = fs.statSync(path.join(Path,file, filess[i]))
+                      size+=Math.floor(parseInt(filestat["size"])/1024,0)
+                    }
+                    filedetail.size=size
+                    filedetail.state = 'Wait'
+                    async.eachSeries(state.names, function iteratee(key, inside) {
+                            if (filedetail.state != 'Trained') {
+                                if (key.name == file) {
+                                    filedetail.state = 'Trained'
+                                }
+                            }
+                            inside(null)
+                    })
+                    result.push(filedetail)
+                    callback(null)
+                })
+            } else {
+                callback(null)
+            }
+          }, function() {
+              res.send(train_view({
+                  files: result
+              }))
+          });
 
+
+        })
+    })
+    /*
     fs.readdir(Path, function(error, files) {
         async.eachSeries(files, function iteratee(file, callback) {
             var filedetail = {} // file detail info
@@ -138,15 +183,9 @@ router.get('/train', function(req, res, next) {
                     result.push(filedetail)
                 }
                 callback(null)
-            }
-        }, function() {
-            res.send(train_view({
-                files: result
-            }))
-        });
+            }*/
 
-    })
-})
+
 
 var mosaic_view = jade.compile([
     '- each file in files',

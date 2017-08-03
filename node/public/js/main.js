@@ -101,7 +101,7 @@ function convert(id, folder) {
 }
 
 function train(id) {
-    var data = {
+  var data = {
         'id': id,
     }
     $.ajax({

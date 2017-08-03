@@ -14,6 +14,10 @@ img{
   vertical-align: middle;
   border: 0;
 }
+
+.max{
+  font-size:80px;
+}
 .file {
     padding: 2px;
     margin: 10px;
