@@ -29,12 +29,7 @@ NUM_EPOCHS_PER_DECAY = 350.0      # Epochs after which learning rate decays.
 LEARNING_RATE_DECAY_FACTOR = 0.1  # Learning rate decay factor.
 INITIAL_LEARNING_RATE = 0.1       # Initial learning rate.
 
-# If a model is trained with multiple GPUs, prefix all Op names with tower_name
-# to differentiate the operations. Note that this prefix is removed from the
-# names of the summaries when visualizing a model.
 TOWER_NAME = 'tower'
-
-DATA_URL = 'http://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz'
 
 
 def _activation_summary(x):
@@ -119,31 +114,6 @@ def distorted_inputs(data_dir):
   return images, labels
 
 
-def inputs(eval_data):
-  """Construct input for CIFAR evaluation using the Reader ops.
-
-  Args:
-    eval_data: bool, indicating if one should use the train or eval data set.
-
-  Returns:
-    images: Images. 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
-    labels: Labels. 1D tensor of [batch_size] size.
-
-  Raises:
-    ValueError: If no data_dir
-  """
-  if not FLAGS.data_dir:
-    raise ValueError('Please supply a data_dir')
-  data_dir = os.path.join(FLAGS.data_dir, 'cifar-10-batches-bin')
-  images, labels = input.inputs(eval_data=eval_data,
-                                        data_dir=data_dir,
-                                        batch_size=FLAGS.batch_size)
-  if FLAGS.use_fp16:
-    images = tf.cast(images, tf.float16)
-    labels = tf.cast(labels, tf.float16)
-  return images, labels
-
-
 def inference(images):
   """Build the CIFAR-10 model.
 
@@ -189,12 +159,12 @@ def inference(images):
     conv2 = tf.nn.relu(pre_activation, name=scope.name)
     _activation_summary(conv2)
 
-  # norm2
-  norm2 = tf.nn.lrn(conv2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
-                    name='norm2')
   # pool2
-  pool2 = tf.nn.max_pool(norm2, ksize=[1, 3, 3, 1],
+  pool2 = tf.nn.max_pool(conv2, ksize=[1, 3, 3, 1],
                          strides=[1, 2, 2, 1], padding='SAME', name='pool2')
+# norm2
+  norm2 = tf.nn.lrn(pool2, 4, bias=1.0, alpha=0.001 / 9.0, beta=0.75,
+                  name='norm2')
 
   # local3
   with tf.variable_scope('local3') as scope:

@@ -33,7 +33,7 @@ router.post('/signup',function(req,res,next){
 
   Path=path.join(Path,'upload')
   fs.existsSync(Path) || fs.mkdirSync(Path);
-  
+
   res.redirect('/')
 })
 
@@ -54,8 +54,16 @@ router.get('/compare',function(req,res,next){
   res.render('compare',{user: tempuser})
 })
 
+router.get('/feedback',function(req,res,next){
+  res.render('feedback',{user:tempuser})
+})
+
 router.get('/mosaic',function(req,res,next){
   res.render('mosaic',{user:tempuser})
+})
+
+router.get('/feedback-test',function(req,res,next){
+  res.render('feedback-face',{user:tempuser})
 })
 
 module.exports = router;

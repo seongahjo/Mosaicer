@@ -158,6 +158,22 @@ function makeFolder() {
         readFile(defaultId, defaultDir)
     })
 }
+
+function getFeedback(id) {
+    var data = {
+        'id': id
+    }
+    $.ajax({
+        url: 'file/feedback',
+        method: 'GET',
+        data: data,
+    }).done(function(data) {
+        $("#lists").html(data)
+    })
+}
+
+
+
 $(document).ajaxStart(function() {
     console.log('ajaxstart')
 })

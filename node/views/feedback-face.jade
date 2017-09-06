@@ -1,0 +1,24 @@
+extends layout
+block content
+  .right_col(role='main')
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+        .x_title
+          h2
+            | Feedback
+          ul.nav.navbar-right.panel_toolbox
+            li
+              a.collapse-link
+                i.fa.fa-chevron-up
+            li
+              a.close-link
+                i.fa.fa-close
+          .clearfix
+        .x_content
+          #feedback
+            .fileview
+              div.file(type="img")
+                div.icon
+                  img(src="img/image.png")
+                div.name test
+                
