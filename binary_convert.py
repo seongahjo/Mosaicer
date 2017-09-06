@@ -68,15 +68,14 @@ def convert_global(image_dir,data_dir,label):
         old=np.fromfile(file=filename, dtype=np.uint8).reshape(-1,3073)
         result=np.vstack([result,old])
 
-
-        #output.append(label)
-        #outputstr=''.join(output)
-        #print(outputstr)
     result.tofile(outputstr+".bin")
 
     print('saved at '+ outputstr+'.bin')
     print(result)
 
+#output.append(label)
+#outputstr=''.join(output)
+#print(outputstr)
 
     #move all images
     #shutil.move(image_dir,FLAGS.temp_dir)
@@ -119,7 +118,10 @@ def convert(img):
 
     # Directory that stores image binary file
     output=[]
+
     output.append(FLAGS.temp_dir)
+    if not os.path.exists(FLAGS.temp_dir):
+        os.makedirs(FLAGS.temp_dir)
     output.append('/')
     output.append(filename)
     output.append('.bin')
