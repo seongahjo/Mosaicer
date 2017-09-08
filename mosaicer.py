@@ -7,6 +7,7 @@ import sys
 import tensorflow as tf
 import config
 import face_recognition
+import shutil
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -19,16 +20,18 @@ def mosaic(video_path,train_dir, label):
         os.makedirs(result_dir)
     index=0
     cap = cv2.VideoCapture(data)
-    fps = 20.0
+    fps = 30.0
     width = int(cap.get(3))
     height = int(cap.get(4))
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir,filename), foc, fps, (width, height))
-
+    face_count=0
     while(cap.isOpened()):
         ret, frame = cap.read()
-        faces = face_recognition.face_locations(frame,number_of_times_to_upsample=0,model="cnn")
-
+        if(!ret)
+            break
+        if index%3==0:
+            faces = face_recognition.face_locations(frame,number_of_times_to_upsample=0,model="cnn")
         for (top,right,bottom,left) in faces:
             imgFace = frame[top:bottom, left:right]
             img_yuv = cv2.cvtColor(imgFace, cv2.COLOR_BGR2YUV)
@@ -39,11 +42,11 @@ def mosaic(video_path,train_dir, label):
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
-            index+=1
-            cv2.imwrite("image/test_data"+str(index)+".jpg", img_output2)
-            if check_image(train_dir=train_dir, label=label,index=index):
+            cv2.imwrite("image/test_data"+str(face_count)+".jpg", img_output2)
+            if check_image(train_dir=train_dir, label=label,count=face_count):
                 frame=job(frame=frame,x=left,y=top,w=right-left,h=bottom-top,height=height,width=width)
-
+            face_count+=1
+        index+=1
         out.write(frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -70,25 +73,29 @@ def job(frame,x,y,w,h,height,width):
 
       for time_x in range(0,tx):
           for time_y in range(0,ty):
-              for m in range(0,30):
-                  for n in range(0,30):
-                      if time_y*30+y+m < height:
-                          if time_x*30+x+n < width:
-                              if time_y*30+y+m > 0:
-                                  if time_x*30+x+n > 0:
-                                      avg_r = avg_r + frame[time_y*30+y+m,time_x*30+x+n,2]
-                                      avg_g = avg_g + frame[time_y*30+y+m,time_x*30+x+n,1]
-                                      avg_b = avg_b + frame[time_y*30+y+m,time_x*30+x+n,0]
-              avg_r = avg_r / 900
-              avg_g = avg_g / 900
-              avg_b = avg_b / 900
+                      if time_y*30+y+15 < height:
+                          if time_x*30+x+15 < width:
+                                      avg_r = frame[time_y*30+y+15,time_x*30+x+15,2]
+                                      avg_g = frame[time_y*30+y+15,time_x*30+x+15,1]
+                                      avg_b = frame[time_y*30+y+15,time_x*30+x+15,0]
+                          else:
+                                      avg_r = frame[time_y*30+y+15,time_x*30+x+1,2]
+                                      avg_g = frame[time_y*30+y+15,time_x*30+x+1,1]
+                                      avg_b = frame[time_y*30+y+15,time_x*30+x+1,0]
+                      else:
+                          if time_x*30+x+15 < width:
+                                      avg_r = frame[time_y*30+y+1,time_x*30+x+15,2]
+                                      avg_g = frame[time_y*30+y+1,time_x*30+x+15,1]
+                                      avg_b = frame[time_y*30+y+1,time_x*30+x+15,0]
+                          else:
+                                      avg_r = frame[time_y*30+y+1,time_x*30+x+1,2]
+                                      avg_g = frame[time_y*30+y+1,time_x*30+x+1,1]
+                                      avg_b = frame[time_y*30+y+1,time_x*30+x+1,0]
 
-              for m in range(0,30):
-                  for n in range(0,30):
-                      if time_y*30+y+m < height:
-                          if time_x*30+x+n < width:
-                              if time_y*30+y+m > 0:
-                                  if time_x*30+x+n > 0:
+                      for m in range(0,30):
+                          for n in range(0,30):
+                              if time_y*30+y+m < height:
+                                  if time_x*30+x+n < width:
                                       frame[time_y*30+y+m,time_x*30+x+n,2] = avg_r
                                       frame[time_y*30+y+m,time_x*30+x+n,1] = avg_g
                                       frame[time_y*30+y+m,time_x*30+x+n,0] = avg_b
@@ -96,17 +103,21 @@ def job(frame,x,y,w,h,height,width):
 
 
 
-def check_image(train_dir, label,index):
+def check_image(train_dir, label,count):
     threshold=FLAGS.threshold
-    output=binary_convert.convert("image/test_data"+str(index)+".jpg")
+    filename="image/test_data"+str(count)+".jpg"
+    output=binary_convert.convert(filename)
+    if not os.path.exists("image/"+str(label)):
+        os.makedirs("image/"+str(label))
+    if not os.path.exists("image/"+str(0)):
+        os.makedirs("image/"+str(0))
     precision=compare.evaluate(output,train_dir)
-    print (precision)
-    #No checkpoint file found Exception
-    # 1이 ? 이상일경우
-    # 0.4
+
     if precision[label] > threshold :
+      shutil.move(filename,"image/"+str(label)+"/")
       return True
     else :
+      shutil.move(filename,"image/"+str(0)+"/")
       return False
 
 if __name__ == "__main__":
