@@ -8,6 +8,8 @@ import tensorflow as tf
 import config
 import face_recognition
 import shutil
+import random
+import time
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -23,12 +25,13 @@ def mosaic(video_path,train_dir, label):
     fps = 30.0
     width = int(cap.get(3))
     height = int(cap.get(4))
+    start_time = time.time()
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir,filename), foc, fps, (width, height))
     face_count=0
     while(cap.isOpened()):
         ret, frame = cap.read()
-        if(!ret)
+        if not ret:
             break
         if index%3==0:
             faces = face_recognition.face_locations(frame,number_of_times_to_upsample=0,model="cnn")
@@ -42,8 +45,8 @@ def mosaic(video_path,train_dir, label):
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
-            cv2.imwrite("image/test_data"+str(face_count)+".jpg", img_output2)
-            if check_image(train_dir=train_dir, label=label,count=face_count):
+            cv2.imwrite("image/"+filename[0]+str(face_count)+".jpg", img_output2)
+            if check_image(filename=filename[0],train_dir=train_dir, label=label,count=face_count):
                 frame=job(frame=frame,x=left,y=top,w=right-left,h=bottom-top,height=height,width=width)
             face_count+=1
         index+=1
@@ -51,9 +54,10 @@ def mosaic(video_path,train_dir, label):
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+    end_time=time.time()
     cap.release()
     out.release()
+    print('time : {0}'.format(end_time-start_time))
     return 'finish'
 
 
@@ -103,23 +107,30 @@ def job(frame,x,y,w,h,height,width):
 
 
 
-def check_image(train_dir, label,count):
+def check_image(filename, train_dir, label,count):
     threshold=FLAGS.threshold
-    filename="image/test_data"+str(count)+".jpg"
+    filename="image/"+filename+str(count)+".jpg"
     output=binary_convert.convert(filename)
     if not os.path.exists("image/"+str(label)):
         os.makedirs("image/"+str(label))
     if not os.path.exists("image/"+str(0)):
         os.makedirs("image/"+str(0))
     precision=compare.evaluate(output,train_dir)
-
-    if precision[label] > threshold :
-      shutil.move(filename,"image/"+str(label)+"/")
-      return True
-    else :
-      shutil.move(filename,"image/"+str(0)+"/")
-      return False
-
+    print (precision)
+    try:
+        if precision[label] > threshold :
+          shutil.move(filename,"image/"+str(label)+"/")
+          return True
+        else :
+          shutil.move(filename,"image/"+str(0)+"/")
+          return False
+    except:
+        shutil.move(filename,"image/"+str(label)+random.randint(1,100)+"/")
+    finally:
+        if precision[label] > threshold :
+          return True
+        else :
+          return False
 if __name__ == "__main__":
     if len(sys.argv) < 2 :
             print ('[Error] ./%s [filename]' %sys.argv[0])

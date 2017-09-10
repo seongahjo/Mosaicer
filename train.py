@@ -17,7 +17,6 @@ def train_data(data_dir,train_dir):
   with tf.Graph().as_default():
     global_step = tf.contrib.framework.get_or_create_global_step()
 
-    # Get images and labels for CIFAR-10.
     images, labels = core.distorted_inputs(data_dir=data_dir)
     # Build a Graph that computes the logits predictions from the
     # inference model.

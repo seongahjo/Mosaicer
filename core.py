@@ -20,7 +20,6 @@ FLAGS = tf.app.flags.FLAGS
 IMAGE_SIZE = input.IMAGE_SIZE
 NUM_CLASSES = input.NUM_CLASSES
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = input.NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN
-NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = input.NUM_EXAMPLES_PER_EPOCH_FOR_EVAL
 
 
 # Constants describing the training process.
@@ -267,23 +266,23 @@ def train(total_loss, global_step):
     train_op: op for training.
   """
   # Variables that affect learning rate.
-  num_batches_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / FLAGS.batch_size
-  decay_steps = int(num_batches_per_epoch * NUM_EPOCHS_PER_DECAY)
+  #num_batches_per_epoch = NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN / FLAGS.batch_size
+  #decay_steps = int(num_batches_per_epoch * NUM_EPOCHS_PER_DECAY)
 
   # Decay the learning rate exponentially based on the number of steps.
-  lr = tf.train.exponential_decay(INITIAL_LEARNING_RATE,
-                                  global_step,
-                                  decay_steps,
-                                  LEARNING_RATE_DECAY_FACTOR,
-                                  staircase=True)
-  tf.summary.scalar('learning_rate', lr)
+  #lr = tf.train.exponential_decay(INITIAL_LEARNING_RATE,
+#                                  global_step,
+#                                  decay_steps,
+#                                  LEARNING_RATE_DECAY_FACTOR,
+#                                  staircase=True)
+  #tf.summary.scalar('learning_rate', lr)
 
   # Generate moving averages of all losses and associated summaries.
   loss_averages_op = _add_loss_summaries(total_loss)
 
   # Compute gradients.
   with tf.control_dependencies([loss_averages_op]):
-    opt = tf.train.GradientDescentOptimizer(lr)
+    opt = tf.train.AdamOptimizer(learning_rate=1e-4)
     grads = opt.compute_gradients(total_loss)
 
   # Apply gradients.
