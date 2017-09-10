@@ -16,6 +16,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 ## Modules
 * Convert
   * Image files to Labeled Binary file
+  * Append image files in existing file
 * Train
   * Make model by labeled binary files
 * Evaluate
