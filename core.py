@@ -16,7 +16,7 @@ FLAGS = tf.app.flags.FLAGS
 
 
 
-# Global constants describing the CIFAR-10 data set.
+# Global constants describing the data set.
 IMAGE_SIZE = input.IMAGE_SIZE
 NUM_CLASSES = input.NUM_CLASSES
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = input.NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN
@@ -28,7 +28,7 @@ NUM_EPOCHS_PER_DECAY = 350.0      # Epochs after which learning rate decays.
 LEARNING_RATE_DECAY_FACTOR = 0.1  # Learning rate decay factor.
 INITIAL_LEARNING_RATE = 0.1       # Initial learning rate.
 
-TOWER_NAME = 'tower'
+TOWER_NAME = 'mosaicer'
 
 
 def _activation_summary(x):
@@ -94,15 +94,7 @@ def _variable_with_weight_decay(name, shape, stddev, wd):
 
 
 def distorted_inputs(data_dir):
-  """Construct distorted input for CIFAR training using the Reader ops.
 
-  Returns:
-    images: Images. 4D tensor of [batch_size, IMAGE_SIZE, IMAGE_SIZE, 3] size.
-    labels: Labels. 1D tensor of [batch_size] size.
-
-  Raises:
-    ValueError: If no data_dir
-  """
   if not FLAGS.data_dir:
     raise ValueError('Please supply a data_dir')
   images, labels = input.distorted_inputs(data_dir=data_dir,
@@ -114,7 +106,7 @@ def distorted_inputs(data_dir):
 
 
 def inference(images):
-  """Build the CIFAR-10 model.
+  """Build the model.
 
   Args:
     images: Images returned from distorted_inputs() or inputs().
@@ -226,7 +218,7 @@ def loss(logits, labels):
 
 
 def _add_loss_summaries(total_loss):
-  """Add summaries for losses in CIFAR-10 model.
+  """Add summaries for losses in model.
 
   Generates moving average for all losses and associated summaries for
   visualizing the performance of the network.
@@ -253,7 +245,7 @@ def _add_loss_summaries(total_loss):
 
 
 def train(total_loss, global_step):
-  """Train CIFAR-10 model.
+  """Train model.
 
   Create an optimizer and apply to all trainable variables. Add moving
   average for all trainable variables.

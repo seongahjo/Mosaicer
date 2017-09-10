@@ -27,7 +27,7 @@ tf.app.flags.DEFINE_integer('max_steps', 1000,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
-tf.app.flags.DEFINE_integer('threshold',0.7,
+tf.app.flags.DEFINE_integer('threshold',0.75,
                             """minimum value to identify image.""")
 
 # mosaic

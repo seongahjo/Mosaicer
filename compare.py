@@ -21,9 +21,6 @@ def eval_once(saver, top_k_op,train_dir):
     if ckpt and ckpt.model_checkpoint_path:
       # Restores from checkpoint
       saver.restore(sess, ckpt.model_checkpoint_path)
-      # Assuming model_checkpoint_path looks something like:
-      #   /my-favorite-path/cifar10_train/model.ckpt-0,
-      # extract global_step from it.
       global_step = ckpt.model_checkpoint_path.split('/')[-1].split('-')[-1]
     else:
       print('No checkpoint file found')
@@ -50,7 +47,7 @@ def eval_once(saver, top_k_op,train_dir):
 def evaluate(output, train_dir):
   with tf.Graph().as_default() as g:
     filename_queue=tf.train.string_input_producer([output])
-    read_input=input.read_cifar10(filename_queue)
+    read_input=input.read_binary(filename_queue)
     reshaped_image = tf.cast(read_input.uint8image, tf.float32)
     #resized_image= tf.image.resize_image_with_crop_or_pad(reshaped_image,24,24)
     resized_image=tf.image.resize_images(reshaped_image,[FLAGS.input_size,FLAGS.input_size])
