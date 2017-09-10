@@ -17,8 +17,7 @@ FLAGS = tf.app.flags.FLAGS
 
 IMAGE_SIZE = FLAGS.input_size
 NUM_CLASSES = FLAGS.num_classes
-NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 200
-NUM_EXAMPLES_PER_EPOCH_FOR_EVAL = 10000
+NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = 2800
 
 
 def read_cifar10(filename_queue):
@@ -116,7 +115,7 @@ def _generate_image_and_label_batch(image, label, min_queue_examples,
         capacity=min_queue_examples + 3 * batch_size)
 
   # Display the training images in the visualizer.
-  tf.image_summary('images', images)
+  tf.summary.image('images', images)
 
   return images, tf.reshape(label_batch, [batch_size])
 

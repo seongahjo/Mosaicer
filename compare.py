@@ -51,15 +51,14 @@ def evaluate(output, train_dir):
   with tf.Graph().as_default() as g:
     filename_queue=tf.train.string_input_producer([output])
     read_input=input.read_cifar10(filename_queue)
-    #reshaped_image = tf.cast(read_input.uint8image, tf.float32)
+    reshaped_image = tf.cast(read_input.uint8image, tf.float32)
     #resized_image= tf.image.resize_image_with_crop_or_pad(reshaped_image,24,24)
-    resized_image=tf.image.resize_images(read_input.uint8image,[FLAGS.input_size,FLAGS.input_size])
+    resized_image=tf.image.resize_images(reshaped_image,[FLAGS.input_size,FLAGS.input_size])
     float_image=tf.image.per_image_standardization(resized_image)
 
-    min_fraction_of_examples_in_queue=0.4
     num_examples_per_epoch=FLAGS.num_examples
-    min_queue_examples = int(num_examples_per_epoch * min_fraction_of_examples_in_queue)
-    batch_size=128
+    min_queue_examples = int(num_examples_per_epoch)
+    batch_size=FLAGS.batch_size
 
     images, labels = input._generate_image_and_label_batch(float_image,read_input.label,min_queue_examples,batch_size,shuffle=False)
     # inference model.

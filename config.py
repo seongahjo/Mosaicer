@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-FLAGS = tf.app.flags.FLAGS
 
 # compare
 tf.app.flags.DEFINE_integer('num_examples',1,
@@ -11,7 +10,8 @@ tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
 
 # core
 # Basic model parameters.
-tf.app.flags.DEFINE_integer('batch_size', 128,
+#128
+tf.app.flags.DEFINE_integer('batch_size', 512,
                             """Number of images to process in a batch.""")
 
 tf.app.flags.DEFINE_boolean('use_fp16', False,
@@ -23,25 +23,26 @@ tf.app.flags.DEFINE_integer('num_classes',10,
                            """Number of classes to run.""")
 
 # train
-tf.app.flags.DEFINE_integer('max_steps', 100,
+tf.app.flags.DEFINE_integer('max_steps', 1000,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
-
+tf.app.flags.DEFINE_integer('threshold',0.7,
+                            """minimum value to identify image.""")
 
 # mosaic
 tf.app.flags.DEFINE_integer('mosaic_label', 1,
                             """label you want to digitize""")
 
 
-#directory
+# directory
 tf.app.flags.DEFINE_string('image_dir', 'image',
                            """Path to the image data directory.""")
 tf.app.flags.DEFINE_string('data_dir', 'data',
                            """Path to the binary data directory.""")
+tf.app.flags.DEFINE_string('video_dir', 'video',
+                           """Path to the video data directory.""")
 tf.app.flags.DEFINE_string('train_dir', '/tmp/seongah_train',
                            """Path to the train data directory.""")
 tf.app.flags.DEFINE_string('temp_dir', '/tmp/seongah_temp',
                            """Path to the temp data directory.""")
-tf.app.flags.DEFINE_string('video_dir', 'video',
-                           """Path to the video data directory.""")
