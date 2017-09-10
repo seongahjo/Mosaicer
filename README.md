@@ -5,6 +5,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 * Description in Korean: http://www.slideshare.net/seongside/mosaicer-description-korean
 * Youtube : https://youtu.be/qifwKGzVR4c
 
+
 ## Requirement
 + OpenCV
 + Tensorflow
@@ -14,29 +15,29 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
 ## Modules
 * Convert
- * Image files to Labeled Binary file
+  * Image files to Labeled Binary file
 * Train
- * Make model by labeled binary files
+  * Make model by labeled binary files
 * Evaluate
- * Classify image by model which is a result of Train
+  * Classify image by model which is a result of Train
 * Mosaic
- * Digitize your video by model
+  * Digitize your video by model
 * Web
- * Support above functions on REST API request
+  * Support above functions on REST API request
 
 
 ## Demo
-* [Mosaicer Cloud]
+* [Mosaic WEB]
 
 ## How To Train
 <strong>Before RUN you should configure your directory on 'config.py'</strong>
 
 ```
-1. Put your 32x32 Images on 'DATA' folder
+1. Put your 32x32 Images on 'Image' folder
 
-2. RUN python binary_convert.py with label
+2. RUN python binary_convert.py (with label, foldername)
 
-  EX) [python binary_convert.py 1] or [python binary_convert.py 0]
+  EX) [python binary_convert.py (1) (foldername)] or [python binary_convert.py (0) (foldername)]
 
   images with label 1 is digitized by default
 
@@ -56,7 +57,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
   EX) [python mosacier.py test.avi]
 
-4. WATCH YOUR VIDEO 'result.avi'
+4. WATCH YOUR VIDEO 'result.avi' in video/result folder
 ```
 
 ## [API]
@@ -72,4 +73,4 @@ Mosaicer is released under [MIT License]
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
 [REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST_API.md
-[Mosaicer Cloud]: https://github.com/seongahjo/Mosaicer/tree/master/node
+[Mosaic WEB]: https://github.com/seongahjo/Mosaicer/tree/master/node
