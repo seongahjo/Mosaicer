@@ -119,10 +119,16 @@ def check_image(filename, train_dir, label,count):
     print (precision)
     try:
         if precision[label] > threshold :
-          shutil.move(filename,"image/"+str(label)+"/")
+          path="image/"+str(label)+"/"
+          if os.path.exists(os.path.join(path,filename))
+            os.remove(os.path.join(path,filename))
+          shutil.move(filename,path)
           return True
         else :
-          shutil.move(filename,"image/"+str(0)+"/")
+          path="image/"+str(0)+"/"
+          if os.path.exists(os.path.join(path,filename))
+            os.remove(os.path.join(path,filename))
+          shutil.move(filename,path)
           return False
     except:
         shutil.move(filename,"image/"+str(label)+random.randint(1,100)+"/")

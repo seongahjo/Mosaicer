@@ -21,6 +21,8 @@ tf.app.flags.DEFINE_boolean('use_fp16', False,
 # input
 tf.app.flags.DEFINE_integer('num_classes',10,
                            """Number of classes to run.""")
+tf.app.flags.DEFINE_integer('num_image',2800,
+                           """Number of images to run.""")
 
 # train
 tf.app.flags.DEFINE_integer('max_steps', 1000,
