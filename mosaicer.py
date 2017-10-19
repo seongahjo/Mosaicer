@@ -117,18 +117,21 @@ def check_image(filename, train_dir, label,count):
         os.makedirs("image/"+str(0))
     precision=compare.evaluate(output,train_dir)
     print (precision)
+
     try:
         if precision[label] > threshold :
-          path="image/"+str(label)+"/"
-          if os.path.exists(os.path.join(path,filename))
-            os.remove(os.path.join(path,filename))
-          shutil.move(filename,path)
+          if count%30==0:
+              path="image/"+str(label)+"/"
+              if os.path.exists(os.path.join(path,filename)):
+                os.remove(os.path.join(path,filename))
+              shutil.move(filename,path)
           return True
         else :
           path="image/"+str(0)+"/"
-          if os.path.exists(os.path.join(path,filename))
-            os.remove(os.path.join(path,filename))
-          shutil.move(filename,path)
+          if count%30==0:
+              if os.path.exists(os.path.join(path,filename)):
+                os.remove(os.path.join(path,filename))
+              shutil.move(filename,path)
           return False
     except:
         shutil.move(filename,"image/"+str(label)+random.randint(1,100)+"/")

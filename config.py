@@ -19,9 +19,9 @@ tf.app.flags.DEFINE_boolean('use_fp16', False,
 
 
 # input
-tf.app.flags.DEFINE_integer('num_classes',10,
+tf.app.flags.DEFINE_integer('num_classes',2,
                            """Number of classes to run.""")
-tf.app.flags.DEFINE_integer('num_image',2800,
+tf.app.flags.DEFINE_integer('num_image',1000,
                            """Number of images to run.""")
 
 # train
@@ -29,7 +29,7 @@ tf.app.flags.DEFINE_integer('max_steps', 1000,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
-tf.app.flags.DEFINE_integer('threshold',0.75,
+tf.app.flags.DEFINE_integer('threshold',0.5,
                             """minimum value to identify image.""")
 
 # mosaic

@@ -18,7 +18,7 @@ FLAGS = tf.app.flags.FLAGS
 
 # Global constants describing the data set.
 IMAGE_SIZE = input.IMAGE_SIZE
-NUM_CLASSES = input.NUM_CLASSES
+NUM_CLASSES = FLAGS.num_classes
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = input.NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN
 
 

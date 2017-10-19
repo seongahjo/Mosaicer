@@ -11,7 +11,6 @@ FLAGS = tf.app.flags.FLAGS
 
 
 IMAGE_SIZE = FLAGS.input_size
-NUM_CLASSES = FLAGS.num_classes
 NUM_EXAMPLES_PER_EPOCH_FOR_TRAIN = FLAGS.num_image
 
 
