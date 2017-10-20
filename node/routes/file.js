@@ -28,6 +28,7 @@ router.get('/', function(req, res, next) {
       console.log(error)
       return;
     }
+
     for (var i = 0; i < files.length; i++) {
       files[i] = mime.stat(folder, files[i])
     }
@@ -94,7 +95,7 @@ var train_view = jade.compile([
   '    td',
   '      |#{file.amount}',
   '    td',
-  '      |#{file.size} MB',
+  '      |#{file.size} KB',
   '    td.last',
   '      -  if (file.state === "Trained")',
   '        button.btn.btn-success.btn-xs(type="button") #{file.state}',
@@ -121,6 +122,7 @@ router.get('/train', function(req, res, next) {
     async.eachSeries(files, function iteratee(file, callback) {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
+      size=0
       if (stat.isDirectory()) {
         filedetail.name = file
         fs.readdir(path.join(Path, file), function(error, filess) {

@@ -46,50 +46,82 @@ router.get('/train', function(req, res, next) {
       var id = req.query.id
       var imageDir = path.join('/tmp/', id, 'upload')
       var folders = []
-      fs.readdir(imageDir, function(error, files) {
-        async.eachSeries(files, function iteratee(file, callback) {
-          var stat = fs.statSync(path.join(imageDir, file))
-          if (stat.isDirectory()) {
-            folders.push(path.join(imageDir, file))
-          }
-          callback()
-
-        }) //async
-      }) //readdir
-
-      // /tmp/id/upload 안에 있는 모든 폴더들 학습하자...
-      // 아직 미완성 (ㄲㄲㄲㄲㄱ)
       var trainDir = path.join('/tmp/', id, 'train')
       var dataDir = path.join('/tmp/', id, 'data')
+      var index=0;
       var trainData = {
         'train_dir': trainDir,
         'data_dir': dataDir
       }
+      async.waterfall([
+          function(callback) {
+            var files=fs.readdirSync(imageDir)
+                async.eachSeries(files, function iteratee(file, fcallback) {
+                    console.log('read file')
+                    var stat = fs.statSync(path.join(imageDir, file))
+                    if (stat.isDirectory()) {
+                      folders.push(path.join(imageDir, file))
+                    }
+                    fcallback()
+                  })
+                callback(null, folders)
+              },
+              function(folders, callback) {
+                console.log("folder : " + folders)
 
-      async.eachSeries(folders, function iteratee(folder, callback) {
-          var convertData = {
-            'image_dir': folder,
-            'data_dir': dataDir,
-            'label': label
+                async.eachSeries(folders, function iteratee(folder, fcallback) {
+                  console.log('convert inside' +  folder)
+                  var convertData = {
+                    'image_dir': folder,
+                    'data_dir': dataDir,
+                    'label': index
+                  }
+
+                  axios.get(pythonServer + 'convert', {
+                    params: convertData
+                  }).then(function(response) {
+                    console.log('convert finished')
+                    index+=1
+                    fcallback()
+                    if(index==folders.length)
+                    callback(null)
+                  })
+                })
+
+              }
+            ],function(err, result){
+                console.log('train start')
+                axios.get(pythonServer + 'train', {
+                  params: trainData
+                }).then(function(response) {
+                  console.log(response.data)
+                  res.json(response.data)
+                })
+              });
+
+        /*async.each(files, function(file, callback) {
+          var stat = fs.statSync(path.join(imageDir, file))
+          console.log('inside')
+          if (stat.isDirectory()) {
+            console.log("files : "+path.join(imageDir,file))
+            folders.push(path.join(imageDir, file))
           }
-          axios.get(pythonServer + 'convert', {
-            params: convertData
-          }).then(function(response) {
-            console.log('convert finished')
-
-          }).finally(function(){
-              callback()
-          })
+          callback()
 
         })
+        */
 
+        // /tmp/id/upload 안에 있는 모든 폴더들 학습하자...
+        // 아직 미완성 (ㄲㄲㄲㄲㄱ)
+
+        /*
         axios.get(pythonServer + 'train', {
           params: trainData
         }).then(function(response) {
           console.log(response.data)
           res.json(response.data)
         })
-
+*/
 
       })
 
