@@ -48,9 +48,9 @@ router.get('/train', function(req, res, next) {
       var folders = []
       fs.readdir(imageDir, function(error, files) {
         async.eachSeries(files, function iteratee(file, callback) {
-          var stat = fs.statSync(path.join(Path, file))
+          var stat = fs.statSync(path.join(imageDir, file))
           if (stat.isDirectory()) {
-            folders.push(path.join(Path, file))
+            folders.push(path.join(imageDir, file))
           }
           callback()
 

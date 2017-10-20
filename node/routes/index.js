@@ -13,6 +13,11 @@ router.get('/', function(req, res, next) {
 router.post('/login',function(req,res,next){
   console.log('id : '+req.body.id)
   console.log('pw : '+req.body.pw)
+
+  var Path=path.join('/tmp/',id)
+  // login Failed
+  if(!fs.existsSync(Path))
+  res.sendStatus(404)
   //authorization
   tempuser={id : req.body.id}
   // login
@@ -27,6 +32,8 @@ router.post('/signup',function(req,res,next){
   console.log('name : '+ name)
   console.log('pw : '+ pw)
   // make user
+
+  // make Folder
   var Path=path.join('/tmp/',id)
   console.log(Path)
   fs.existsSync(Path) || fs.mkdirSync(Path);
