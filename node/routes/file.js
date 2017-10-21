@@ -10,7 +10,7 @@ var file_view = jade.compile([
   '- each file in files',
   '  div.file(type="#{file.type}", dir="#{file.dir}")',
   '    div.icon',
-  '      img(src="img/#{file.type}.png")',
+  '      img.box(src="img/#{file.type}.png")',
   '    div.name #{file.name}',
   '-  if(folder==="upload")',
   '     div.file(type="makeDir", dir="#{folder}")',
@@ -156,37 +156,6 @@ router.get('/train', function(req, res, next) {
 
   })
 })
-/*
-fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
-        var filedetail = {} // file detail info
-        var stat = fs.statSync(path.join(Path, file))
-        if (!stat.isDirectory()) {
-            var ext = path.extname(file || '').split('.');
-            ext = ext[ext.length - 1]
-            if (ext == 'bin') {
-                filedetail.name = file
-                filedetail.size = stat["size"]
-                filedetail.label = file.split('train')[1].charAt(0)
-                    //if (Object.keys(state).length != 0) {
-                    //Optimization 필요
-                filedetail.state = 'Wait'
-                async.eachSeries(state.names, function iteratee(key, inside) {
-                        if (filedetail.state != 'Trained') {
-                            if (key.name == file) {
-                                filedetail.state = 'Trained'
-                            }
-                        }
-                        inside(null)
-                    })
-                    //  }
-            }
-            if (Object.keys(filedetail).length != 0) {
-                result.push(filedetail)
-            }
-            callback(null)
-        }*/
-
 
 
 var mosaic_view = jade.compile([
@@ -241,27 +210,80 @@ router.get('/mosaic', function(req, res, next) {
   })
 })
 
+var feedback_view = jade.compile([
+  '- each file in files',
+  '  tr',
+  '    td',
+  '      i.fa.fa-file-video-o',
+  '      |#{file.name}',
+  '    td.last',
+  '      a(href="#{file.path}")',
+  '        button.btn.btn-warning.btn-xs(type="button") View',
+].join('\n'))
+
+
 router.get('/feedback', function(req, res, next) {
   var id = req.query.id
-  var Path = path.join('/tmp/', id, 'video')
-  var statePath = path.join(Path, 'result')
+  //var Path = path.join('/tmp/', id, 'video')
+  var Path = path.join('../','video')
+  //var statePath = path.join(Path, 'result')
   var result = []
+  fs.readdir(Path, function(error, files) {
+    async.eachSeries(files, function iteratee(file, callback) {
+      var filedetail = {} // file detail info
+      var stat = fs.statSync(path.join(Path, file))
+      if (!stat.isDirectory() &&  path.extname(file)=='.avi') {
+        filedetail.name = file
+        filedetail.path=path.basename(file,path.extname(file))
+      }
+      if(JSON.stringify(filedetail) != '{}') // json null check
+      result.push(filedetail)
+      callback()
+    },function(){
+      res.send(feedback_view({
+        files: result
+      }))
 
+    })
+  })
+})
+
+var feedback_face_view = jade.compile([
+  '- each file in files',
+  '  figure.imgcheckbox',
+  '    .figure-content',
+  '      img.face(src="util/img/#{file.video}/#{file.name}",data-src="holder.js/64x64")',
+  '    figcaption',
+  '      i.fa.fa-check.fa-5x',
+  '    label',
+  '      input(type="checkbox", name="name")',
+  '      |  Label',
+].join('\n'))
+
+router.get('/feedback_face', function(req, res, next) {
+  var id = req.query.id
+  var file_name=req.query.filename
+  var Path = path.join('../image',file_name, 'etc')
+  var result = []
+  console.log(Path)
   fs.readdir(Path, function(error, files) {
     async.eachSeries(files, function iteratee(file, callback) {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory()) {
         filedetail.name = file
-        filedetail.size = stat["size"]
+        filedetail.video=file_name
       }
-
-      res.send(mosaic_view({
+      result.push(filedetail)
+      callback()
+    },function(){
+      res.send(feedback_face_view({
         files: result
       }))
-
     })
   })
+
+
 })
 
 

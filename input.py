@@ -131,9 +131,9 @@ def distorted_inputs(data_dir, batch_size):
     f=os.path.join(data_dir,filename)
     if 'train' in filename and os.path.splitext(filename)[-1] == '.bin':
         filenames.append(f)
-
         print(f)
-
+  if not filenames :
+      raise ValueError("No data file")
   print('train start')
   for f in filenames:
     if not tf.gfile.Exists(f):

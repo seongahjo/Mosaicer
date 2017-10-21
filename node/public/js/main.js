@@ -1,6 +1,9 @@
 var currentfolder = 'upload';
 var defaultDir = 'upload'
 
+$(document).ready(function(){
+	Holder.run()
+})
 
 function readFile(id, dir) {
     var data = {
@@ -172,6 +175,24 @@ function getFeedback(id) {
     })
 }
 
+function getFeedback_face(id,filename){
+	var data = {
+			'id': id,
+			'filename':filename
+	}
+	$.ajax({
+			url: 'file/feedback_face',
+			method: 'GET',
+			data: data,
+	}).done(function(data) {
+			$("#feedback").html(data)
+			$('.imgcheckbox').imgCheckbox({
+				round: true,
+				animation: true,
+			})
+
+	})
+}
 
 
 $(document).ajaxStart(function() {

@@ -9,7 +9,7 @@
 .files {
     margin: 5px;
 }
-img{
+img.box{
   max-width: 100%;
   vertical-align: middle;
   border: 0;
@@ -26,7 +26,13 @@ img{
     text-align: center;
     vertical-align: top;
 }
-
+.face{
+  width:60px;
+  height:60px;
+}
+figure{
+  margin:8px;
+}
 .file .icon {
     margin: auto;
     margin-top: 0;

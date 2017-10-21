@@ -13,9 +13,10 @@ router.get('/', function(req, res, next) {
 router.post('/login',function(req,res,next){
   console.log('id : '+req.body.id)
   console.log('pw : '+req.body.pw)
-
+  var id=req.body.id
   var Path=path.join('/tmp/',id)
   // login Failed
+  console.log(Path)
   if(!fs.existsSync(Path))
   res.sendStatus(404)
   //authorization

@@ -53,6 +53,9 @@ def evaluate(output, train_dir):
     resized_image=tf.image.resize_images(reshaped_image,[FLAGS.input_size,FLAGS.input_size])
     float_image=tf.image.per_image_standardization(resized_image)
 
+    float_image.set_shape([FLAGS.input_size,FLAGS.input_size,3])
+    read_input.label.set_shape([1])
+
     num_examples_per_epoch=FLAGS.num_examples
     min_queue_examples = int(num_examples_per_epoch)
     batch_size=FLAGS.batch_size

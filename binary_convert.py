@@ -39,7 +39,9 @@ def convert_global(image_dir,data_dir,label):
   # Directory that stores image binary file
     output=[]
     output.append(data_dir+"/")
-    output.append("train"+label)
+    output.append("train_")
+    output.append(os.path.basename(image_dir)+"_")
+    output.append(label)
     outputstr=''.join(output)
 
   # Single file

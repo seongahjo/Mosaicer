@@ -18,6 +18,10 @@ def mosaic(video_path,train_dir, label):
     data=video_path
     video_dir,filename=os.path.split(video_path)
     result_dir= os.path.join(video_dir,'result')
+    file_name=os.path.splitext(filename)[0]
+    file_path=os.path.join("image",file_name)
+    if not os.path.exists(file_path):
+        os.makedirs(file_path)
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
     index=0
@@ -45,8 +49,8 @@ def mosaic(video_path,train_dir, label):
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output,(32,32),interpolation = cv2.INTER_AREA)
-            cv2.imwrite("image/"+filename[0]+str(face_count)+".jpg", img_output2)
-            if check_image(filename=filename[0],train_dir=train_dir, label=label,count=face_count):
+            cv2.imwrite(os.path.join(file_path,str(face_count)+".jpg"), img_output2)
+            if check_image(filename=file_name,train_dir=train_dir, label=label,count=face_count):
                 frame=job(frame=frame,x=left,y=top,w=right-left,h=bottom-top,height=height,width=width)
             face_count+=1
         index+=1
@@ -109,40 +113,65 @@ def job(frame,x,y,w,h,height,width):
 
 def check_image(filename, train_dir, label,count):
     threshold=FLAGS.threshold
-    filename="image/"+filename+str(count)+".jpg"
-    output=binary_convert.convert(filename)
-    if not os.path.exists("image/"+str(label)):
-        os.makedirs("image/"+str(label))
-    if not os.path.exists("image/"+str(0)):
-        os.makedirs("image/"+str(0))
+    per_frame=FLAGS.face_frame
+    full_name=str(count)+".jpg"
+    folder_path=os.path.join("image",filename)
+    full_path=os.path.join(folder_path,full_name)
+    output=binary_convert.convert(full_path)
+    #폴더 생성
+    if not os.path.exists(os.path.join(folder_path,str(label))):
+        os.makedirs(os.path.join(folder_path,str(label)))
+    if not os.path.exists(os.path.join(folder_path,str(0))):
+        os.makedirs(os.path.join(folder_path,str(0)))
+    if not os.path.exists(os.path.join(folder_path,"etc")):
+        os.makedirs(os.path.join(folder_path,"etc"))
+
     precision=compare.evaluate(output,train_dir)
     print (precision)
 
+    # 현재 threshold 70
+    # 헷갈리는건 50?
     try:
         if precision[label] > threshold :
-          if count%30==0:
-              path="image/"+str(label)+"/"
+          if count%per_frame==0:
+              path=os.path.join(folder_path,str(label))
               if os.path.exists(os.path.join(path,filename)):
                 os.remove(os.path.join(path,filename))
-              shutil.move(filename,path)
-          return True
-        else :
-          path="image/"+str(0)+"/"
-          if count%30==0:
-              if os.path.exists(os.path.join(path,filename)):
-                os.remove(os.path.join(path,filename))
-              shutil.move(filename,path)
+              shutil.move(full_path,os.path.join(path,full_name))
+          else:
+            os.remove(full_path)
           return False
+        elif precision[label] < threshold and precision[label] >0.4:
+            if count%per_frame==0:
+                path=os.path.join(folder_path,"etc")
+                if os.path.exists(os.path.join(path,filename)):
+                  os.remove(os.path.join(path,filename))
+                shutil.move(full_path,os.path.join(path,full_name))
+            else:
+                os.remove(full_path)
+            return True
+        else :
+          if count%per_frame==0:
+              path=os.path.join(folder_path,str(0))
+              if os.path.exists(os.path.join(path,filename)):
+                os.remove(os.path.join(path,filename))
+              shutil.move(full_path,os.path.join(path,full_name))
+          else:
+            os.remove(full_path)
+          return True
     except:
-        shutil.move(filename,"image/"+str(label)+random.randint(1,100)+"/")
+        shutil.move(full_path,"image/"+str(label)+"/"+random.randint(1,100))
     finally:
+        #os.remove(full_path)
         if precision[label] > threshold :
-          return True
-        else :
           return False
+        else :
+          return True
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2 :
             print ('[Error] ./%s [filename]' %sys.argv[0])
     else:
         video_path=os.path.join(FLAGS.video_dir,sys.argv[1])
-        mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.mosaic_label)
+        mosaic(video_path=video_path,train_dir=FLAGS.train_dir, label=FLAGS.target_label)
