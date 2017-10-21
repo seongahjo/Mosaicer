@@ -1,5 +1,5 @@
-var currentfolder = 'upload';
-var defaultDir = 'upload'
+var currentfolder = '';
+var defaultDir = ''
 
 $(document).ready(function(){
 	Holder.run()

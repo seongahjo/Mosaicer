@@ -37,10 +37,14 @@ router.post('/signup',function(req,res,next){
   // make Folder
   var Path=path.join('/tmp/',id)
   console.log(Path)
-  fs.existsSync(Path) || fs.mkdirSync(Path);
 
-  Path=path.join(Path,'upload')
-  fs.existsSync(Path) || fs.mkdirSync(Path);
+  fs.existsSync(Path) || fs.mkdirSync(Path)
+
+  uploadPath=path.join(Path,'upload')
+  fs.existsSync(uploadPath) || fs.mkdirSync(uploadPath)
+
+  videoPath=path.join(Path,'video')
+  fs.existsSync(videoPath) || fs.mkdirSync(videoPath)
 
   res.redirect('/')
 })
@@ -70,8 +74,13 @@ router.get('/mosaic',function(req,res,next){
   res.render('mosaic',{user:tempuser})
 })
 
-router.get('/feedback-test',function(req,res,next){
-  res.render('feedback-face',{user:tempuser})
+router.get('/feedback-face',function(req,res,next){
+  var video_name=req.query.video
+  res.render('feedback-face',{user:tempuser,video:video_name})
+})
+
+router.get('/setting',function(req,res,next){
+  res.render('setting',{user:tempuser})
 })
 
 module.exports = router;

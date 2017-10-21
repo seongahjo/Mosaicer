@@ -22,7 +22,8 @@ var file_view = jade.compile([
 router.get('/', function(req, res, next) {
   var id = req.query.id
   var folder = req.query.folder
-  var realPath = path.join('/tmp/', id, folder)
+  var realPath=path.join('../','image',folder)
+  //var realPath = path.join('/tmp/', id, folder)
   fs.readdir(realPath, function(error, files) {
     if (error) {
       console.log(error)
@@ -59,7 +60,8 @@ var convert_view = jade.compile([
 
 router.get('/convert', function(req, res, next) {
   var id = req.query.id
-  var Path = path.join('/tmp/', id, 'upload')
+  //var Path = path.join('/tmp/', id, 'upload')
+  var Path=path.join('../','image')
   var result = []
   fs.readdir(Path, function(error, files) {
     async.eachSeries(files, function iteratee(file, callback) {
@@ -108,7 +110,8 @@ var train_view = jade.compile([
 
 router.get('/train', function(req, res, next) {
   var id = req.query.id
-  var Path = path.join('/tmp/', id, 'upload')
+  var Path=path.join('../','image')
+  //var Path = path.join('/tmp/', id, 'upload')
   var statePath = path.join(Path, 'state.json')
   var state = {}
   var result = []
@@ -177,7 +180,8 @@ var mosaic_view = jade.compile([
 
 router.get('/mosaic', function(req, res, next) {
   var id = req.query.id
-  var Path = path.join('/tmp/', id, 'video')
+  //var Path = path.join('/tmp/', id, 'video')
+  var Path=path.join('../','video')
   var statePath = path.join(Path, 'result')
   var result = []
 
@@ -185,7 +189,7 @@ router.get('/mosaic', function(req, res, next) {
     async.eachSeries(files, function iteratee(file, callback) {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
-      if (!stat.isDirectory()) {
+      if (!stat.isDirectory() && path.extname(file)=='.avi') {
         filedetail.name = file
         filedetail.size = stat["size"]
         filedetail.state = 'Mosaic'
@@ -217,7 +221,7 @@ var feedback_view = jade.compile([
   '      i.fa.fa-file-video-o',
   '      |#{file.name}',
   '    td.last',
-  '      a(href="#{file.path}")',
+  '      a(href="feedback-face?video=#{file.path}")',
   '        button.btn.btn-warning.btn-xs(type="button") View',
 ].join('\n'))
 
