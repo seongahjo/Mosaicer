@@ -118,7 +118,8 @@ def check_image(filename, train_dir, label,count):
     folder_path=os.path.join("image",filename)
     full_path=os.path.join(folder_path,full_name)
     output=binary_convert.convert(full_path)
-    #폴더 생성
+
+    # Make Dirs
     if not os.path.exists(os.path.join(folder_path,str(label))):
         os.makedirs(os.path.join(folder_path,str(label)))
     if not os.path.exists(os.path.join(folder_path,str(0))):
@@ -129,8 +130,7 @@ def check_image(filename, train_dir, label,count):
     precision=compare.evaluate(output,train_dir)
     print (precision)
 
-    # 현재 threshold 70
-    # 헷갈리는건 50?
+    # Threshold 70
     try:
         if precision[label] > threshold :
           if count%per_frame==0:
