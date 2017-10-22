@@ -17,7 +17,12 @@ var storage = multer.diskStorage({
 
 var uploadstorage = multer.diskStorage({
   destination: function(req, file, cb) {
-    var folder = path.join('/tmp/', req.body.id, req.body.folder)
+    var folder=''
+    if(path.extname(file)==".jpg")
+    folder=path.join('../','image',req.body.folder)
+    else if(path.extname(file)==".avi")
+    folder=path.join('../','video')
+    //var folder = path.join('/tmp/', req.body.id, req.body.folder)
     cb(null, folder)
   },
   filename: function(req, file, cb) {
@@ -37,7 +42,8 @@ var upload = multer({
 router.get('/makeFolder', function(req, res, next) {
   var id = req.query.id
   var folder = req.query.folder
-  var dir = path.join('/tmp/', id, 'upload', folder)
+  //var dir = path.join('/tmp/', id, 'upload', folder)
+  var dir = path.join('../','image',folder)
   fs.existsSync(dir) || fs.mkdirSync(dir)
   res.send(dir)
 })

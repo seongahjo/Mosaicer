@@ -12,7 +12,7 @@ var file_view = jade.compile([
   '    div.icon',
   '      img.box(src="img/#{file.type}.png")',
   '    div.name #{file.name}',
-  '-  if(folder==="upload")',
+  '-  if(folder==="")',
   '     div.file(type="makeDir", dir="#{folder}")',
   '       div.icon',
   '         a(href="#",data-toggle="modal", data-target=".bs-example-modal-sm")',
