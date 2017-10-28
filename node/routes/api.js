@@ -10,6 +10,7 @@ var async = require('async')
 var jade = require('jade')
 var wreck = require('wreck')
 var mime = require('../util/mime')
+var fse=require('fs-extra')
 var storage = multer.diskStorage({
   filename: function(req, file, cb) {
     cb(null, Date.now() + '.jpg')
@@ -43,13 +44,46 @@ var upload = multer({
 
 
 router.get('/makeFolder', function(req, res, next) {
-  var id = req.query.id
   var folder = req.query.folder
-  //var dir = path.join('/tmp/', id, 'upload', folder)
   var dir = path.join('../','image',folder)
+  console.log('makeFolder : '+dir)
   fs.existsSync(dir) || fs.mkdirSync(dir)
   res.send(dir)
 })
+
+
+router.get('/delete', function(req, res, next) {
+  var files = req.query.files
+  async.eachSeries(files, function iteratee(file, fcallback) {
+    var Path=path.join('../','image',file)
+    if(fs.existsSync(Path)){
+    fse.removeSync(Path)
+    }
+    fcallback()
+  })
+  res.sendStatus(200)
+})
+
+
+router.get('/paste', function(req, res, next) {
+  var srcs = req.query.src
+  var dest = req.query.to
+  dest = path.join('../','image',dest,'/')
+  console.log(srcs+ ' to '+dest)
+  try {
+  async.eachSeries(srcs, function iteratee(src, fcallback) {
+    var Path=path.join('../','image',src)
+    if(fs.existsSync(Path)){
+    fse.copySync(Path,path.join(dest,path.basename(src)))
+    }
+    fcallback()
+  })
+}catch(err){
+  console.log(err)
+}
+  res.sendStatus(200)
+})
+
 
 router.get('/train', function(req, res, next) {
       var folders=req.query.folder

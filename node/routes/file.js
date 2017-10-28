@@ -8,16 +8,31 @@ var async = require('async')
 
 var file_view = jade.compile([
   '- each file in files',
-  '  div.file(type="#{file.type}", dir="#{file.dir}")',
-  '    div.icon',
-  '      img.box(src="img/#{file.type}.png")',
-  '    div.name #{file.name}',
+  '  -  if(file.type==="image")',
+  '       figure.imgcheckbox',
+  '        .figure-content',
+  '          img.face(src="util/img/#{folder}/#{file.name}",data-src="holder.js/64x64")',
+  '        figcaption',
+  '          i.fa.fa-check.fa-5x',
+  '        label',
+  '          input(type="checkbox",id="upload" name="#{folder}/#{file.name}")',
+  '          |  Label',
+  '   -  else',
+  '       div.file(type="#{file.type}", dir="#{file.dir}")',
+  '         div.icon',
+  '          img.box(src="img/#{file.type}.png")',
+  '         div.name #{file.name}',
   '-  if(folder==="")',
   '     div.file(type="makeDir", dir="#{folder}")',
   '       div.icon',
   '         a(href="#",data-toggle="modal", data-target=".bs-example-modal-sm")',
   '           i.max.fa.fa-plus-square-o'
 ].join('\n'))
+
+/*'  div.file(type="#{file.type}", dir="#{file.dir}")',
+'    div.icon',
+'      img.box(src="img/#{file.type}.png")',
+'    div.name #{file.name}',*/
 
 router.get('/', function(req, res, next) {
   var folder = req.query.folder
@@ -296,7 +311,7 @@ var feedback_face_view = jade.compile([
   '- each file in files',
   '  figure.imgcheckbox',
   '    .figure-content',
-  '      img.face(src="util/img/#{file.video}/#{file.name}",data-src="holder.js/64x64")',
+  '      img.face(src="util/img/#{file.video}\/etc/#{file.name}",data-src="holder.js/64x64")',
   '    figcaption',
   '      i.fa.fa-check.fa-5x',
   '    label',

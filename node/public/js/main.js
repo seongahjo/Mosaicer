@@ -5,6 +5,16 @@ var modelFile = ''
 var videoFile = ''
 var feedbackFile = []
 var uploadFile=[]
+var cp_src=[]
+function removeList(list,file){
+  var i = list.indexOf(file);
+  if (i != -1) {
+    list.splice(i, 1);
+    console.log('deleted ' + list)
+  }
+}
+
+
 $(document).ready(function() {
   Holder.run()
 
@@ -22,33 +32,73 @@ $(document).ready(function() {
     console.log(trainFolder)
   });
 
+
+})
+
+function load(){
   $('figure').on('click', function(event) {
     var figure = $(this)
     var input = $('input[type="checkbox"]', figure)
     if (input.prop('checked')) {
-      if (input.prop('id') === 'feedback')
-        feedbackFile.push(input.prop('name'))
-      else if(input.prop('id') === 'upload')
-        uploadFile.push(input.prop('name'))
+      if (input.prop('id') === 'feedback'){
+        feedbackFile.push(input.prop('name')+".jpg")
+        console.log('added '+ feedbackFile)
+      }
+      else if(input.prop('id') === 'upload'){
+        uploadFile.push(input.prop('name')+".jpg")
       console.log('added ' + uploadFile)
+      }
     } else {
       if (input.prop('id') === 'feedback') {
-        var i = feedbackFile.indexOf(input.prop('name'));
-        if (i != -1) {
-          feedbackFile.splice(i, 1);
-          console.log('deleted ' + feedbackFile)
-        }
+        removeList(feedbackFile,input.prop('name')+".jpg")
       }
       else if (input.prop('id') === 'upload') {
-        var i = uploadFIle.indexOf(input.prop('name'));
-        if (i != -1) {
-          uploadFile.splice(i, 1);
-          console.log('deleted ' + uploadFile)
-        }
+        removeList(uploadFile,input.prop('name')+".jpg")
       }
-    }
+    } // ese
   })
-})
+}
+
+function cpFiles(){
+  cp_src=[]
+  for(var i=0; i<uploadFile.length; i++){
+  cp_src.push(uploadFile[i])
+  }
+  console.log('copy finished '+cp_src)
+
+}
+
+function pasteFiles(){
+  var data={
+    'src':cp_src,
+    'to':currentfolder
+  }
+  console.log(cp_src+" to "+currentfolder)
+  $.ajax({
+    url:'api/paste',
+    method:'GET',
+    data:data
+  }).done(function(response){
+    console.log('good')
+    readFile(currentfolder)
+  })
+  // image/namsu_jo
+
+}
+function removeFiles(){
+  var data={
+    'files':uploadFile
+  }
+  $.ajax({
+    url:'api/delete',
+    method:'GET',
+    data:data
+  }).done(function(response){
+    console.log('good')
+    readFile(currentfolder)
+
+  })
+}
 
 function readFile(dir) {
   var data = {
@@ -60,12 +110,29 @@ function readFile(dir) {
     data: data
   }).done(function(data) {
     $("#files").html(data)
+    $('.imgcheckbox').imgCheckbox({
+      animation: true,
+      round: true
+    })
+    //initialize
+    uploadFile=[]
+    load()
     $('#files').on('click', function() {
       $(this).children('.focus').removeClass('focus')
+
     })
+
     $('[type=folder]').on({
       'click': function(e) {
-        $(this).addClass('focus')
+        if($(this).hasClass("focus")){
+          $(this).removeClass('focus')
+          removeList(uploadFile,$(this).attr("dir"))
+        }
+        else{
+          $(this).addClass('focus')
+          uploadFile.push($(this).attr("dir"))
+          console.log(uploadFile)
+        }
         e.stopPropagation();
       },
       'dblclick': function(e) {
@@ -75,6 +142,7 @@ function readFile(dir) {
           id: defaultId,
           folder: currentfolder
         };
+        uploadFile=[]
       },
     })
   })
@@ -187,7 +255,6 @@ function download(filename) {
 
 function makeFolder() {
   var data = {
-    'id': defaultId,
     'folder': $("#folder-id").val()
   }
   $.ajax({
@@ -196,7 +263,7 @@ function makeFolder() {
     data: data,
   }).done(function(response) {
     $("#folder-id").val('')
-    readFile(defaultId, defaultDir)
+    readFile(defaultDir)
   })
 }
 
@@ -223,6 +290,7 @@ function getFeedback_face(filename) {
       round: true,
       animation: true,
     })
+    load()
 
   })
 }

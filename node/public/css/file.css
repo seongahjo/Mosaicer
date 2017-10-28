@@ -154,7 +154,10 @@ figure{
   height:100%;
 }
 
-
+.btn_nav{
+  padding: 6px 1px;
+  margin-right : 0px;
+}
 .modal {
   text-align: center;
   padding: 0!important;
