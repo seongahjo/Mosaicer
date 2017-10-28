@@ -1,6 +1,8 @@
 var currentfolder = '';
 var defaultDir = ''
 var trainFolder=[]
+var modelFile=''
+var videoFile=''
 $(document).ready(function(){
 	Holder.run()
 
@@ -20,9 +22,8 @@ $('input').on('ifUnchecked', function(event){
 });
 })
 
-function readFile(id, dir) {
+function readFile( dir) {
     var data = {
-        'id': id,
         'folder': dir
     }
     $.ajax({
@@ -60,67 +61,64 @@ function goLeft() {
     }
 }
 
-function getConvert(id) {
-    var data = {
-        'id': id
-    }
+function getConvert() {
     $.ajax({
         url: 'file/convert',
         method: 'GET',
-        data: data
     }).done(function(data) {
         $("#file-list").html(data)
     })
 }
 
-function getTrain(id) {
-    var data = {
-        'id': id
-    }
+function getTrain() {
     $.ajax({
         url: 'file/train',
         method: 'GET',
-        data: data
     }).done(function(data) {
         $("#lists").html(data)
     })
 }
 
-function getMosaic(id) {
-    var data = {
-        'id': id
-    }
+function getMosaic() {
     $.ajax({
         url: 'file/mosaic',
         method: 'GET',
-        data: data,
     }).done(function(data) {
         $("#lists").html(data)
     })
+
+
+		$.ajax({
+			url:'file/model',
+			method:'GET',
+		}).done(function(data){
+			$("#main").html(data)
+		})
 }
 
 
-function convert(id, folder) {
-  var label=$("#btn_" + folder).val()
-  if(label===undefined)
-    return
-    var data = {
-        'id': id,
-        'folder': folder,
-        'label': label
-    }
-    $.ajax({
-        url: 'api/convert',
-        method: 'GET',
-        data: data
-    }).done(function(response) {
-        getConvert(id)
-    })
+function model(name){
+	modelFile=name
+	$.ajax({
+		url:'file/video',
+		method:'GET',
+	}).done(function(data){
+		$("#main").html(data)
+	})
 }
 
-function train(id) {
+function video(name){
+	videoFile=name
+	var data={
+		'model' : modelFile,
+		'filename' : videoFile,
+	}
+console.log(data)
+}
+
+
+function train() {
   var data = {
-        'id': id,
 				'folder':trainFolder
     }
     $.ajax({
@@ -136,14 +134,9 @@ function train(id) {
 
 
 
-function mosaic(id,filename){
-  var label=$("#btn_"+filename).val()
-  if(label===undefined)
-    return
+function mosaic(filename){
   var data = {
-    'id' : id,
     'filename' : filename,
-    'label' : label
   }
   $.ajax({
     url: 'api/mosaic',
@@ -155,9 +148,10 @@ function mosaic(id,filename){
 
 
 
-function download(id,filename){
+
+
+function download(filename){
   var data = {
-    'id' : id,
     'filename' : filename
   }
   location.href='api/download?'+$.param(data)
@@ -178,22 +172,17 @@ function makeFolder() {
     })
 }
 
-function getFeedback(id) {
-    var data = {
-        'id': id
-    }
+function getFeedback() {
     $.ajax({
         url: 'file/feedback',
         method: 'GET',
-        data: data,
     }).done(function(data) {
         $("#lists").html(data)
     })
 }
 
-function getFeedback_face(id,filename){
+function getFeedback_face(filename){
 	var data = {
-			'id': id,
 			'filename':filename
 	}
 	$.ajax({

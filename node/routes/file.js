@@ -20,7 +20,6 @@ var file_view = jade.compile([
 ].join('\n'))
 
 router.get('/', function(req, res, next) {
-  var id = req.query.id
   var folder = req.query.folder
   var realPath=path.join('../','image',folder)
   //var realPath = path.join('/tmp/', id, folder)
@@ -58,35 +57,6 @@ var convert_view = jade.compile([
 ].join('\n'))
 
 
-router.get('/convert', function(req, res, next) {
-  var id = req.query.id
-  //var Path = path.join('/tmp/', id, 'upload')
-  var Path=path.join('../','image')
-  var result = []
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
-      var filedetail = {} // file detail info
-      var stat = fs.statSync(path.join(Path, file))
-      if (stat.isDirectory()) {
-        filedetail.name = file
-        fs.readdir(path.join(Path, file), function(error, filess) {
-          filedetail.amount = filess.length;
-          result.push(filedetail)
-          callback(null)
-        })
-      } else {
-        callback(null)
-      }
-
-    }, function() {
-      res.send(convert_view({
-        files: result
-      }))
-    });
-
-  })
-})
-
 
 
 
@@ -114,9 +84,7 @@ var train_view = jade.compile([
 var model_view = jade.compile([
   '- each file in files',
   '  tr',
-  '    td',
-  '      input.flat(type="checkbox",value="#{file.name}")',
-  '    td.last',
+  '    td.last(onClick="model(\'#{file.name}\')")',
   '      i.fa.fa-folder',
   '      |#{file.name}',
   ].join('\n'))
@@ -124,7 +92,6 @@ var model_view = jade.compile([
 
 
 router.get('/model', function(req, res, next) {
-  var id = req.query.id
   var Path=path.join('../','model')
   var result = []
 
@@ -151,8 +118,44 @@ router.get('/model', function(req, res, next) {
 
 
 
+
+var video_view = jade.compile([
+  '- each file in files',
+  '  tr',
+  '    td.last(onClick="video(\'#{file.name}\')")',
+  '      i.fa.fa-file-video-o',
+  '      |#{file.name}',
+  ].join('\n'))
+
+
+
+router.get('/video', function(req, res, next) {
+  var Path=path.join('../','video')
+  var result = []
+
+  if(!fs.existsSync(Path))
+  res.send(404)
+  fs.readdir(Path, function(error, files) {
+    async.eachSeries(files, function iteratee(file, callback) {
+      var filedetail = {} // file detail info
+      var stat = fs.statSync(path.join(Path, file))
+      if (!stat.isDirectory() && file!=".temp") {
+        filedetail.name = file
+        result.push(filedetail)
+        callback(null)
+        } else {
+        callback(null)
+      }
+    }, function() {
+      res.send(video_view({
+        files: result
+      }))
+    });
+  })
+})
+
+
 router.get('/train', function(req, res, next) {
-  var id = req.query.id
   var Path=path.join('../','image')
   //var Path = path.join('/tmp/', id, 'upload')
   var statePath = path.join(Path, 'state.json')
@@ -220,7 +223,6 @@ var mosaic_view = jade.compile([
 ].join('\n'))
 
 router.get('/mosaic', function(req, res, next) {
-  var id = req.query.id
   //var Path = path.join('/tmp/', id, 'video')
   var Path=path.join('../','video')
   var statePath = path.join(Path, 'result')
@@ -268,10 +270,7 @@ var feedback_view = jade.compile([
 
 
 router.get('/feedback', function(req, res, next) {
-  var id = req.query.id
-  //var Path = path.join('/tmp/', id, 'video')
   var Path = path.join('../','video')
-  //var statePath = path.join(Path, 'result')
   var result = []
   fs.readdir(Path, function(error, files) {
     async.eachSeries(files, function iteratee(file, callback) {
@@ -306,7 +305,6 @@ var feedback_face_view = jade.compile([
 ].join('\n'))
 
 router.get('/feedback_face', function(req, res, next) {
-  var id = req.query.id
   var file_name=req.query.filename
   var Path = path.join('../image',file_name, 'etc')
   var result = []

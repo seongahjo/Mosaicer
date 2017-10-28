@@ -26,7 +26,6 @@ var uploadstorage = multer.diskStorage({
     else if(result.type=="video")
     folder=path.join('../','video')
     console.log("upload to "+folder)
-    //var folder = path.join('/tmp/', req.body.id, req.body.folder)
     cb(null, folder)
   },
   filename: function(req, file, cb) {
@@ -53,12 +52,8 @@ router.get('/makeFolder', function(req, res, next) {
 })
 
 router.get('/train', function(req, res, next) {
-      var id = req.query.id
       var folders=req.query.folder
-      console.log("id ="+ id)
       console.log(folders)
-      //var imageDir = path.join('/tmp/', id, 'upload')
-      //var folders = []
       var trainDir = path.join('../', 'model')
       var dataDir=path.join('data');
       fs.existsSync(trainDir) || fs.mkdirSync(trainDir)
@@ -74,22 +69,6 @@ router.get('/train', function(req, res, next) {
         'train_dir': trainDir,
         'data_dir': dataDir
       }
-
-
-      /*var files=fs.readdirSync(imageDir)
-          async.eachSeries(files, function iteratee(file, fcallback) {
-              console.log('read file')
-              var stat = fs.statSync(path.join(imageDir, file))
-              if (stat.isDirectory()) {
-                folders.push(path.join(imageDir, file))
-              }
-              fcallback()
-            })
-          callback(null, folders)
-        },
-        function(folders, callback) {
-          console.log("folder : " + folders)*/
-
       async.waterfall([
           function(callback) {
 
@@ -123,31 +102,6 @@ router.get('/train', function(req, res, next) {
                   res.json(response.data)
                 })
               });
-
-        /*async.each(files, function(file, callback) {
-          var stat = fs.statSync(path.join(imageDir, file))
-          console.log('inside')
-          if (stat.isDirectory()) {
-            console.log("files : "+path.join(imageDir,file))
-            folders.push(path.join(imageDir, file))
-          }
-          callback()
-
-        })
-        */
-
-        // /tmp/id/upload 안에 있는 모든 폴더들 학습하자...
-        // 아직 미완성 (ㄲㄲㄲㄲㄱ)
-
-        /*
-        axios.get(pythonServer + 'train', {
-          params: trainData
-        }).then(function(response) {
-          console.log(response.data)
-          res.json(response.data)
-        })
-*/
-
       })
 
     var upload_view = jade.compile([
@@ -166,10 +120,10 @@ router.get('/train', function(req, res, next) {
     })
 
     router.get('/mosaic', function(req, res, next) {
-      var id = req.query.id
       var filename = req.query.filename
+      var model=req.query.model
       var label = 9
-      var trainDir = path.join('train')
+      var trainDir = path.join('model',model)
       var videoPath = path.join('video', filename)
       var data = {
         'train_dir': trainDir,
@@ -185,7 +139,6 @@ router.get('/train', function(req, res, next) {
     })
 
     router.get('/download', function(req, res, next) {
-      //var id = req.query.id
       var filename = req.query.filename
       var Path = path.join('../','video', 'result', filename)
       console.log(Path)
