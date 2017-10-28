@@ -54,6 +54,7 @@ router.get('/makeFolder', function(req, res, next) {
 
 router.get('/delete', function(req, res, next) {
   var files = req.query.files
+  console.log(files +" to delete")
   async.eachSeries(files, function iteratee(file, fcallback) {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){

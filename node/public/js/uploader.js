@@ -17,9 +17,6 @@ $(function() {
     var uploader = $("#drop-area-div").dmUploader({
         url: 'api/compare',
         method: 'POST',
-        extraData: {
-            id: defaultId
-        },
         allowedTypes: 'image/*',
         onInit: function() {
             console.log('good')
@@ -77,7 +74,6 @@ $(function() {
         url: 'api/upload',
         method: 'POST',
         extraData: {
-            id: defaultId,
             folder: currentfolder
         },
         allowedTypes: 'image/*',
@@ -85,7 +81,7 @@ $(function() {
             console.log('good')
         },
         onUploadSuccess: function(id, data) {
-            readFile(defaultId, currentfolder)
+            readFile(currentfolder)
         }
     });
 
@@ -109,7 +105,6 @@ $(function() {
         url: 'api/videoUpload',
         method: 'POST',
         extraData: {
-            id: defaultId,
             folder : 'video'
         },
         allowedTypes: 'video/*',
@@ -117,7 +112,7 @@ $(function() {
             console.log('good')
         },
         onUploadSuccess: function(id, data) {
-            getMosaic(defaultId)
+            getMosaic()
                 //readFile(defaultId, currentfolder)
         },
         onUploadProgress: function(id, percent) {

@@ -9,12 +9,13 @@ var tempuser = { id : 'user'}
 //  res.render('index', {user: tempuser});
   res.render('login')
 });*/
-
+var Path='../image'
+fs.existsSync(Path) || fs.mkdirSync(Path);
 router.get('/',function(req,res,next){
+
 /*  console.log('id : '+req.body.id)
   console.log('pw : '+req.body.pw)*/
   var id='test'
-  var Path=path.join('/tmp/',id)
   // login Failed
   /*console.log(Path)
   if(!fs.existsSync(Path))

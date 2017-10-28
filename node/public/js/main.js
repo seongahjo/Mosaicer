@@ -40,21 +40,9 @@ function load(){
     var figure = $(this)
     var input = $('input[type="checkbox"]', figure)
     if (input.prop('checked')) {
-      if (input.prop('id') === 'feedback'){
-        feedbackFile.push(input.prop('name')+".jpg")
-        console.log('added '+ feedbackFile)
-      }
-      else if(input.prop('id') === 'upload'){
         uploadFile.push(input.prop('name')+".jpg")
-      console.log('added ' + uploadFile)
-      }
     } else {
-      if (input.prop('id') === 'feedback') {
-        removeList(feedbackFile,input.prop('name')+".jpg")
-      }
-      else if (input.prop('id') === 'upload') {
         removeList(uploadFile,input.prop('name')+".jpg")
-      }
     } // ese
   })
 }
@@ -85,7 +73,14 @@ function pasteFiles(){
   // image/namsu_jo
 
 }
+
+
+function FeedbackFiles(){
+  console.log('feedback')
+
+}
 function removeFiles(){
+
   var data={
     'files':uploadFile
   }
@@ -94,7 +89,6 @@ function removeFiles(){
     method:'GET',
     data:data
   }).done(function(response){
-    console.log('good')
     readFile(currentfolder)
 
   })
@@ -139,7 +133,6 @@ function readFile(dir) {
         currentfolder = $(this).attr("dir")
         readFile(currentfolder)
         $('#uploader').data('dmUploader').settings.extraData = {
-          id: defaultId,
           folder: currentfolder
         };
         uploadFile=[]
@@ -196,7 +189,7 @@ function getMosaic() {
 function model(name) {
   modelFile = name
   $.ajax({
-    url: 'file/video',
+    url: 'file/video_upload',
     method: 'GET',
   }).done(function(data) {
     $("#main").html(data)
@@ -223,7 +216,7 @@ function train() {
     data: data,
     timeout: 200000,
   }).done(function(response) {
-    getTrain(id)
+    getTrain()
   })
 
 }

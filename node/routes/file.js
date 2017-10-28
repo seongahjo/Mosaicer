@@ -11,7 +11,7 @@ var file_view = jade.compile([
   '  -  if(file.type==="image")',
   '       figure.imgcheckbox',
   '        .figure-content',
-  '          img.face(src="util/img/#{folder}/#{file.name}",data-src="holder.js/64x64")',
+  '          img.face(src="util/img?folder=#{folder}&file=#{file.name}",data-src="holder.js/64x64")',
   '        figcaption',
   '          i.fa.fa-check.fa-5x',
   '        label',
@@ -132,7 +132,24 @@ router.get('/model', function(req, res, next) {
 })
 
 
+var video_upload_view = jade.compile([
+  '.x_content',
+  '  #video-upload.uploader',
+  '    | Drag and Drop Videos Here',
+  '    br',
+  '    |   or click to add videos using the input',
+  '    br',
+  '    .browser',
+  '      label',
+  '        span',
+  '        | Click to open the file Browser',
+  '        input(type="file", name="files[]", multiple="multiple", title="Click to add Files")'
+  ].join('\n'))
 
+
+  router.get('/video_upload', function(req, res, next) {
+        res.send(video_upload_view())
+  })
 
 var video_view = jade.compile([
   '- each file in files',
@@ -311,11 +328,11 @@ var feedback_face_view = jade.compile([
   '- each file in files',
   '  figure.imgcheckbox',
   '    .figure-content',
-  '      img.face(src="util/img/#{file.video}\/etc/#{file.name}",data-src="holder.js/64x64")',
+  '      img.face(src="util/img?folder=#{file.video}/etc&file=#{file.name}",data-src="holder.js/64x64")',
   '    figcaption',
   '      i.fa.fa-check.fa-5x',
   '    label',
-  '      input(type="checkbox",id="feedback" name="${file.video}/#{file.name}")',
+  '      input(type="checkbox",id="feedback" name="#{file.video}/etc/#{file.name}")',
   '      |  Label',
 ].join('\n'))
 
@@ -329,7 +346,7 @@ router.get('/feedback_face', function(req, res, next) {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory()) {
-        filedetail.name = file
+        filedetail.name = path.basename(file,path.extname(file))
         filedetail.video=file_name
       }
       result.push(filedetail)
