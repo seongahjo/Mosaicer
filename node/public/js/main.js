@@ -1,8 +1,23 @@
 var currentfolder = '';
 var defaultDir = ''
-
+var trainFolder=[]
 $(document).ready(function(){
 	Holder.run()
+
+	$('input').on('ifChecked', function(event){
+
+	trainFolder.push(event.currentTarget.value)
+
+	console.log(trainFolder)
+});
+
+$('input').on('ifUnchecked', function(event){
+	var i = trainFolder.indexOf(event.currentTarget.value);
+	if(i != -1) {
+		trainFolder.splice(i, 1);
+	}
+	console.log(trainFolder)
+});
 })
 
 function readFile(id, dir) {
@@ -106,6 +121,7 @@ function convert(id, folder) {
 function train(id) {
   var data = {
         'id': id,
+				'folder':trainFolder
     }
     $.ajax({
         url: 'api/train',

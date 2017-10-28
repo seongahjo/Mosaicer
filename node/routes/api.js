@@ -9,6 +9,7 @@ var FormData = require('form-data')
 var async = require('async')
 var jade = require('jade')
 var wreck = require('wreck')
+var mime = require('../util/mime')
 var storage = multer.diskStorage({
   filename: function(req, file, cb) {
     cb(null, Date.now() + '.jpg')
@@ -18,10 +19,13 @@ var storage = multer.diskStorage({
 var uploadstorage = multer.diskStorage({
   destination: function(req, file, cb) {
     var folder=''
-    if(path.extname(file)==".jpg")
+    var result=mime.stat(req.body.folder,file.originalname)
+    console.log(result)
+    if(result.type=="image")
     folder=path.join('../','image',req.body.folder)
-    else if(path.extname(file)==".avi")
+    else if(result.type=="video")
     folder=path.join('../','video')
+    console.log("upload to "+folder)
     //var folder = path.join('/tmp/', req.body.id, req.body.folder)
     cb(null, folder)
   },
@@ -50,33 +54,49 @@ router.get('/makeFolder', function(req, res, next) {
 
 router.get('/train', function(req, res, next) {
       var id = req.query.id
-      var imageDir = path.join('/tmp/', id, 'upload')
-      var folders = []
-      var trainDir = path.join('/tmp/', id, 'train')
-      var dataDir = path.join('/tmp/', id, 'data')
+      var folders=req.query.folder
+      console.log("id ="+ id)
+      console.log(folders)
+      //var imageDir = path.join('/tmp/', id, 'upload')
+      //var folders = []
+      var trainDir = path.join('../', 'model')
+      var dataDir=path.join('data');
+      fs.existsSync(trainDir) || fs.mkdirSync(trainDir)
+      for(var s=0;s<9;s++){
+        console.log(path.join(trainDir,s.toString()))
+        if(!fs.existsSync(path.join(trainDir,s.toString())))
+        break;
+      }
+      trainDir=path.join('model',s.toString())
+      fs.existsSync(dataDir) || fs.mkdirSync(dataDir)
       var index=0;
       var trainData = {
         'train_dir': trainDir,
         'data_dir': dataDir
       }
+
+
+      /*var files=fs.readdirSync(imageDir)
+          async.eachSeries(files, function iteratee(file, fcallback) {
+              console.log('read file')
+              var stat = fs.statSync(path.join(imageDir, file))
+              if (stat.isDirectory()) {
+                folders.push(path.join(imageDir, file))
+              }
+              fcallback()
+            })
+          callback(null, folders)
+        },
+        function(folders, callback) {
+          console.log("folder : " + folders)*/
+
       async.waterfall([
           function(callback) {
-            var files=fs.readdirSync(imageDir)
-                async.eachSeries(files, function iteratee(file, fcallback) {
-                    console.log('read file')
-                    var stat = fs.statSync(path.join(imageDir, file))
-                    if (stat.isDirectory()) {
-                      folders.push(path.join(imageDir, file))
-                    }
-                    fcallback()
-                  })
-                callback(null, folders)
-              },
-              function(folders, callback) {
-                console.log("folder : " + folders)
 
                 async.eachSeries(folders, function iteratee(folder, fcallback) {
-                  console.log('convert inside' +  folder)
+                  console.log('convert inside ' +  folder)
+                  folder=path.join('image',folder)
+                  console.log('folder '+folder)
                   var convertData = {
                     'image_dir': folder,
                     'data_dir': dataDir,
@@ -94,9 +114,8 @@ router.get('/train', function(req, res, next) {
                   })
                 })
 
-              }
+              },
             ],function(err, result){
-                console.log('train start')
                 axios.get(pythonServer + 'train', {
                   params: trainData
                 }).then(function(response) {
@@ -149,9 +168,9 @@ router.get('/train', function(req, res, next) {
     router.get('/mosaic', function(req, res, next) {
       var id = req.query.id
       var filename = req.query.filename
-      var label = req.query.label
-      var trainDir = path.join('/tmp/', id, 'train')
-      var videoPath = path.join('/tmp/', id, 'video', filename)
+      var label = 9
+      var trainDir = path.join('train')
+      var videoPath = path.join('video', filename)
       var data = {
         'train_dir': trainDir,
         'video_path': videoPath,
@@ -166,9 +185,9 @@ router.get('/train', function(req, res, next) {
     })
 
     router.get('/download', function(req, res, next) {
-      var id = req.query.id
+      //var id = req.query.id
       var filename = req.query.filename
-      var Path = path.join('/tmp/', id, 'video', 'result', filename)
+      var Path = path.join('../','video', 'result', filename)
       console.log(Path)
       res.download(Path);
     })

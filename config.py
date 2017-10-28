@@ -19,13 +19,13 @@ tf.app.flags.DEFINE_boolean('use_fp16', False,
 
 
 # input
-tf.app.flags.DEFINE_integer('num_classes',2,
+tf.app.flags.DEFINE_integer('num_classes',10,
                            """Number of classes to run.""")
 tf.app.flags.DEFINE_integer('num_image',70,
                            """Number of images to run.""")
 
 # train
-tf.app.flags.DEFINE_integer('max_steps', 700,
+tf.app.flags.DEFINE_integer('max_steps', 50,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
@@ -33,7 +33,7 @@ tf.app.flags.DEFINE_integer('threshold',0.7,
                             """minimum value to identify image.""")
 
 # mosaic
-tf.app.flags.DEFINE_integer('target_label', 1,
+tf.app.flags.DEFINE_integer('target_label', 9,
                             """label you do not want to digitize""")
 tf.app.flags.DEFINE_integer('face_frame',10,
                             """save face per defined frame""")

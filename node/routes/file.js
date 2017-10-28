@@ -88,9 +88,13 @@ router.get('/convert', function(req, res, next) {
 })
 
 
+
+
 var train_view = jade.compile([
   '- each file in files',
   '  tr',
+  '    td',
+  '      input.flat(type="checkbox",value="#{file.name}")',
   '    td',
   '      i.fa.fa-folder',
   '      |#{file.name}',
@@ -105,6 +109,45 @@ var train_view = jade.compile([
   '        button.btn.btn-warning.btn-xs(type="button") #{file.state}'
 ].join('\n'))
 
+
+
+var model_view = jade.compile([
+  '- each file in files',
+  '  tr',
+  '    td',
+  '      input.flat(type="checkbox",value="#{file.name}")',
+  '    td.last',
+  '      i.fa.fa-folder',
+  '      |#{file.name}',
+  ].join('\n'))
+
+
+
+router.get('/model', function(req, res, next) {
+  var id = req.query.id
+  var Path=path.join('../','model')
+  var result = []
+
+  if(!fs.existsSync(Path))
+  res.send(404)
+  fs.readdir(Path, function(error, files) {
+    async.eachSeries(files, function iteratee(file, callback) {
+      var filedetail = {} // file detail info
+      var stat = fs.statSync(path.join(Path, file))
+      if (stat.isDirectory()) {
+        filedetail.name = file
+        result.push(filedetail)
+        callback(null)
+        } else {
+        callback(null)
+      }
+    }, function() {
+      res.send(model_view({
+        files: result
+      }))
+    });
+  })
+})
 
 
 
@@ -169,8 +212,6 @@ var mosaic_view = jade.compile([
   '      |#{file.name}',
   '    td',
   '      |#{file.size}',
-  '    td',
-  '      input(id="btn_#{file.name}",type="number", min="0", max="9",maxlength = "1",oninput="maxLengthCheck(this)")',
   '    td.last',
   '      -  if (file.state === "Mosaic")',
   '        button.btn.btn-success.btn-xs(type="button" onClick="mosaic(defaultId,\'#{file.name}\')") Mosaic',

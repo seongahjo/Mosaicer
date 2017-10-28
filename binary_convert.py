@@ -24,7 +24,7 @@ def convert_global(image_dir,data_dir,label):
        Directory stores images binary file
      """
 
-
+    print("[binary] dir : ",image_dir)
   # Load all images which is image
     imgs=[]
     temp_imgs = [glob.glob(os.path.join(image_dir, e)) for e in ['*.jpeg','*.png','*.jpg']]

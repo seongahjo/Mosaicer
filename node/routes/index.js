@@ -4,23 +4,22 @@ var fs = require('fs');
 var path = require('path')
 /* GET home page. */
 
-var tempuser = { id : 'test'}
-router.get('/', function(req, res, next) {
+var tempuser = { id : 'user'}
+/*router.get('/', function(req, res, next) {
 //  res.render('index', {user: tempuser});
   res.render('login')
-});
+});*/
 
-router.post('/login',function(req,res,next){
-  console.log('id : '+req.body.id)
-  console.log('pw : '+req.body.pw)
-  var id=req.body.id
+router.get('/',function(req,res,next){
+/*  console.log('id : '+req.body.id)
+  console.log('pw : '+req.body.pw)*/
+  var id='test'
   var Path=path.join('/tmp/',id)
   // login Failed
-  console.log(Path)
+  /*console.log(Path)
   if(!fs.existsSync(Path))
-  res.sendStatus(404)
+  res.sendStatus(404)*/
   //authorization
-  tempuser={id : req.body.id}
   // login
   res.render('index',{user : tempuser})
 })

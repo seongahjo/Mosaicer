@@ -1,0 +1,76 @@
+extends layout
+block content
+  .right_col(role='main')
+    .col-md-12.col-sm-12.col-xs-12
+      .x_panel
+          .x_title
+            h2
+              | To Do List 
+              small Sample tasks
+            |                   
+            ul.nav.navbar-right.panel_toolbox
+              li
+                a.collapse-link
+                  i.fa.fa-chevron-up
+              |                     
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+                  i.fa.fa-wrench
+                |                       
+                ul.dropdown-menu(role='menu')
+                  li
+                    a(href='#') Settings 1
+                  |                         
+                  li
+                    a(href='#') Settings 2
+              |                     
+              li
+                a.close-link
+                  i.fa.fa-close
+            |                   
+            .clearfix
+          |                 
+          .x_content
+            div
+              ul.to_do
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Schedule meeting with new client
+                |                       
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Create email address for new intern
+                |                       
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Have IT fix the network printer
+                |                       
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Copy backups to offsite location
+                |                       
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Food truck fixie locavors mcsweeney
+                |                       
+                li
+                  p
+                    .icheckbox_flat-green(style='position: relative;')
+                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
+                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
+                    |  Food truck fixie locavors mcsweeney
