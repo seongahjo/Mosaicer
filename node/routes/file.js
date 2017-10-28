@@ -300,7 +300,7 @@ var feedback_face_view = jade.compile([
   '    figcaption',
   '      i.fa.fa-check.fa-5x',
   '    label',
-  '      input(type="checkbox", name="name")',
+  '      input(type="checkbox",id="feedback" name="${file.video}/#{file.name}")',
   '      |  Label',
 ].join('\n'))
 
