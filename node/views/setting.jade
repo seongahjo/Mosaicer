@@ -31,46 +31,23 @@ block content
             .clearfix
           |                 
           .x_content
-            div
-              ul.to_do
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Schedule meeting with new client
-                |                       
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Create email address for new intern
-                |                       
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Have IT fix the network printer
-                |                       
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Copy backups to offsite location
-                |                       
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Food truck fixie locavors mcsweeney
-                |                       
-                li
-                  p
-                    .icheckbox_flat-green(style='position: relative;')
-                      input.flat(type='checkbox', style='position: absolute; opacity: 0;')
-                      ins.iCheck-helper(style='position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;')
-                    |  Food truck fixie locavors mcsweeney
+          div
+            a#signup.hiddenanchor
+            a#signin.hiddenanchor
+            .login_wrapper
+              section.login_content
+                form(action='', method='POST')
+                  h1 Setting
+                  div
+                    label max_steps
+                    input.form-control(type='text', name='max_steps', placeholder='max_steps', required='',value="900")
+                  div
+                    label threshold
+                    input.form-control(type='text', name='threshold', placeholder='threshold', required='',value="0.7")
+                  div
+                    label target_label 
+                    input.form-control(type='text', name='target_label', placeholder='target_label', required='', value="9")
+                  div
+                    label face_frame
+                    input.form-control(type='text', name='face_frame', placeholder='face_frame', required='', value="10")
+                  

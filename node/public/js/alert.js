@@ -16,8 +16,10 @@ function wait(type){
       });*/
     },
     after_close:function(notice){
-      done(type)
+      if(!notice || notice!= undefined){
       removeList(alertlist,notice)
+      done(type)
+      }
     }
   })
 }

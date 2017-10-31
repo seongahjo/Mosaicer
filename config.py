@@ -25,7 +25,7 @@ tf.app.flags.DEFINE_integer('num_image',70,
                            """Number of images to run.""")
 
 # train
-tf.app.flags.DEFINE_integer('max_steps', 50,
+tf.app.flags.DEFINE_integer('max_steps', 900,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")

@@ -112,6 +112,7 @@ router.get('/train', function(req, res, next) {
       var trainDir = path.join('../', 'model')
       var dataDir=path.join('data');
       fs.existsSync(trainDir) || fs.mkdirSync(trainDir)
+      fs.existsSync(dataDir) || fs.mkdirSync(dataDir)
       if(!name){
       for(var s=0;s<9;s++){
         console.log(path.join(trainDir,s.toString()))
@@ -121,7 +122,9 @@ router.get('/train', function(req, res, next) {
       trainDir=path.join('model',s.toString())
       }
       trainDir=path.join('model',name)
+      dataDir=path.join(dataDir,name)
       fs.existsSync(dataDir) || fs.mkdirSync(dataDir)
+
       var index=0;
       var trainData = {
         'train_dir': trainDir,

@@ -14,36 +14,7 @@ $(function() {
             //  droppedFiles = e.originalEvent.dataTransfer.files;
         });
 
-    var uploader = $("#drop-area-div").dmUploader({
-        url: 'api/compare',
-        method: 'POST',
-        allowedTypes: 'image/*',
-        onInit: function() {
-            console.log('good')
-        },
-        onNewFile: function(id, file) {
-            /* Fields available are:
-               - file.name
-               - file.type
-               - file.size (in bytes)
-            */
-            var reader = new FileReader();
 
-            reader.onload = function(e) {
-                $('#preview').attr('src', e.target.result);
-            }
-
-            reader.readAsDataURL(file);
-            console.log(file)
-        },
-        onUploadProgress: function(id, percent) {
-            console.log('Upload of #' + id + ' is at %' + percent);
-            // do something cool here!
-        },
-        onUploadSuccess: function(id, data) {
-            $('#progress-lists').html(data)
-        }
-    });
 
 
     $(document).on('dragenter', function() {
@@ -106,6 +77,7 @@ $("#video-upload").on('drag dragstart dragend dragover dragenter dragleave drop'
         //  droppedFiles = e.originalEvent.dataTransfer.files;
     });
 var up;
+var count=0;
 var videoUpload = $("#video-upload").dmUploader({
     url: 'api/videoUpload',
     method: 'POST',
@@ -116,7 +88,7 @@ var videoUpload = $("#video-upload").dmUploader({
     onInit: function() {
 
     },
-    onBeforeUpload:function(id){
+    onNewFile:function(id){
       up=wait("upload")
     },
     onUploadSuccess: function(id, data) {
@@ -124,16 +96,15 @@ var videoUpload = $("#video-upload").dmUploader({
       $("#main").addClass("animated fadeOutRight")
       $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
       function(){
-        $("#main").removeClass("animated fadeOutRight")
+        if(count==0){
+          $("#main").removeClass("animated fadeOutRight")
         $("#main").addClass("animated fadeInRight")
-          videoName=data
-        getMosaicButton()
         up.remove()
-      }
-    );
-
-
-
+        videoName=data
+        getMosaicButton()
+        count+=1
+        }
+      })
             //readFile(defaultId, currentfolder)
     },
     onUploadProgress: function(id, percent) {

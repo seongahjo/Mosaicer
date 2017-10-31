@@ -70,14 +70,9 @@ var train_view = jade.compile([
   '      |#{file.name}',
   '    td',
   '      |#{file.amount}',
-  '    td',
-  '      |#{file.size} KB',
   '    td.last',
-  '      -  if (file.state === "Trained")',
-  '        button.btn.btn-success.btn-xs(type="button") #{file.state}',
-  '      -  else',
-  '        button.btn.btn-warning.btn-xs(type="button") #{file.state}'
-].join('\n'))
+  '      |#{file.size} KB',
+  ].join('\n'))
 
 
 

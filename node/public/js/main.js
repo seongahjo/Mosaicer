@@ -19,7 +19,6 @@ function removeList(list,file){
 
 $(document).ready(function() {
   Holder.run()
-
 })
 
 function load(){
@@ -94,6 +93,7 @@ function model(name) {
     error("empty")
     return
   }
+  var count=0;
   modelFile = name
   $.ajax({
     url: 'file/video_upload',
@@ -102,10 +102,14 @@ function model(name) {
     $("#main").addClass("animated fadeOutRight")
     $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
     function(){
+      if(count==0){
       $("#main").removeClass("animated fadeOutRight")
       $("#main").addClass("animated fadeInRight")
       $("#main").html(data)
+      console.log('twice?')
       video_load()
+      count+=1
+      }
     }
   );
   })

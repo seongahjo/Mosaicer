@@ -13,7 +13,7 @@ function getTrain() {
     method: 'GET',
   }).done(function(data) {
     $("#lists").html(data)
-  //  $(".flat").iCheck();
+  //$("input").iCheck();
     $('input').on('ifChecked', function(event) {
       trainFolder.push(event.currentTarget.value)
       console.log(trainFolder)
