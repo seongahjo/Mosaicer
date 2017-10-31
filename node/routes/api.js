@@ -66,6 +66,25 @@ router.get('/delete', function(req, res, next) {
 })
 
 
+router.get('/feedback', function(req, res, next) {
+  var files = req.query.files
+  var dest = req.query.to
+  dest = path.join('../','image',dest,'/')
+  console.log(files+ ' to '+dest)
+  try {
+  async.eachSeries(files, function iteratee(file, fcallback) {
+    var Path=path.join('../','image',file)
+    if(fs.existsSync(Path)){
+    fse.move(Path,path.join(dest,path.basename(file)), { overwrite: true })
+    }
+    fcallback()
+  })
+}catch(err){
+  console.log(err)
+}
+  res.sendStatus(200)
+})
+
 router.get('/paste', function(req, res, next) {
   var srcs = req.query.src
   var dest = req.query.to

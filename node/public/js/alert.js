@@ -6,9 +6,11 @@ function wait(type){
     desktop: {
         desktop: true
     },
+    delay:10000,
+
     after_init: function(notice) {
       alertlist.push(notice)
-      setInterval("notice.attention('pulse')",
+      setInterval(function(){notice.attention('pulse')},
       1000)
       /*  notice.elem.on('click', 'button', function() {
       });*/

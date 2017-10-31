@@ -37,8 +37,21 @@ function load(){
 
 
 function FeedbackFiles(){
-  console.log(uploadFile)
-  console.log('feedback')
+console.log(uploadFile+" to "+folderName)
+var data={
+  'files' : uploadFile,
+  'to' : folderName
+}
+wait('feedback')
+
+$.ajax({
+  url:'api/feedback',
+  method:'GET',
+  data:data
+}).done(function(resposne){
+  done("feedback")
+  getFeedback_face("#{video}")
+})
 
 }
 function removeFiles(){
@@ -94,8 +107,9 @@ function model(name) {
 function folder(name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
-if(uploadFile && uploadFile.length)
-console.log(uploadFile+" to "+folderName)
+if(uploadFile && uploadFile.length){
+  FeedbackFiles()
+}
 else
 error("empty")
 
