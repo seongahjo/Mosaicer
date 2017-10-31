@@ -42,14 +42,14 @@ var data={
   'files' : uploadFile,
   'to' : folderName
 }
-wait('feedback')
+var notice=wait('feedback')
 
 $.ajax({
   url:'api/feedback',
   method:'GET',
   data:data
 }).done(function(resposne){
-  done("feedback")
+  notice.remove()
   getFeedback_face("#{video}")
 })
 
@@ -99,8 +99,15 @@ function model(name) {
     url: 'file/video_upload',
     method: 'GET',
   }).done(function(data) {
-    $("#main").html(data)
-    video_load()
+    $("#main").addClass("animated fadeOutRight")
+    $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+    function(){
+      $("#main").removeClass("animated fadeOutRight")
+      $("#main").addClass("animated fadeInRight")
+      $("#main").html(data)
+      video_load()
+    }
+  );
   })
 }
 
@@ -144,15 +151,15 @@ function train() {
     'folder': trainFolder,
     'name' : folder
   }
-  wait("train")
+  var notice=wait("train")
   $.ajax({
     url: 'api/train',
     method: 'GET',
     data: data,
     timeout:7200000,
   }).done(function(response) {
+    notice.remove()
     getTrain()
-    done("train")
   })
 
 }
@@ -163,14 +170,14 @@ function mosaic() {
     'model':modelFile,
     'filename': videoName,
   }
-  wait('mosaic')
+  var notice=wait('mosaic')
   $.ajax({
     url: 'api/mosaic',
     method: 'GET',
     data: data,
     timeout:7200000,
   }).done(function(response){
-    done("mosaic")
+    notice.remove()
   })
 }
 

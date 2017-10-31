@@ -81,6 +81,7 @@ $(function() {
             console.log('good')
         },
         onUploadSuccess: function(id, data) {
+            done("upload")
             readFile(currentfolder)
         }
     });
@@ -104,7 +105,7 @@ $("#video-upload").on('drag dragstart dragend dragover dragenter dragleave drop'
     .on('drop', function(e) {
         //  droppedFiles = e.originalEvent.dataTransfer.files;
     });
-
+var up;
 var videoUpload = $("#video-upload").dmUploader({
     url: 'api/videoUpload',
     method: 'POST',
@@ -113,16 +114,30 @@ var videoUpload = $("#video-upload").dmUploader({
     },
     allowedTypes: 'video/*',
     onInit: function() {
+
+    },
+    onBeforeUpload:function(id){
+      up=wait("upload")
     },
     onUploadSuccess: function(id, data) {
-      console.log(data)
-      videoName=data
-        getMosaic()
+      getMosaic()
+      $("#main").addClass("animated fadeOutRight")
+      $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+      function(){
+        $("#main").removeClass("animated fadeOutRight")
+        $("#main").addClass("animated fadeInRight")
+          videoName=data
         getMosaicButton()
+        up.remove()
+      }
+    );
+
+
+
             //readFile(defaultId, currentfolder)
     },
     onUploadProgress: function(id, percent) {
-        console.log('Upload of #' + id + ' is at %' + percent);
+        up.update({text : "Uploading to " +percent+" %"})
         // do something cool here!
     }
 });

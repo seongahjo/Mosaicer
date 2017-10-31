@@ -1,12 +1,12 @@
 function wait(type){
-  new PNotify({
+  return new PNotify({
     title: 'ing...',
     text: 'Your '+type+' is working...',
     type: 'info',
     desktop: {
         desktop: true
     },
-    delay:10000,
+    delay:100000,
 
     after_init: function(notice) {
       alertlist.push(notice)
@@ -16,6 +16,7 @@ function wait(type){
       });*/
     },
     after_close:function(notice){
+      done(type)
       removeList(alertlist,notice)
     }
   })

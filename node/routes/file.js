@@ -234,9 +234,9 @@ var mosaic_view = jade.compile([
   '      |#{file.size}',
   '    td.last',
   '      -  if (file.state === "Mosaic")',
-  '        button.btn.btn-success.btn-xs(type="button" onClick="mosaic(defaultId,\'#{file.name}\')") Mosaic',
+  '        span.label.label-success Not Mosaic',
   '      -  else',
-  '        button.btn.btn-warning.btn-xs(type="button"  onClick="download(defaultId,\'#{file.name}\')") Download',
+  '        button.btn.btn-warning.btn-xs(type="button"  onClick="download(\'#{file.name}\')") Download',
 ].join('\n'))
 
 router.get('/mosaic', function(req, res, next) {
