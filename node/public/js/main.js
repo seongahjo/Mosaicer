@@ -6,6 +6,8 @@ var videoFile = ''
 var uploadFile=[]
 var cp_src=[]
 var videoName='' // after upload
+var folderName='' // choose folder
+var alertlist=[]
 function removeList(list,file){
   var i = list.indexOf(file);
   if (i != -1) {
@@ -50,7 +52,7 @@ function removeFiles(){
     data:data
   }).done(function(response){
     readFile(currentfolder)
-
+    done("delete folder")
   })
 }
 
@@ -65,7 +67,20 @@ function goLeft() {
 
 
 
+function image_load(){
+  $.ajax({
+    url: 'file/folder',
+    method: 'GET',
+  }).done(function(data) {
+    $("#ModalContent").html(data)
+  })
+}
+
 function model(name) {
+  if(name==undefined || name==""){
+    error("empty")
+    return
+  }
   modelFile = name
   $.ajax({
     url: 'file/video_upload',
@@ -76,7 +91,21 @@ function model(name) {
   })
 }
 
+function folder(name){
+folderName=name
+$(".bs-example-modal-lg").modal('hide')
+if(uploadFile && uploadFile.length)
+console.log(uploadFile+" to "+folderName)
+else
+error("empty")
+
+}
+
 function video(name) {
+  if(name==undefined || name==""){
+    error("empty")
+    return
+  }
   videoFile = name
   var data = {
     'model': modelFile,
@@ -89,11 +118,19 @@ function video(name) {
 function train() {
 
   var folder=$("#folder-id").val()
-
+  if(folder==""){
+    error("empty")
+  return
+  }
+  if(!(trainFolder &&trainFolder.length)){
+    error("empty")
+  return
+  }
   var data = {
     'folder': trainFolder,
     'name' : folder
   }
+  wait("train")
   $.ajax({
     url: 'api/train',
     method: 'GET',
@@ -101,10 +138,10 @@ function train() {
     timeout:7200000,
   }).done(function(response) {
     getTrain()
+    done("train")
   })
 
 }
-
 
 
 function mosaic() {
@@ -112,13 +149,14 @@ function mosaic() {
     'model':modelFile,
     'filename': videoName,
   }
+  wait('mosaic')
   $.ajax({
     url: 'api/mosaic',
     method: 'GET',
     data: data,
     timeout:7200000,
   }).done(function(response){
-
+    done("mosaic")
   })
 }
 
@@ -141,6 +179,7 @@ function makeFolder() {
   }).done(function(response) {
     $("#folder-id").val('')
     readFile(defaultDir)
+    done("make folder")
   })
 }
 

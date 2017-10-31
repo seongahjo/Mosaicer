@@ -57,21 +57,6 @@ router.get('/', function(req, res, next) {
 })
 
 
-var convert_view = jade.compile([
-  '- each file in files',
-  '  tr',
-  '    td',
-  '      i.fa.fa-folder',
-  '      |#{file.name}',
-  '    td',
-  '      |#{file.amount}',
-  '    td',
-  '      input(id="btn_#{file.name}",type="number", min="0", max="9",maxlength = "1",oninput="maxLengthCheck(this)")',
-  '    td.last',
-  '      a.btn.btn-primary.btn-xs(href="#" onClick="convert(defaultId,\'#{file.name}\')") Convert',
-].join('\n'))
-
-
 
 
 
@@ -365,6 +350,47 @@ router.get('/feedback_face', function(req, res, next) {
 
 })
 
+
+
+
+
+var folder_view = jade.compile([
+  '- each file in files',
+  '  a(href="#" onClick="folder(\'#{file.name}\')")',
+  '    .mail_list',
+  '      .left',
+  '        i.fa.fa-folder',
+  '      .right',
+  '        h3',
+  '          | #{file.name}',
+  '        p',
+  '          |content',
+].join('\n'))
+
+router.get('/folder', function(req, res, next) {
+  var Path=path.join('../','image')
+  var result = []
+
+  if(!fs.existsSync(Path))
+  res.send(404)
+  fs.readdir(Path, function(error, files) {
+    async.eachSeries(files, function iteratee(file, callback) {
+      var filedetail = {} // file detail info
+      var stat = fs.statSync(path.join(Path, file))
+      if (stat.isDirectory()) {
+        filedetail.name = file
+        result.push(filedetail)
+        callback(null)
+        } else {
+        callback(null)
+      }
+    }, function() {
+      res.send(folder_view({
+        files: result
+      }))
+    });
+  })
+})
 
 
 

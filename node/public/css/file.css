@@ -106,7 +106,10 @@ figure{
 	cursor: pointer;
 }
 
-
+.mail_list h3{
+  padding-left:3px;
+  
+}
 .uploader div.browser input {
 	position: absolute;
 	top: 0;
