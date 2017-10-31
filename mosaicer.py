@@ -24,6 +24,9 @@ def mosaic(video_path,train_dir, label):
         os.makedirs(file_path)
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
+
+    if type(label) is str:
+        label=int(label)
     index=0
     cap = cv2.VideoCapture(data)
     fps = 30.0
@@ -119,6 +122,7 @@ def check_image(filename, train_dir, label,count):
     full_path=os.path.join(folder_path,full_name)
     output=binary_convert.convert(full_path)
 
+
     # Make Dirs
     if not os.path.exists(os.path.join(folder_path,str(label))):
         os.makedirs(os.path.join(folder_path,str(label)))
@@ -128,8 +132,7 @@ def check_image(filename, train_dir, label,count):
         os.makedirs(os.path.join(folder_path,"etc"))
 
     precision=compare.evaluate(output,train_dir)
-    print (precision)
-
+    print(precision)
     # Threshold 70
     try:
         if precision[label] > threshold :

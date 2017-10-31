@@ -5,7 +5,7 @@ import tensorflow as tf
 tf.app.flags.DEFINE_integer('num_examples',1,
                            """Number of examples to run.""")
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
-tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
+tf.app.flags.DEFINE_integer('label_size',10,"""Label size""")
 
 
 # core

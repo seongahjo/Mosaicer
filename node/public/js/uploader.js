@@ -87,38 +87,44 @@ $(function() {
 
 
 
-    $("#video-upload").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        })
-        .on('dragover dragenter', function() {
-            $("#video-upload").addClass('is-dragover');
-        })
-        .on('dragleave dragend drop', function() {
-            $("#video-upload").removeClass('is-dragover');
-        })
-        .on('drop', function(e) {
-            //  droppedFiles = e.originalEvent.dataTransfer.files;
-        });
-
-    var videoUpload = $("#video-upload").dmUploader({
-        url: 'api/videoUpload',
-        method: 'POST',
-        extraData: {
-            folder : 'video'
-        },
-        allowedTypes: 'video/*',
-        onInit: function() {
-            console.log('good')
-        },
-        onUploadSuccess: function(id, data) {
-            getMosaic()
-                //readFile(defaultId, currentfolder)
-        },
-        onUploadProgress: function(id, percent) {
-            console.log('Upload of #' + id + ' is at %' + percent);
-            // do something cool here!
-        }
-    });
 
 })
+
+function video_load(){
+$("#video-upload").on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    })
+    .on('dragover dragenter', function() {
+        $("#video-upload").addClass('is-dragover');
+    })
+    .on('dragleave dragend drop', function() {
+        $("#video-upload").removeClass('is-dragover');
+    })
+    .on('drop', function(e) {
+        //  droppedFiles = e.originalEvent.dataTransfer.files;
+    });
+
+var videoUpload = $("#video-upload").dmUploader({
+    url: 'api/videoUpload',
+    method: 'POST',
+    extraData: {
+        folder : 'video'
+    },
+    allowedTypes: 'video/*',
+    onInit: function() {
+    },
+    onUploadSuccess: function(id, data) {
+      console.log(data)
+      videoName=data
+        getMosaic()
+        getMosaicButton()
+            //readFile(defaultId, currentfolder)
+    },
+    onUploadProgress: function(id, percent) {
+        console.log('Upload of #' + id + ' is at %' + percent);
+        // do something cool here!
+    }
+});
+
+}

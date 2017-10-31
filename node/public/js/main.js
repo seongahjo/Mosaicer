@@ -3,9 +3,9 @@ var defaultDir = ''
 var trainFolder = []
 var modelFile = ''
 var videoFile = ''
-var feedbackFile = []
 var uploadFile=[]
 var cp_src=[]
+var videoName='' // after upload
 function removeList(list,file){
   var i = list.indexOf(file);
   if (i != -1) {
@@ -17,21 +17,6 @@ function removeList(list,file){
 
 $(document).ready(function() {
   Holder.run()
-
-  $('input').on('ifChecked', function(event) {
-
-    trainFolder.push(event.currentTarget.value)
-    console.log(trainFolder)
-  });
-
-  $('input').on('ifUnchecked', function(event) {
-    var i = trainFolder.indexOf(event.currentTarget.value);
-    if (i != -1) {
-      trainFolder.splice(i, 1);
-    }
-    console.log(trainFolder)
-  });
-
 
 })
 
@@ -47,35 +32,10 @@ function load(){
   })
 }
 
-function cpFiles(){
-  cp_src=[]
-  for(var i=0; i<uploadFile.length; i++){
-  cp_src.push(uploadFile[i])
-  }
-  console.log('copy finished '+cp_src)
-
-}
-
-function pasteFiles(){
-  var data={
-    'src':cp_src,
-    'to':currentfolder
-  }
-  console.log(cp_src+" to "+currentfolder)
-  $.ajax({
-    url:'api/paste',
-    method:'GET',
-    data:data
-  }).done(function(response){
-    console.log('good')
-    readFile(currentfolder)
-  })
-  // image/namsu_jo
-
-}
 
 
 function FeedbackFiles(){
+  console.log(uploadFile)
   console.log('feedback')
 
 }
@@ -94,53 +54,6 @@ function removeFiles(){
   })
 }
 
-function readFile(dir) {
-  var data = {
-    'folder': dir
-  }
-  $.ajax({
-    url: 'file',
-    method: 'GET',
-    data: data
-  }).done(function(data) {
-    $("#files").html(data)
-    $('.imgcheckbox').imgCheckbox({
-      animation: true,
-      round: true
-    })
-    //initialize
-    uploadFile=[]
-    load()
-    $('#files').on('click', function() {
-      $(this).children('.focus').removeClass('focus')
-
-    })
-
-    $('[type=folder]').on({
-      'click': function(e) {
-        if($(this).hasClass("focus")){
-          $(this).removeClass('focus')
-          removeList(uploadFile,$(this).attr("dir"))
-        }
-        else{
-          $(this).addClass('focus')
-          uploadFile.push($(this).attr("dir"))
-          console.log(uploadFile)
-        }
-        e.stopPropagation();
-      },
-      'dblclick': function(e) {
-        currentfolder = $(this).attr("dir")
-        readFile(currentfolder)
-        $('#uploader').data('dmUploader').settings.extraData = {
-          folder: currentfolder
-        };
-        uploadFile=[]
-      },
-    })
-  })
-
-}
 
 function goLeft() {
   if (currentfolder != 'upload') {
@@ -150,40 +63,6 @@ function goLeft() {
   }
 }
 
-function getConvert() {
-  $.ajax({
-    url: 'file/convert',
-    method: 'GET',
-  }).done(function(data) {
-    $("#file-list").html(data)
-  })
-}
-
-function getTrain() {
-  $.ajax({
-    url: 'file/train',
-    method: 'GET',
-  }).done(function(data) {
-    $("#lists").html(data)
-  })
-}
-
-function getMosaic() {
-  $.ajax({
-    url: 'file/mosaic',
-    method: 'GET',
-  }).done(function(data) {
-    $("#lists").html(data)
-  })
-
-
-  $.ajax({
-    url: 'file/model',
-    method: 'GET',
-  }).done(function(data) {
-    $("#main").html(data)
-  })
-}
 
 
 function model(name) {
@@ -193,6 +72,7 @@ function model(name) {
     method: 'GET',
   }).done(function(data) {
     $("#main").html(data)
+    video_load()
   })
 }
 
@@ -207,14 +87,18 @@ function video(name) {
 
 
 function train() {
+
+  var folder=$("#folder-id").val()
+
   var data = {
-    'folder': trainFolder
+    'folder': trainFolder,
+    'name' : folder
   }
   $.ajax({
     url: 'api/train',
     method: 'GET',
     data: data,
-    timeout: 200000,
+    timeout:7200000,
   }).done(function(response) {
     getTrain()
   })
@@ -223,20 +107,20 @@ function train() {
 
 
 
-function mosaic(filename) {
+function mosaic() {
   var data = {
-    'filename': filename,
+    'model':modelFile,
+    'filename': videoName,
   }
   $.ajax({
     url: 'api/mosaic',
     method: 'GET',
     data: data,
+    timeout:7200000,
+  }).done(function(response){
+
   })
 }
-
-
-
-
 
 
 function download(filename) {
@@ -260,33 +144,6 @@ function makeFolder() {
   })
 }
 
-function getFeedback() {
-  $.ajax({
-    url: 'file/feedback',
-    method: 'GET',
-  }).done(function(data) {
-    $("#lists").html(data)
-  })
-}
-
-function getFeedback_face(filename) {
-  var data = {
-    'filename': filename
-  }
-  $.ajax({
-    url: 'file/feedback_face',
-    method: 'GET',
-    data: data,
-  }).done(function(data) {
-    $("#feedback").html(data)
-    $('.imgcheckbox').imgCheckbox({
-      round: true,
-      animation: true,
-    })
-    load()
-
-  })
-}
 
 
 $(document).ajaxStart(function() {

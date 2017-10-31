@@ -36,7 +36,7 @@ def eval_once(saver, top_k_op,train_dir):
 
       values,indices = sess.run(top_k_op)
       #최대 나올 갯
-      for i in range(0,2):
+      for i in range(0,10):
         result[indices.flatten().tolist()[i]]=values.flatten().tolist()[i]
     except Exception as e:  # pylint: disable=broad-except
       coord.request_stop(e)
@@ -65,7 +65,7 @@ def evaluate(output, train_dir):
     # inference model.
     logits = core.inference(images)
     # Calculate predictions.
-    top_k_op = tf.nn.top_k(tf.nn.softmax(logits), k=2)
+    top_k_op = tf.nn.top_k(tf.nn.softmax(logits), k=10)
 
     # Restore the moving average version of the learned variables for eval.
     variable_averages = tf.train.ExponentialMovingAverage(

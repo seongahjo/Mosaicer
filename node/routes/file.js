@@ -324,6 +324,10 @@ router.get('/feedback', function(req, res, next) {
   })
 })
 
+
+
+
+
 var feedback_face_view = jade.compile([
   '- each file in files',
   '  figure.imgcheckbox',
@@ -361,6 +365,16 @@ router.get('/feedback_face', function(req, res, next) {
 
 })
 
+
+
+
+var mosaic_button_view = jade.compile([
+  'button#compose.btn.btn-lg.btn-success.btn-block(type="button", onClick="mosaic()") MOSAIC'
+].join('\n'))
+
+router.get('/mosaic_button', function(req, res, next) {
+res.send(mosaic_button_view())
+})
 
 
 module.exports = router

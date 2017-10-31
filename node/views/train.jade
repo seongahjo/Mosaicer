@@ -25,15 +25,29 @@ block content
           table.table.table-striped.jambo_table.bulk_action
             thead
               tr.headings
-                th
-                  input.flat#check-all(type="checkbox")
+                th.column-title 
                 th.column-title File Name
                 th.column-title Amount
                 th.column-title Size
                 th.column-title.no-link.last
                   span.nobr Status
-              tbody#lists
-          button.btn.btn-block.btn-primary.pull-right(type='button', onClick='train(\'test\')') train
-
+              tbody#lists  
+          a(href="#",data-toggle="modal", data-target=".bs-example-modal-sm")',
+            button.btn.btn-block.btn-primary.pull-right(type='button') train
+          
+          .modal.fade.bs-example-modal-sm(tabindex='-1', role='dialog', aria-hidden='true', style='display: none;')
+            .modal-dialog.modal-sm
+              .modal-content
+                .modal-header
+                  button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') ×
+                  h4#myModalLabel2.modal-title New Model
+                .modal-body
+                  input.form-control#folder-id(type='text',placeholder='untitled folder')
+                
+                .modal-footer
+                  button.btn.btn-default(type='button', data-dismiss='modal') Close
+                  button.btn.btn-primary(type='button', onClick='train()', data-dismiss='modal') Save
+  
   script.
     getTrain()

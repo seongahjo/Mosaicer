@@ -24,7 +24,7 @@ var uploadstorage = multer.diskStorage({
     console.log(result)
     if(result.type=="image")
     folder=path.join('../','image',req.body.folder)
-    else if(result.type=="video")
+    else if(result.type=="movie")
     folder=path.join('../','video')
     console.log("upload to "+folder)
     cb(null, folder)
@@ -87,17 +87,21 @@ router.get('/paste', function(req, res, next) {
 
 
 router.get('/train', function(req, res, next) {
+      var name= req.query.name
       var folders=req.query.folder
       console.log(folders)
       var trainDir = path.join('../', 'model')
       var dataDir=path.join('data');
       fs.existsSync(trainDir) || fs.mkdirSync(trainDir)
+      if(!name){
       for(var s=0;s<9;s++){
         console.log(path.join(trainDir,s.toString()))
         if(!fs.existsSync(path.join(trainDir,s.toString())))
         break;
       }
       trainDir=path.join('model',s.toString())
+      }
+      trainDir=path.join('model',name)
       fs.existsSync(dataDir) || fs.mkdirSync(dataDir)
       var index=0;
       var trainData = {
@@ -151,7 +155,7 @@ router.get('/train', function(req, res, next) {
     })
 
     router.post('/videoUpload', upload.single('file'), function(req, res, next) {
-      res.json('good')
+      res.json(req.file.originalname)
     })
 
     router.get('/mosaic', function(req, res, next) {
