@@ -35,9 +35,10 @@ function load(){
 
 
 
-function FeedbackFiles(){
+function FeedbackFiles(video){
 console.log(uploadFile+" to "+folderName)
 var data={
+  'video' : video,
   'files' : uploadFile,
   'to' : folderName
 }
@@ -47,9 +48,9 @@ $.ajax({
   url:'api/feedback',
   method:'GET',
   data:data
-}).done(function(resposne){
+}).done(function(response){
   notice.remove()
-  getFeedback_face("#{video}")
+  getFeedback_face(response)
 })
 
 }
@@ -79,10 +80,14 @@ function goLeft() {
 
 
 
-function image_load(){
+function image_load(video){
+  var data={
+	'video':video
+}
   $.ajax({
     url: 'file/folder',
     method: 'GET',
+    data : data,
   }).done(function(data) {
     $("#ModalContent").html(data)
   })
@@ -115,14 +120,14 @@ function model(name) {
   })
 }
 
-function folder(name){
+function folder(video,name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
-if(uploadFile && uploadFile.length){
-  FeedbackFiles()
-}
-else
-error("empty")
+//if(uploadFile && uploadFile.length){
+  FeedbackFiles(video)
+//}
+//else
+//error("empty")
 
 }
 

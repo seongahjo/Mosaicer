@@ -351,7 +351,7 @@ router.get('/feedback_face', function(req, res, next) {
 
 var folder_view = jade.compile([
   '- each file in files',
-  '  a(href="#" onClick="folder(\'#{file.name}\')")',
+  '  a(href="#" onClick="folder(\'#{video}\',\'#{file.name}\')")',
   '    .mail_list',
   '      .left',
   '        i.fa.fa-folder',
@@ -365,7 +365,7 @@ var folder_view = jade.compile([
 router.get('/folder', function(req, res, next) {
   var Path=path.join('../','image')
   var result = []
-
+ var video=req.query.video
   if(!fs.existsSync(Path))
   res.send(404)
   fs.readdir(Path, function(error, files) {
@@ -381,7 +381,8 @@ router.get('/folder', function(req, res, next) {
       }
     }, function() {
       res.send(folder_view({
-        files: result
+        files: result,
+        video : video
       }))
     });
   })

@@ -132,6 +132,7 @@ def distorted_inputs(data_dir, batch_size):
     if 'train' in filename and os.path.splitext(filename)[-1] == '.bin':
         filenames.append(f)
         print(f)
+  filenames.append('data/train_namsu_9.bin')
   if not filenames :
       raise ValueError("No data file")
   print('train start')

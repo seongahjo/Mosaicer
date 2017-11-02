@@ -40,7 +40,10 @@ def convert_global(image_dir,data_dir,label):
     output=[]
     output.append(data_dir+"/")
     output.append("train_")
-    output.append(os.path.basename(image_dir)+"_")
+    if os.path.basename(image_dir)!="etc":
+      output.append(os.path.basename(image_dir)+"_")
+    else:
+      output.append("namsu_")
     output.append(label)
     outputstr=''.join(output)
 

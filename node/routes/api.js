@@ -67,22 +67,39 @@ router.get('/delete', function(req, res, next) {
 
 
 router.get('/feedback', function(req, res, next) {
+  var video=req.query.video
   var files = req.query.files
+  var etc_path=path.join('image',video,'etc')
   var dest = req.query.to
-  dest = path.join('../','image',dest,'/')
+  var dataDir='data'
+dest = path.join('../','image',dest,'/')
   console.log(files+ ' to '+dest)
-  try {
-  async.eachSeries(files, function iteratee(file, fcallback) {
+ try {
+async.eachSeries(files, function iteratee(file, fcallback) {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){
     fse.move(Path,path.join(dest,path.basename(file)), { overwrite: true })
     }
     fcallback()
-  })
-}catch(err){
+})
+
+                  var convertData = {
+                    'image_dir': etc_path,
+                    'data_dir': dataDir,
+                    'label': 9
+                  }
+                  axios.get(pythonServer + 'convert', {
+                    params: convertData
+                  }).then(function(response) {
+                    fse.emptyDir('../'+etc_path)
+                    console.log('convert finished')
+		})
+
+res.send(video)
+}
+catch(err){
   console.log(err)
 }
-  res.sendStatus(200)
 })
 
 router.get('/paste', function(req, res, next) {
@@ -149,8 +166,9 @@ router.get('/train', function(req, res, next) {
                     console.log('convert finished')
                     index+=1
                     fcallback()
-                    if(index==folders.length)
-                    callback(null)
+                    if(index==folders.length){
+	callback(null)
+		}
                   })
                 })
 

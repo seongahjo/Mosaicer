@@ -143,7 +143,7 @@ def check_image(filename, train_dir, label,count):
               shutil.move(full_path,os.path.join(path,full_name))
           else:
             os.remove(full_path)
-          return False
+          return True
         elif precision[label] < threshold and precision[label] >0.4:
             if count%per_frame==0:
                 path=os.path.join(folder_path,"etc")
@@ -161,15 +161,16 @@ def check_image(filename, train_dir, label,count):
               shutil.move(full_path,os.path.join(path,full_name))
           else:
             os.remove(full_path)
-          return True
+          return False
     except:
         shutil.move(full_path,"image/"+str(label)+"/"+random.randint(1,100))
     finally:
         #os.remove(full_path)
+        print('exception?')
         if precision[label] > threshold :
-          return False
-        else :
           return True
+        else :
+          return False
 
 
 if __name__ == "__main__":
