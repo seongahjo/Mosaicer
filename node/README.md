@@ -2,6 +2,7 @@
 You can use [Mosaicer] in a simplest way by Web GUI
 
 ## Tutorial
+0. run ./run.sh
 1. Make a directory
 2. Enter the directory and Upload your images by drag & drop
 3. Train your train data
