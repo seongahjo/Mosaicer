@@ -5,7 +5,7 @@ import tensorflow as tf
 tf.app.flags.DEFINE_integer('num_examples',1,
                            """Number of examples to run.""")
 tf.app.flags.DEFINE_integer('input_size',24,"""INPUT SIZE""")
-tf.app.flags.DEFINE_integer('label_size',2,"""Label size""")
+tf.app.flags.DEFINE_integer('label_size',10,"""Label size""")
 
 
 # core
@@ -21,9 +21,11 @@ tf.app.flags.DEFINE_boolean('use_fp16', False,
 # input
 tf.app.flags.DEFINE_integer('num_classes',10,
                            """Number of classes to run.""")
+tf.app.flags.DEFINE_integer('num_image',70,
+                           """Number of images to run.""")
 
 # train
-tf.app.flags.DEFINE_integer('max_steps', 1000,
+tf.app.flags.DEFINE_integer('max_steps', 500,
                             """Number of batches to run.""")
 tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
@@ -31,9 +33,10 @@ tf.app.flags.DEFINE_integer('threshold',0.7,
                             """minimum value to identify image.""")
 
 # mosaic
-tf.app.flags.DEFINE_integer('mosaic_label', 1,
-                            """label you want to digitize""")
-
+tf.app.flags.DEFINE_integer('target_label', 9,
+                            """label you do not want to digitize""")
+tf.app.flags.DEFINE_integer('face_frame',10,
+                            """save face per defined frame""")
 
 # directory
 tf.app.flags.DEFINE_string('image_dir', 'image',

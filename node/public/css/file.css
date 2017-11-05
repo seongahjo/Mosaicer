@@ -9,7 +9,7 @@
 .files {
     margin: 5px;
 }
-img{
+img.box{
   max-width: 100%;
   vertical-align: middle;
   border: 0;
@@ -26,7 +26,13 @@ img{
     text-align: center;
     vertical-align: top;
 }
-
+.face{
+  width:60px;
+  height:60px;
+}
+figure{
+  margin:8px;
+}
 .file .icon {
     margin: auto;
     margin-top: 0;
@@ -100,7 +106,10 @@ img{
 	cursor: pointer;
 }
 
-
+.mail_list h3{
+  padding-left:3px;
+  
+}
 .uploader div.browser input {
 	position: absolute;
 	top: 0;
@@ -148,7 +157,10 @@ img{
   height:100%;
 }
 
-
+.btn_nav{
+  padding: 6px 1px;
+  margin-right : 0px;
+}
 .modal {
   text-align: center;
   padding: 0!important;

@@ -1,31 +1,27 @@
 extends layout
 block content
   .right_col(role='main')
-    .col-md-12.col-sm-12.col-xs-12
-      .x_panel
-        .x_title
-          h2
-            | Mosaic
-          ul.nav.navbar-right.panel_toolbox
-            li
-              a.collapse-link
-                i.fa.fa-chevron-up
-            li
-              a.close-link
-                i.fa.fa-close
-          .clearfix
-        .x_content
-          #video-upload.uploader
-            | Drag and Drop Videos Here
-            br
-            |   or click to add videos using the input
-            br
-            .browser
-              label
-                span
-                  | Click to open the file Browser
-                  input(type='file', name='files[]', multiple='multiple', title='Click to add Files')
-
+    .x_panel
+      .x_title
+        h2
+          |  Mosaic
+          small
+        ul.nav.navbar-right.panel_toolbox
+          li
+            a.collapse-link
+              i.fa.fa-chevron-up
+          li
+            a.close-link
+              i.fa.fa-close
+        .clearfix
+      .x_content
+        .col-md-12.col-sm-12.col-xs-12
+          .table-responsive
+            table.table.table-striped.jambo_table.bulk_action
+              thead
+                tr.headings
+                  th.column-title Model Name
+                tbody#main
 
     .col-md-12.col-sm-12.col-xs-12
       .x_panel
@@ -50,9 +46,9 @@ block content
                 tr.headings
                   th.column-title File Name
                   th.column-title Size
-                  th.column-title Label
                   th.column-title.no-link.last
                     span.nobr Action
                 tbody#lists
   script.
-    getMosaic(defaultId)
+    getMosaic()
+    getModel()

@@ -7,15 +7,17 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
 
 ## Requirement
-+ OpenCV
-+ Tensorflow
-+ PIL
-+ dlib
-+ Flask (web.py)
++ Python3 ↑
++ OpenCV 3.1.0
++ Tensorflow 1.2.1
++ PIL 4.1.1
++ dlib 19.6.1
++ Flask (web.py) 0.11.1
 
 ## Modules
 * Convert
   * Image files to Labeled Binary file
+  * Append image files in existing file
 * Train
   * Make model by labeled binary files
 * Evaluate

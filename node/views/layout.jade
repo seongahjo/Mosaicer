@@ -27,14 +27,26 @@ html(lang='en')
     link(href='css/custom.min.css', rel='stylesheet')
     // file style
     link(href='css/file.css', rel='stylesheet')
+    
+    link(href= 'css/animate.min.css',rel='stylesheet')
+    link(href= 'css/animation.imgcheckbox.min.css',rel='stylesheet')
+    link(href='css/pnotify.custom.min.css',rel='stylesheet')
     // jQuery
     script(src='js/jquery.min.js')
     // Bootstrap
     script(src='js/bootstrap.min.js')
+    // iCheck
+    script(src='js/icheck.min.js')
     script.
       var defaultId='#{user.id}'
     // Main
     script(src='js/main.js')
+    script(src='js/file.js')
+    script(src='js/shape.js')
+    script(src='js/alert.js')
+    script(src="js/holder.min.js")
+    script(src='js/jquery.imgcheckbox.min.js')
+    script(src='js/pnotify.custom.min.js')
 
   body.nav-md
     .container.body
@@ -64,12 +76,12 @@ html(lang='en')
                     a(href='upload')
                       i.fa.fa-upload
                       |  Upload
-                  
+
                   li
                     a(href='train')
                       i.fa.fa-graduation-cap
                       |  Train
-              
+
                   li
                     a(href='mosaic')
                       i.fa.fa-magic
@@ -79,11 +91,11 @@ html(lang='en')
                       i.fa.fa-comment
                       |  Feedback
                   li
-                    a
+                    a(href='setting')
                       i.fa.fa-wrench
                       |  Setting
-                      
-                      
+
+
             // /sidebar menu
             // /menu footer buttons
             .sidebar-footer.hidden-small
@@ -93,7 +105,7 @@ html(lang='en')
                 span.glyphicon.glyphicon-fullscreen(aria-hidden='true')
               a(data-toggle='tooltip', data-placement='top', title='Lock')
                 span.glyphicon.glyphicon-eye-close(aria-hidden='true')
-              a(data-toggle='tooltip', data-placement='top', title='Logout')
+              a(href="../",data-toggle='tooltip', data-placement='top', title='Logout')
                 span.glyphicon.glyphicon-off(aria-hidden='true')
             // /menu footer buttons
         // top navigation
@@ -113,7 +125,7 @@ html(lang='en')
                     li
                       a(href='javascript:;') Help
                     li
-                      a(href='login.html')
+                      a(href='../')
                         i.fa.fa-sign-out.pull-right
                         |  Log Out
         //top navigation
@@ -122,7 +134,7 @@ html(lang='en')
         footer
           .pull-right
           | Mosaicer Cloud by 
-          a(href='https://github.com/seongahjo') seongahjo
+          a(href='https://github.com/seongahjo')  seongahjo
           .clearfix
 // /footer content
 
@@ -137,8 +149,7 @@ script(src='js/gauge.min.js')
 script(src='js/bootstrap-progressbar.min.js')
 // DateJS
 script(src='js/date.js')
-// iCheck
-script(src='js/icheck.min.js')
+
 // bootstrap-daterangepicker
 script(src='js/moment.min.js')
 script(src='js/daterangepicker.js')
@@ -149,7 +160,7 @@ script(src='js/custom.min.js')
 // script for Mosaic
 script(src='js/uploader.js')
 script(src='js/util.js')
-// 
+//
   Not used now
   // Chart.js
   script(src='js/Chart.min.js')
