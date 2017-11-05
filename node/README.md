@@ -1,12 +1,11 @@
 # Mosaic WEB
-You can use [Mosaicer] in a simplest way by Web
+You can use [Mosaicer] in a simplest way by Web GUI
 
 ## Tutorial
 1. Make a directory
 2. Enter the directory and Upload your images by drag & drop
 3. Train your train data
 4. <strong>Enjoy Deep Learning</strong>
-  * Upload your image and see a result of classification
   * Upload your video and see a result of digitization
 
 ## Architecture
