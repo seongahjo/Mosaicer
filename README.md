@@ -1,5 +1,5 @@
 # Mosaicer
-Using OpenCV & Tensorflow Digitize One's face on Video or Picture
+Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</strong>
 
 * Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
 * Description in Korean: http://www.slideshare.net/seongside/mosaicer-description-korean
@@ -26,10 +26,9 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
   * Digitize your video by model
 * Web
   * Support above functions on REST API request
-
-
-## Demo
 * [Mosaic WEB]
+  * Use Mosaicer simply by web
+
 
 ## How To Train
 <strong>Before RUN you should configure your directory on 'config.py'</strong>
@@ -61,6 +60,8 @@ Using OpenCV & Tensorflow Digitize One's face on Video or Picture
 
 4. WATCH YOUR VIDEO 'result.avi' in video/result folder
 ```
+
+<strong>Or just Use [Mosaic WEB]</strong>
 
 ## [API]
 
