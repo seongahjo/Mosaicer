@@ -4,20 +4,44 @@ var path = require('path')
 var axios = require('axios')
 var multer = require('multer')
 var pythonServer = 'http://localhost:9999/'
+<<<<<<< HEAD
+=======
 var fs = require('fs')
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
 var FormData = require('form-data')
 var async = require('async')
 var jade = require('jade')
 var wreck = require('wreck')
 var mime = require('../util/mime')
+<<<<<<< HEAD
+var fu=require('../util/file')
+
+var storage = multer.diskStorage({
+  filename: (req,file,cb)=> {
+=======
 var fse=require('fs-extra')
 var storage = multer.diskStorage({
-  filename: (req, file, cb)=> {
+  filename: function(req, file, cb) {
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
     cb(null, Date.now() + '.jpg')
   }
 })
 
 var uploadstorage = multer.diskStorage({
+<<<<<<< HEAD
+  destination: (req,file,cb)=> {
+    var folder = ''
+    var result = mime.stat(req.body.folder, file.originalname)
+    console.log(result)
+    if (result.type == "image")
+      folder = path.join('../', 'image', req.body.folder)
+    else if (result.type == "movie")
+      folder = path.join('../', 'video')
+    console.log("upload to " + folder)
+    cb(null, folder)
+  },
+  filename: (req,file,cb)=> {
+=======
   destination: function(req, file, cb) {
     var folder=''
     var result=mime.stat(req.body.folder,file.originalname)
@@ -30,6 +54,7 @@ var uploadstorage = multer.diskStorage({
     cb(null, folder)
   },
   filename: function(req, file, cb) {
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
     cb(null, file.originalname)
   }
 })
@@ -43,30 +68,98 @@ var upload = multer({
 })
 
 
-router.get('/makeFolder', (req, res, next)=> {
+<<<<<<< HEAD
+router.get('/makeFolder', (req,res,next)=> {
+  var folder = req.query.folder
+  var dir = path.join('../', 'image', folder)
+
+  fu.make(dir)
+  console.log('makeFolder : ' + dir)
+
+=======
+router.get('/makeFolder', function(req, res, next) {
   var folder = req.query.folder
   var dir = path.join('../','image',folder)
   console.log('makeFolder : '+dir)
   fs.existsSync(dir) || fs.mkdirSync(dir)
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
   res.send(dir)
 })
 
 
-router.get('/delete', (req, res, next) =>{
+<<<<<<< HEAD
+router.get('/delete', (req,res,next)=> {
+  var files = req.query.files
+  console.log(files + " to delete")
+  async.eachSeries(files, (file,fcallback)=> {
+    var Path = path.join('../', 'image', file)
+    fu.remove(Path)
+=======
+router.get('/delete', function(req, res, next) {
   var files = req.query.files
   console.log(files +" to delete")
-  async.eachSeries(files, (file, fcallback)=> {
+  async.eachSeries(files, function iteratee(file, fcallback) {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){
     fse.removeSync(Path)
     }
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
     fcallback()
   })
   res.sendStatus(200)
 })
 
 
-router.get('/feedback', (req, res, next) =>{
+<<<<<<< HEAD
+router.get('/feedback', (req,res,next)=> {
+  var video = req.query.video
+  var files = req.query.files
+  var etc_path = path.join('image', video, 'etc')
+  var dest = req.query.to
+  var dataDir = 'data'
+  dest = path.join('../', 'image', dest, '/')
+  console.log(files + ' to ' + dest)
+  try {
+    async.eachSeries(files, (file,fcallback)=> {
+      var Path = path.join('../', 'image', file)
+      fu.move(Path,path.join(dest, path.basename(file)),{overwrite:true})
+      fcallback()
+    })
+
+    var convertData = {
+      'image_dir': etc_path,
+      'data_dir': dataDir,
+      'label': 9
+    }
+    axios.get(pythonServer + 'convert', {
+      params: convertData
+    }).then((response)=> {
+      fu.empty('../' + etc_path)
+      console.log('convert finished')
+    })
+
+    res.send(video)
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+router.get('/paste', (req,res,next)=> {
+  var srcs = req.query.src
+  var dest = req.query.to
+  dest = path.join('../', 'image', dest, '/')
+  console.log(srcs + ' to ' + dest)
+  try {
+    async.eachSeries(srcs, (src,fcallback)=> {
+      var Path = path.join('../', 'image', src)
+      fu.copy(Path,path.join(dest,path.basename(src)))
+      fcallback()
+    })
+  } catch (err) {
+    console.log(err)
+  }
+=======
+router.get('/feedback', function(req, res, next) {
   var video=req.query.video
   var files = req.query.files
   var etc_path=path.join('image',video,'etc')
@@ -75,7 +168,7 @@ router.get('/feedback', (req, res, next) =>{
 dest = path.join('../','image',dest,'/')
   console.log(files+ ' to '+dest)
  try {
-async.eachSeries(files, (file, fcallback)=> {
+async.eachSeries(files, function iteratee(file, fcallback) {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){
     fse.move(Path,path.join(dest,path.basename(file)), { overwrite: true })
@@ -90,7 +183,7 @@ async.eachSeries(files, (file, fcallback)=> {
                   }
                   axios.get(pythonServer + 'convert', {
                     params: convertData
-                  }).then((response) =>{
+                  }).then(function(response) {
                     fse.emptyDir('../'+etc_path)
                     console.log('convert finished')
 		})
@@ -102,7 +195,7 @@ catch(err){
 }
 })
 
-router.get('/paste', (req,res,next) => {
+router.get('/paste', function(req, res, next) {
   var srcs = req.query.src
   var dest = req.query.to
   dest = path.join('../','image',dest,'/')
@@ -118,11 +211,108 @@ router.get('/paste', (req,res,next) => {
 }catch(err){
   console.log(err)
 }
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
   res.sendStatus(200)
 })
 
 
-router.get('/train', (req,res,next) => {
+<<<<<<< HEAD
+router.get('/train', (req,res,next)=> {
+  var name = req.query.name
+  var folders = req.query.folder
+  console.log(folders)
+  var trainDir = path.join('../', 'model')
+  var dataDir = path.join('data');
+  fu.make(trainDir)
+  fu.make(dataDir)
+  if (!name) {
+    // no default name
+    res.sendStatus(400)
+  }
+  trainDir = path.join('model', name)
+  dataDir = path.join(dataDir, name)
+  fu.make(dataDir)
+
+  var index = 0;
+  var trainData = {
+    'train_dir': trainDir,
+    'data_dir': dataDir
+  }
+  async.waterfall([
+    function(callback) {
+
+      async.eachSeries(folders, (folder,fcallback)=> {
+        console.log('convert inside ' + folder)
+        folder = path.join('image', folder)
+        console.log('folder ' + folder)
+        var convertData = {
+          'image_dir': folder,
+          'data_dir': dataDir,
+          'label': index
+        }
+
+        axios.get(pythonServer + 'convert', {
+          params: convertData
+        }).then((response)=> {
+          console.log('convert finished')
+          index += 1
+          fcallback()
+          if (index == folders.length) {
+            callback(null)
+          }
+        })
+      })
+
+    },
+  ], function(err, result) {
+    axios.get(pythonServer + 'train', {
+      params: trainData
+    }).then((response)=> {
+      console.log(response.data)
+      res.json(response.data)
+    })
+  });
+})
+
+
+router.post('/upload', upload.single('file'), (req,res,next)=> {
+  res.json('good')
+})
+
+router.post('/videoUpload', upload.single('file'), (req,res,next)=> {
+  res.json(req.file.originalname)
+})
+
+router.get('/mosaic', (req,res,next)=> {
+  var filename = req.query.filename
+  var model = req.query.model
+  var label = 9
+  var trainDir = path.join('model', model)
+  var videoPath = path.join('video', filename)
+  var data = {
+    'train_dir': trainDir,
+    'video_path': videoPath,
+    'label': label
+  }
+  axios.get(pythonServer + 'mosaic', {
+    params: data
+  }).then((response)=> {
+    console.log(response.data)
+    res.json(response.data)
+  })
+})
+
+router.get('/download', (req,res,next)=> {
+  var filename = req.query.filename
+  var Path = path.join('../', 'video', 'result', filename)
+  console.log(Path)
+  res.download(Path);
+})
+
+
+module.exports = router
+=======
+router.get('/train', function(req, res, next) {
       var name= req.query.name
       var folders=req.query.folder
       console.log(folders)
@@ -150,7 +340,7 @@ router.get('/train', (req,res,next) => {
       async.waterfall([
           function(callback) {
 
-                async.eachSeries(folders, (folder, fcallback)=> {
+                async.eachSeries(folders, function iteratee(folder, fcallback) {
                   console.log('convert inside ' +  folder)
                   folder=path.join('image',folder)
                   console.log('folder '+folder)
@@ -173,10 +363,10 @@ router.get('/train', (req,res,next) => {
                 })
 
               },
-            ],(err, result)=>{
+            ],function(err, result){
                 axios.get(pythonServer + 'train', {
                   params: trainData
-                }).then((response)=> {
+                }).then(function(response) {
                   console.log(response.data)
                   res.json(response.data)
                 })
@@ -190,15 +380,15 @@ router.get('/train', (req,res,next) => {
       '     span #{precision.label}',
     ].join('\n'))
 
-    router.post('/upload', upload.single('file'), (req,res,next) => {
+    router.post('/upload', upload.single('file'), function(req, res, next) {
       res.json('good')
     })
 
-    router.post('/videoUpload', upload.single('file'), (req,res,next) => {
+    router.post('/videoUpload', upload.single('file'), function(req, res, next) {
       res.json(req.file.originalname)
     })
 
-    router.get('/mosaic', (req,res,next) => {
+    router.get('/mosaic', function(req, res, next) {
       var filename = req.query.filename
       var model=req.query.model
       var label = 9
@@ -211,13 +401,13 @@ router.get('/train', (req,res,next) => {
       }
       axios.get(pythonServer + 'mosaic', {
         params: data
-      }).then((response)=> {
+      }).then(function(response) {
         console.log(response.data)
         res.json(response.data)
       })
     })
 
-    router.get('/download', (req,res,next) => {
+    router.get('/download', function(req, res, next) {
       var filename = req.query.filename
       var Path = path.join('../','video', 'result', filename)
       console.log(Path)
@@ -226,3 +416,4 @@ router.get('/train', (req,res,next) => {
 
 
     module.exports = router
+>>>>>>> ce28ec475ea36cb26525a8a77bc71141da268019
