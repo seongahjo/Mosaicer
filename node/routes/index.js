@@ -11,7 +11,7 @@ var tempuser = { id : 'user'}
 });*/
 var Path='../image'
 fs.existsSync(Path) || fs.mkdirSync(Path);
-router.get('/',function(req,res,next){
+router.get('/',(req,res,next)=>{
 
 /*  console.log('id : '+req.body.id)
   console.log('pw : '+req.body.pw)*/
@@ -25,7 +25,7 @@ router.get('/',function(req,res,next){
   res.render('index',{user : tempuser})
 })
 
-router.post('/signup',function(req,res,next){
+router.post('/signup',(req,res,next)=>{
   var id= req.body.id
   var name= req.body.name
   var pw = req.body.pw
@@ -50,36 +50,36 @@ router.post('/signup',function(req,res,next){
 })
 
 
-router.get('/upload',function(req,res,next){
+router.get('/upload',(req,res,next)=>{
   res.render('upload',{user: tempuser})
 })
 
-router.get('/convert',function(req,res,next){
+router.get('/convert',(req,res,next)=>{
   res.render('convert',{user: tempuser})
 })
 
-router.get('/train',function(req,res,next){
+router.get('/train',(req,res,next)=>{
   res.render('train',{user: tempuser})
 })
 
-router.get('/compare',function(req,res,next){
+router.get('/compare',(req,res,next)=>{
   res.render('compare',{user: tempuser})
 })
 
-router.get('/feedback',function(req,res,next){
+router.get('/feedback',(req,res,next)=>{
   res.render('feedback',{user:tempuser})
 })
 
-router.get('/mosaic',function(req,res,next){
+router.get('/mosaic',(req,res,next)=>{
   res.render('mosaic',{user:tempuser})
 })
 
-router.get('/feedback-face',function(req,res,next){
+router.get('/feedback-face',(req,res,next)=>{
   var video_name=req.query.video
   res.render('feedback-face',{user:tempuser,video:video_name})
 })
 
-router.get('/setting',function(req,res,next){
+router.get('/setting',(req,res,next)=>{
   res.render('setting',{user:tempuser})
 })
 

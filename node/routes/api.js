@@ -12,7 +12,7 @@ var wreck = require('wreck')
 var mime = require('../util/mime')
 var fse=require('fs-extra')
 var storage = multer.diskStorage({
-  filename: function(req, file, cb) {
+  filename: (req, file, cb)=> {
     cb(null, Date.now() + '.jpg')
   }
 })
@@ -43,7 +43,7 @@ var upload = multer({
 })
 
 
-router.get('/makeFolder', function(req, res, next) {
+router.get('/makeFolder', (req, res, next)=> {
   var folder = req.query.folder
   var dir = path.join('../','image',folder)
   console.log('makeFolder : '+dir)
@@ -52,10 +52,10 @@ router.get('/makeFolder', function(req, res, next) {
 })
 
 
-router.get('/delete', function(req, res, next) {
+router.get('/delete', (req, res, next) =>{
   var files = req.query.files
   console.log(files +" to delete")
-  async.eachSeries(files, function iteratee(file, fcallback) {
+  async.eachSeries(files, (file, fcallback)=> {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){
     fse.removeSync(Path)
@@ -66,7 +66,7 @@ router.get('/delete', function(req, res, next) {
 })
 
 
-router.get('/feedback', function(req, res, next) {
+router.get('/feedback', (req, res, next) =>{
   var video=req.query.video
   var files = req.query.files
   var etc_path=path.join('image',video,'etc')
@@ -75,7 +75,7 @@ router.get('/feedback', function(req, res, next) {
 dest = path.join('../','image',dest,'/')
   console.log(files+ ' to '+dest)
  try {
-async.eachSeries(files, function iteratee(file, fcallback) {
+async.eachSeries(files, (file, fcallback)=> {
     var Path=path.join('../','image',file)
     if(fs.existsSync(Path)){
     fse.move(Path,path.join(dest,path.basename(file)), { overwrite: true })
@@ -90,7 +90,7 @@ async.eachSeries(files, function iteratee(file, fcallback) {
                   }
                   axios.get(pythonServer + 'convert', {
                     params: convertData
-                  }).then(function(response) {
+                  }).then((response) =>{
                     fse.emptyDir('../'+etc_path)
                     console.log('convert finished')
 		})
@@ -102,7 +102,7 @@ catch(err){
 }
 })
 
-router.get('/paste', function(req, res, next) {
+router.get('/paste', (req,res,next) => {
   var srcs = req.query.src
   var dest = req.query.to
   dest = path.join('../','image',dest,'/')
@@ -122,7 +122,7 @@ router.get('/paste', function(req, res, next) {
 })
 
 
-router.get('/train', function(req, res, next) {
+router.get('/train', (req,res,next) => {
       var name= req.query.name
       var folders=req.query.folder
       console.log(folders)
@@ -150,7 +150,7 @@ router.get('/train', function(req, res, next) {
       async.waterfall([
           function(callback) {
 
-                async.eachSeries(folders, function iteratee(folder, fcallback) {
+                async.eachSeries(folders, (folder, fcallback)=> {
                   console.log('convert inside ' +  folder)
                   folder=path.join('image',folder)
                   console.log('folder '+folder)
@@ -173,10 +173,10 @@ router.get('/train', function(req, res, next) {
                 })
 
               },
-            ],function(err, result){
+            ],(err, result)=>{
                 axios.get(pythonServer + 'train', {
                   params: trainData
-                }).then(function(response) {
+                }).then((response)=> {
                   console.log(response.data)
                   res.json(response.data)
                 })
@@ -190,15 +190,15 @@ router.get('/train', function(req, res, next) {
       '     span #{precision.label}',
     ].join('\n'))
 
-    router.post('/upload', upload.single('file'), function(req, res, next) {
+    router.post('/upload', upload.single('file'), (req,res,next) => {
       res.json('good')
     })
 
-    router.post('/videoUpload', upload.single('file'), function(req, res, next) {
+    router.post('/videoUpload', upload.single('file'), (req,res,next) => {
       res.json(req.file.originalname)
     })
 
-    router.get('/mosaic', function(req, res, next) {
+    router.get('/mosaic', (req,res,next) => {
       var filename = req.query.filename
       var model=req.query.model
       var label = 9
@@ -211,13 +211,13 @@ router.get('/train', function(req, res, next) {
       }
       axios.get(pythonServer + 'mosaic', {
         params: data
-      }).then(function(response) {
+      }).then((response)=> {
         console.log(response.data)
         res.json(response.data)
       })
     })
 
-    router.get('/download', function(req, res, next) {
+    router.get('/download', (req,res,next) => {
       var filename = req.query.filename
       var Path = path.join('../','video', 'result', filename)
       console.log(Path)

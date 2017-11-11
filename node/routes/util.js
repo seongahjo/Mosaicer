@@ -3,7 +3,7 @@ var fs = require('fs')
 var router = express.Router();
 var path = require('path')
 /* GET  listing. */
-router.get('/img', function(req, res, next) {
+router.get('/img', (req, res, next)=> {
   var folder_name = req.query.folder
   var file_name = req.query.file;
 
@@ -17,7 +17,7 @@ router.get('/img', function(req, res, next) {
   return
   }
   try {
-    fs.readFile(filename, function(err, data) {
+    fs.readFile(filename, (err, data)=> {
       res.writeHead(200, {
         'Content-Type': 'text/html'
       })

@@ -37,6 +37,7 @@ function load(){
 
 function FeedbackFiles(video){
 console.log(uploadFile+" to "+folderName)
+
 var data={
   'video' : video,
   'files' : uploadFile,
@@ -84,6 +85,12 @@ function image_load(video){
   var data={
 	'video':video
 }
+
+  if(!(uploadFile &&uploadFile.length)){
+	FeedbackFiles(video)
+	return
+}
+else{
   $.ajax({
     url: 'file/folder',
     method: 'GET',
@@ -91,6 +98,7 @@ function image_load(video){
   }).done(function(data) {
     $("#ModalContent").html(data)
   })
+}
 }
 
 function model(name) {

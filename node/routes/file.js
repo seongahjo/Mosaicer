@@ -34,7 +34,7 @@ var file_view = jade.compile([
 '      img.box(src="img/#{file.type}.png")',
 '    div.name #{file.name}',*/
 
-router.get('/', function(req, res, next) {
+router.get('/', (req,res,next)=> {
   var folder = req.query.folder
   var realPath=path.join('../','image',folder)
   //var realPath = path.join('/tmp/', id, folder)
@@ -86,14 +86,14 @@ var model_view = jade.compile([
 
 
 
-router.get('/model', function(req, res, next) {
+router.get('/model', (req,res,next)=> {
   var Path=path.join('../','model')
   var result = []
 
   if(!fs.existsSync(Path))
   res.send(404)
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files)=> {
+    async.eachSeries(files, (file, callback)=> {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (stat.isDirectory()) {
@@ -127,7 +127,7 @@ var video_upload_view = jade.compile([
   ].join('\n'))
 
 
-  router.get('/video_upload', function(req, res, next) {
+  router.get('/video_upload', (req,res,next)=> {
         res.send(video_upload_view())
   })
 
@@ -141,14 +141,14 @@ var video_view = jade.compile([
 
 
 
-router.get('/video', function(req, res, next) {
+router.get('/video', (req,res,next)=> {
   var Path=path.join('../','video')
   var result = []
 
   if(!fs.existsSync(Path))
   res.send(404)
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files) =>{
+    async.eachSeries(files, (file, callback)=> {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory() && file!=".temp") {
@@ -167,7 +167,7 @@ router.get('/video', function(req, res, next) {
 })
 
 
-router.get('/train', function(req, res, next) {
+router.get('/train', (req,res,next)=> {
   var Path=path.join('../','image')
   //var Path = path.join('/tmp/', id, 'upload')
   var statePath = path.join(Path, 'state.json')
@@ -179,14 +179,14 @@ router.get('/train', function(req, res, next) {
   stateData = fs.readFileSync(statePath, 'utf8')
   if (stateData != undefined && stateData != '')
     state = JSON.parse(stateData)
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files)=> {
+    async.eachSeries(files, (file, callback)=> {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       size=0
       if (stat.isDirectory()) {
         filedetail.name = file
-        fs.readdir(path.join(Path, file), function(error, filess) {
+        fs.readdir(path.join(Path, file), (error, filess)=> {
           filedetail.amount = filess.length;
           for (i = 0; i < filess.length; i++) {
             var filestat = fs.statSync(path.join(Path, file, filess[i]))
@@ -194,7 +194,7 @@ router.get('/train', function(req, res, next) {
           }
           filedetail.size = size
           filedetail.state = 'Wait'
-          async.eachSeries(state.names, function iteratee(key, inside) {
+          async.eachSeries(state.names,  (key, inside) =>{
             if (filedetail.state != 'Trained') {
               if (key.name == file) {
                 filedetail.state = 'Trained'
@@ -234,21 +234,21 @@ var mosaic_view = jade.compile([
   '        button.btn.btn-warning.btn-xs(type="button"  onClick="download(\'#{file.name}\')") Download',
 ].join('\n'))
 
-router.get('/mosaic', function(req, res, next) {
+router.get('/mosaic', (req,res,next)=> {
   //var Path = path.join('/tmp/', id, 'video')
   var Path=path.join('../','video')
   var statePath = path.join(Path, 'result')
   var result = []
 
   fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+    async.eachSeries(files, (file,callback)=>{
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory() && path.extname(file)=='.avi') {
         filedetail.name = file
         filedetail.size = stat["size"]
         filedetail.state = 'Mosaic'
-        fs.readdir(statePath, function(err, resultFiles) {
+        fs.readdir(statePath, (err, resultFiles)=> {
           async.eachSeries(resultFiles, function iteratee(resultFile, inside) {
             if (resultFile === file) {
               filedetail.state = 'Download'
@@ -281,11 +281,11 @@ var feedback_view = jade.compile([
 ].join('\n'))
 
 
-router.get('/feedback', function(req, res, next) {
+router.get('/feedback', (req,res,next)=> {
   var Path = path.join('../','video')
   var result = []
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files) =>{
+    async.eachSeries(files, (file,callback)=>{
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory() &&  path.extname(file)=='.avi') {
@@ -320,13 +320,13 @@ var feedback_face_view = jade.compile([
   '      |  Label',
 ].join('\n'))
 
-router.get('/feedback_face', function(req, res, next) {
+router.get('/feedback_face', (req,res,next)=> {
   var file_name=req.query.filename
   var Path = path.join('../image',file_name, 'etc')
   var result = []
   console.log(Path)
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files)=> {
+    async.eachSeries(files, (file,callback)=>{
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory()) {
@@ -362,14 +362,14 @@ var folder_view = jade.compile([
   '          |content',
 ].join('\n'))
 
-router.get('/folder', function(req, res, next) {
+router.get('/folder', (req,res,next)=> {
   var Path=path.join('../','image')
   var result = []
  var video=req.query.video
   if(!fs.existsSync(Path))
   res.send(404)
-  fs.readdir(Path, function(error, files) {
-    async.eachSeries(files, function iteratee(file, callback) {
+  fs.readdir(Path, (error, files)=> {
+    async.eachSeries(files, (file,callback)=>{
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (stat.isDirectory()) {
@@ -394,7 +394,7 @@ var mosaic_button_view = jade.compile([
   'button#compose.btn.btn-lg.btn-success.btn-block(type="button", onClick="mosaic()") MOSAIC'
 ].join('\n'))
 
-router.get('/mosaic_button', function(req, res, next) {
+router.get('/mosaic_button', (req,res,next)=> {
 res.send(mosaic_button_view())
 })
 
