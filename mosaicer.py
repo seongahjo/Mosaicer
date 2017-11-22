@@ -69,47 +69,8 @@ def mosaic(video_path,train_dir, label):
 
 
 def job(frame,x,y,w,h,height,width):
-    avg_r = 0
-    avg_g = 0
-    avg_b = 0
-
-    temp = w % 30
-    if temp != 0:
-      w = w + (30-temp)
-      temp = h % 30
-      if temp != 0:
-        h = h + (30-temp)
-      tx = int(w / 30)
-      ty = int(h / 30)
-
-      for time_x in range(0,tx):
-          for time_y in range(0,ty):
-                      if time_y*30+y+15 < height:
-                          if time_x*30+x+15 < width:
-                                      avg_r = frame[time_y*30+y+15,time_x*30+x+15,2]
-                                      avg_g = frame[time_y*30+y+15,time_x*30+x+15,1]
-                                      avg_b = frame[time_y*30+y+15,time_x*30+x+15,0]
-                          else:
-                                      avg_r = frame[time_y*30+y+15,time_x*30+x+1,2]
-                                      avg_g = frame[time_y*30+y+15,time_x*30+x+1,1]
-                                      avg_b = frame[time_y*30+y+15,time_x*30+x+1,0]
-                      else:
-                          if time_x*30+x+15 < width:
-                                      avg_r = frame[time_y*30+y+1,time_x*30+x+15,2]
-                                      avg_g = frame[time_y*30+y+1,time_x*30+x+15,1]
-                                      avg_b = frame[time_y*30+y+1,time_x*30+x+15,0]
-                          else:
-                                      avg_r = frame[time_y*30+y+1,time_x*30+x+1,2]
-                                      avg_g = frame[time_y*30+y+1,time_x*30+x+1,1]
-                                      avg_b = frame[time_y*30+y+1,time_x*30+x+1,0]
-
-                      for m in range(0,30):
-                          for n in range(0,30):
-                              if time_y*30+y+m < height:
-                                  if time_x*30+x+n < width:
-                                      frame[time_y*30+y+m,time_x*30+x+n,2] = avg_r
-                                      frame[time_y*30+y+m,time_x*30+x+n,1] = avg_g
-                                      frame[time_y*30+y+m,time_x*30+x+n,0] = avg_b
+    blur = cv2.blur(frame[y:y+h,x:x+w,:],(70,70))
+    frame[y:y+h,x:x+w,:] = blur
     return frame
 
 
