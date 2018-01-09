@@ -69,6 +69,8 @@ Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</st
 ## [REST API]
 For Web Module
 
+## [Library]
+
 
 ## License
 Mosaicer is released under [MIT License]
@@ -76,4 +78,5 @@ Mosaicer is released under [MIT License]
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
 [REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST_API.md
+[Library] : https://github.com/seongahjo/Mosaicer/blob/master/LIBRARY.md
 [Mosaic WEB]: https://github.com/seongahjo/Mosaicer/tree/master/node
