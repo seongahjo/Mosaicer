@@ -1,4 +1,3 @@
-# Mosaicer
 <img width="234" alt="2018-01-10 12 47 25" src="https://user-images.githubusercontent.com/10272119/34729417-f20aa9bc-f59f-11e7-8059-bb4acf7c432a.png">
 
 Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</strong>
