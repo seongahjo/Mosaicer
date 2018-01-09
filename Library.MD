@@ -1,0 +1,66 @@
+* OpenCV
+    * https://opencv.org/
+    * 3-clause BSD License
+* Dlib
+    * http://dlib.net/
+    * Boost Software License
+* Tensorflow
+    * https://www.tensorflow.org/
+    * Apache License 2.0
+* pug
+    * https://pugjs.org/
+    * MIT
+* express
+    * https://github.com/expressjs/express
+    * MIT
+* async
+    * https://caolan.github.io/async/
+    * MIT
+* fs-extra
+    * https://github.com/jprichardson/node-fs-extra
+    * MIT
+* Underscore.js
+    * http://underscorejs.org/
+    * MIT
+* Flask
+    * http://flask.pocoo.org/docs/0.12/
+    * 3-clause BSD License
+* Axios
+    * https://github.com/axios/axios
+    * MIT
+* Multer
+    * https://github.com/expressjs/multer
+    * MIT
+* Wreck
+    * https://github.com/hapijs/wreck
+    * 3-clause BSD License
+* DMuploader
+    * https://github.com/danielm/uploader
+    * GPL-2.0
+* Bootstrap
+    * https://getbootstrap.com/docs/
+    * MIT
+* JQuery
+    * https://jquery.org
+    * License
+* iCheck
+    * http://icheck.fronteed.com/
+    * MIT
+* Chart.js
+    * http://www.chartjs.org/
+    * MIT
+* Font Awesome
+    * http://fontawesome.io/
+    * MIT
+* JQVMap
+    * https://github.com/manifestinteractive/jqvmap
+    * MIT 
+* Pnotify
+    * https://github.com/sciactive/pnotify
+    * Apache License 2.0
+* gauge.js
+    * https://github.com/bernii/gauge.js
+    * MIT
+* NProgress.js
+    * http://ricostacruz.com/nprogress/
+    * MIT
