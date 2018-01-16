@@ -2,9 +2,8 @@
 
 Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</strong>
 
-* Slideshare : http://www.slideshare.net/SuekyeongNam/mosaicer
-* Description in Korean: http://www.slideshare.net/seongside/mosaicer-description-korean
-* Youtube : https://youtu.be/qifwKGzVR4c
+* Slideshare : https://www.slideshare.net/SuekyeongNam/mosaicer-82561931
+* Youtube : https://www.youtube.com/watch?v=c5qYdZi6Dpk
 
 
 ## Requirement
