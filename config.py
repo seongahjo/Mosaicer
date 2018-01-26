@@ -31,7 +31,8 @@ tf.app.flags.DEFINE_boolean('log_device_placement', False,
                             """Whether to log device placement.""")
 tf.app.flags.DEFINE_integer('threshold',0.7,
                             """minimum value to identify image.""")
-
+tf.app.flags.DEFINE_integer('num_gpus',1,
+                            """Number of gpu""")
 # mosaic
 tf.app.flags.DEFINE_integer('target_label', 9,
                             """label you do not want to digitize""")
