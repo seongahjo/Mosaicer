@@ -3,9 +3,12 @@ var fs=require('fs')
 var fse=require('fs-extra')
 
 exports.make=(Path)=>{
-  if(!(fs.existsSync(Path) || fs.mkdirSync(Path))){
-    throw new Error('make Error')
-  }
+  if(!fs.existsSync(Path)){
+  fs.mkdirSync(Path)
+}
+else {
+  console.log('already exists')
+}
 }
 
 exports.remove=(Path)=>{

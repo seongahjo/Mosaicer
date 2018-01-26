@@ -44,13 +44,16 @@ var upload = multer({
 
 
 router.get('/makeFolder', (req,res,next)=> {
+  console.log('makeFolder start')
   var folder = req.query.folder
   var dir = path.join('../', 'image', folder)
-
+  console.log('makeFolder ing...')
   fu.make(dir)
-  console.log('makeFolder : ' + dir)
 
-  res.send(dir)
+
+  console.log('makeFolder : ' + dir)
+  res.sendStatus(200)
+  //res.send(dir)
 })
 
 
