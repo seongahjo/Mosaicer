@@ -86,8 +86,7 @@ def average_gradients(tower_grads):
     return average_grads
 
 
-def train():
-    """Train CIFAR-10 for a number of steps."""
+def train_gpu(data_dir, train_dir):
     with tf.Graph().as_default(), tf.device('/cpu:0'):
         # Create a variable to count the number of train() calls. This equals the
         # number of batches processed * FLAGS.num_gpus.
@@ -111,7 +110,7 @@ def train():
         # opt = tf.train.GradientDescentOptimizer(lr)
         opt = tf.train.AdamOptimizer(learning_rate=1e-4)
         # Get images and labels for CIFAR-10.
-        images, labels = core.distorted_inputs(data_dir=FLAGS.data_dir)
+        images, labels = core.distorted_inputs(data_dir=data_dir)
         batch_queue = tf.contrib.slim.prefetch_queue.prefetch_queue(
             [images, labels], capacity=2 * FLAGS.num_gpus)
         # Calculate the gradients for each model tower.
@@ -210,15 +209,17 @@ def train():
 
             # Save the model checkpoint periodically.
             if step % 1000 == 0 or (step + 1) == FLAGS.max_steps:
-                checkpoint_path = os.path.join(FLAGS.train_dir, 'model.ckpt')
+                checkpoint_path = os.path.join(train_dir, 'model.ckpt')
                 saver.save(sess, checkpoint_path, global_step=step)
+
+        return True
 
 
 def main(argv=None):  # pylint: disable=unused-argument
     if tf.gfile.Exists(FLAGS.train_dir):
         tf.gfile.DeleteRecursively(FLAGS.train_dir)
     tf.gfile.MakeDirs(FLAGS.train_dir)
-    train()
+    train_gpu(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
 
 
 if __name__ == '__main__':
