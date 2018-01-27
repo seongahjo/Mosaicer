@@ -17,21 +17,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'image')
 
 
-@app.route('/', methods=['POST'])
-def api():
-    results = []
-    for image in request.files.getlist('images'):
-        path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-        image.save(path)
-        filename = 'image/' + image.filename
-        output = bc.convert(img=filename)
-        imagepath = os.path.join('/tmp/', request.form['id'], 'train')
-        print(imagepath)
-        precision = compare.evaluate(output, imagepath)
-        results.append({'precision': precision})
-    return jsonify(results=results)
-
-
 @app.route('/train')
 def train():
     print('train start')
