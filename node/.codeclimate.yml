@@ -1,6 +1,0 @@
-version: "2"
-exclude_patterns:
-  - "public/"
-  - "node_modules/"
-  - "package.json"
-  - "Readme.md"
