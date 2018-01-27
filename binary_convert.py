@@ -16,7 +16,9 @@ def convert_global(image_dir, data_dir, label):
     """
     Convert All Images in 'data'
     Args:
-       nothing
+       image_dir : image directory converts to binary
+       data_dir :  destination directory
+       label : label
     Returns:
        Directory stores images binary file
      """

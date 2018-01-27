@@ -86,7 +86,7 @@ def average_gradients(tower_grads):
     return average_grads
 
 
-def train_gpu(data_dir, train_dir):
+def train(data_dir, train_dir):
     with tf.Graph().as_default(), tf.device('/cpu:0'):
         # Create a variable to count the number of train() calls. This equals the
         # number of batches processed * FLAGS.num_gpus.
@@ -219,7 +219,7 @@ def main(argv=None):  # pylint: disable=unused-argument
     if tf.gfile.Exists(FLAGS.train_dir):
         tf.gfile.DeleteRecursively(FLAGS.train_dir)
     tf.gfile.MakeDirs(FLAGS.train_dir)
-    train_gpu(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
+    train(data_dir=FLAGS.data_dir,train_dir=FLAGS.train_dir)
 
 
 if __name__ == '__main__':
