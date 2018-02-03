@@ -17,9 +17,9 @@ FLAGS = tf.app.flags.FLAGS
 
 
 def tower_loss(scope, images, labels):
-    """Calculate the total loss on a single tower running the CIFAR model.
+    """Calculate the total loss on a single tower running the model.
     Args:
-      scope: unique prefix string identifying the CIFAR tower, e.g. 'tower_0'
+      scope: unique prefix string identifying the tower, e.g. 'tower_0'
       images: Images. 4D tensor of shape [batch_size, height, width, 3].
       labels: Labels. 1D tensor of shape [batch_size].
     Returns:

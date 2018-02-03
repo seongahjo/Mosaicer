@@ -5,7 +5,7 @@ import time
 from datetime import datetime
 
 import tensorflow as tf
-
+import os
 import core
 
 FLAGS = tf.app.flags.FLAGS
@@ -49,10 +49,13 @@ def train_data(data_dir, train_dir):
                                   'sec/batch)')
                     print(format_str % (datetime.now(), self._step, loss_value,
                                         examples_per_sec, sec_per_batch))
-
+        if 'IS_TEST' in os.environ:
+            steps = os.environ["IS_TEST"]
+        else:
+            steps = FLAGS.max_steps
         with tf.train.MonitoredTrainingSession(
                 checkpoint_dir=train_dir,
-                hooks=[tf.train.StopAtStepHook(last_step=FLAGS.max_steps),
+                hooks=[tf.train.StopAtStepHook(last_step=steps),
                        tf.train.NanTensorHook(loss),
                        _LoggerHook()],
                 config=tf.ConfigProto(
