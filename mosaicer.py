@@ -73,7 +73,7 @@ def capture(video_path, train_dir, label=None):
                 frame = digitize(frame=frame, x=left, y=top, w=right - left, h=bottom - top)
 
             if index % fps == 0:  # save face per 1 sec
-                shutil.move(face_path,os.path.join(file_path,'face',str(face_count)))  # temp
+                shutil.move(face_path,os.path.join(file_path,'face'+str(face_count)))  # temp
                 face_count += 1
         index += 1
         out.write(frame)
@@ -109,6 +109,7 @@ def check_image(video_name, train_dir, label, count):
     file_name = str(count) + FLAGS.extension
     folder_path = os.path.join("image", video_name)
     full_path = os.path.join(folder_path, file_name)
+    #print(full_path)
     output = binary_convert.convert(full_path)
 
     """
@@ -124,7 +125,7 @@ def check_image(video_name, train_dir, label, count):
     precision = compare.evaluate(output, train_dir)
 
 
-    print(precision)
+    #print(precision)
 
 
     if precision[label] > threshold:

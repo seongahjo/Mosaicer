@@ -37,7 +37,7 @@ def convert_global(image_dir, data_dir, label):
 
     # Directory that stores image binary file
     output = []
-    output.append(data_dir + "/")
+    output.append(data_dir + os.sep)
     output.append("train_")
     if os.path.basename(image_dir) != "etc":
         output.append(os.path.basename(image_dir) + "_")
@@ -114,7 +114,8 @@ def convert(img):
     label = [0]
 
     # Extract file name inlcudes extension
-    filename = img.split('/')[1]
+    # OS Type
+    filename = img.split(os.sep)[1]
 
     # Extract file name except extension
     filename = filename.split('.')[0]
@@ -125,7 +126,7 @@ def convert(img):
     output.append(FLAGS.temp_dir)
     if not os.path.exists(FLAGS.temp_dir):
         os.makedirs(FLAGS.temp_dir)
-    output.append('/')
+    output.append(os.sep)
     output.append(filename)
     output.append('.bin')
     outputstr = ''.join(output)
