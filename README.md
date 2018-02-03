@@ -1,3 +1,7 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/seongahjo/Mosaicer.svg?branch=master)](https://travis-ci.org/seongahjo/Mosaicer)
+<br>
+
 <img width="234" alt="2018-01-10 12 47 25" src="https://user-images.githubusercontent.com/10272119/34729417-f20aa9bc-f59f-11e7-8059-bb4acf7c432a.png">
 
 Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</strong>
@@ -7,12 +11,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</st
 
 
 ## Requirement
-+ Python3 ↑
-+ OpenCV 3.1.0
-+ Tensorflow 1.2.1
-+ PIL 4.1.1
-+ dlib 19.6.1
-+ Flask (web.py) 0.11.1
++ Python3 
 
 ## Modules
 * Convert
@@ -75,7 +74,7 @@ For Web Module
 ## License
 Mosaicer is released under [MIT License]
 
-[Library]: https://github.com/seongahjo/Mosaicer/blob/master/LIBRARY.md
+[Library]: https://github.com/seongahjo/Mosaicer/blob/master/NOTICE
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
 [REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST_API.md
