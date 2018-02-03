@@ -16,6 +16,4 @@ RUN pip3 install --upgrade pip \
 && pip3 install -r requirements.txt
 WORKDIR node
 RUN npm install
-WORKDIR ../
-RUN chmod +x ./run.sh && ./run.sh
 EXPOSE 3000
