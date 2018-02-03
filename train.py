@@ -6,6 +6,7 @@ from datetime import datetime
 
 import tensorflow as tf
 import core
+import config
 
 FLAGS = tf.app.flags.FLAGS
 

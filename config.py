@@ -39,7 +39,7 @@ tf.app.flags.DEFINE_integer('target_label', 9,
 tf.app.flags.DEFINE_integer('face_frame', 10,
                             """save face per defined frame""")
 tf.app.flags.DEFINE_integer('skip_frame', 3, """skiep face per defined frame""")
-tf.app.flags.DEFINE_string('extension', 'jpg', """file extension of extracted face""")
+tf.app.flags.DEFINE_string('extension', '.jpg', """file extension of extracted face""")
 
 
 # directory
