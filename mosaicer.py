@@ -9,6 +9,7 @@ import tensorflow as tf
 
 import binary_convert
 import compare
+import config
 
 FLAGS = tf.app.flags.FLAGS
 

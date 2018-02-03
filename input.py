@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import os
-
+import config
 import tensorflow as tf
 
 FLAGS = tf.app.flags.FLAGS
