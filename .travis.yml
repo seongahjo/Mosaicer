@@ -3,8 +3,6 @@ python :
    - "3.5"
 install :
     -  pip install -r travis_requirements.txt
-env :
-  - IS_TEST = 10
 script :
   - python binary_convert.py 0 nam
   - python binary_convert.py 1 jo

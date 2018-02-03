@@ -5,13 +5,12 @@ import time
 from datetime import datetime
 
 import tensorflow as tf
-import os
 import core
 
 FLAGS = tf.app.flags.FLAGS
 
 
-def train_data(data_dir, train_dir):
+def train_data(data_dir, train_dir,steps=FLAGS.max_step):
     with tf.Graph().as_default():
         global_step = tf.contrib.framework.get_or_create_global_step()
 
@@ -49,10 +48,6 @@ def train_data(data_dir, train_dir):
                                   'sec/batch)')
                     print(format_str % (datetime.now(), self._step, loss_value,
                                         examples_per_sec, sec_per_batch))
-        if 'IS_TEST' in os.environ:
-            steps = os.environ["IS_TEST"]
-        else:
-            steps = FLAGS.max_steps
         with tf.train.MonitoredTrainingSession(
                 checkpoint_dir=train_dir,
                 hooks=[tf.train.StopAtStepHook(last_step=steps),
@@ -71,7 +66,7 @@ def main(argv=None):  # pylint: disable=unused-argument
     if tf.gfile.Exists(FLAGS.train_dir):
         tf.gfile.DeleteRecursively(FLAGS.train_dir)
     tf.gfile.MakeDirs(FLAGS.train_dir)
-    train_data(data_dir=FLAGS.data_dir, train_dir=FLAGS.train_dir)
+    train_data(data_dir=FLAGS.data_dir, train_dir=FLAGS.train_dir, steps=10)
 
 
 if __name__ == '__main__':
