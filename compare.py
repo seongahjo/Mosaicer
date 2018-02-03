@@ -4,7 +4,6 @@ from __future__ import print_function
 import tensorflow as tf
 import input
 import core
-import config
 FLAGS = tf.app.flags.FLAGS
 
 

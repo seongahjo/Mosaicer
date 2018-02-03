@@ -6,12 +6,11 @@ from datetime import datetime
 
 import tensorflow as tf
 import core
-import config
 
 FLAGS = tf.app.flags.FLAGS
 
 
-def train_data(data_dir, train_dir,steps=FLAGS.max_step):
+def train_data(data_dir, train_dir,steps=FLAGS.max_steps):
     with tf.Graph().as_default():
         global_step = tf.contrib.framework.get_or_create_global_step()
 
