@@ -26,7 +26,7 @@ Then connect to http://localhost:3000
 ## Demo
 
 
-## Doucmentation
+## Documentation
 + [API]
 + [REST API]
 + [Contributing Guide]
