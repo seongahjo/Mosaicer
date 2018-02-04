@@ -9,73 +9,60 @@ Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</st
 * Slideshare : https://www.slideshare.net/SuekyeongNam/mosaicer-82561931
 * Youtube : https://www.youtube.com/watch?v=c5qYdZi6Dpk
 
+## Features
++ No need to use Photoshop to extract face, <strong>JUST UPLOAD YOUR PHOTO</strong>
++ Quick installation & implementation
 
-## Requirement
-+ Python3 
+## Installation
++ `Python 3.5+` 
+<pre><code>$ pip install -r requirements.txt
+$ ./run.sh</code></pre>
++ `Docker`
+<pre><code>$ docker build --tag mosaicer .
+$ docker run -d --name Mosaicer mosaicer -p 3000:3000 /bin/sh -c 'python3 web.py; cd node && npm start' </code></pre>
 
-## Modules
-* Convert
-  * Image files to Labeled Binary file
-  * Append image files in existing file
-* Train
-  * Make model by labeled binary files
-* Evaluate
-  * Classify image by model which is a result of Train
-* Mosaic
-  * Digitize your video by model
-* Web
-  * Support above functions on REST API request
-* [Mosaic WEB]
-  * Use Mosaicer simply by web
+Then connect to http://localhost:3000
+
+## Demo
 
 
-## How To Train
-<strong>Before RUN you should configure your directory on 'config.py'</strong>
-
-```
-1. Put your 32x32 Images on 'Image' folder
-
-2. RUN python binary_convert.py (with label, foldername)
-
-  EX) [python binary_convert.py (1) (foldername)] or [python binary_convert.py (0) (foldername)]
-
-  images with label 1 is digitized by default
-
-  You should do this step twice by different label
-
-3. RUN python train.py
-```
-
-
-## How To
-```
-1. If you want to digitize one's face on the video
-
-2. Put the video on 'VIDEO' folder
-
-3. RUN python mosaicer.py with your video name
-
-  EX) [python mosacier.py test.avi]
-
-4. WATCH YOUR VIDEO 'result.avi' in video/result folder
-```
-
-<strong>Or just Use [Mosaic WEB]</strong>
-
-## [API]
-
-
-## [REST API]
-For Web Module
-
-## [Library]
-
+## Doucmentation
++ [API]
++ [REST API]
++ [Contributing Guide]
++ [Roadmap]
++ [Library]
 
 ## License
 Mosaicer is released under [MIT License]
+
+```
+Copyright (c) 2017 SeongAhJo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+```
+
 
 [Library]: https://github.com/seongahjo/Mosaicer/blob/master/NOTICE
 [MIT License]: https://github.com/seongahjo/Mosaicer/blob/dev/LICENSE
 [API]: https://github.com/seongahjo/Mosaicer/blob/master/API.md
 [REST API]: https://github.com/seongahjo/Mosaicer/blob/master/REST_API.md
+[Contributing Guide]: https://github.com/seongahjo/Mosaicer/wiki/Contributing-Guide
+[Roadmap]: https://github.com/seongahjo/Mosaicer/wiki/Roadmap
 [Mosaic WEB]: https://github.com/seongahjo/Mosaicer/tree/master/node
