@@ -6,10 +6,9 @@ import time
 import cv2
 import face_recognition
 import tensorflow as tf
-
+import label_image
 import binary_convert
-import compare
-import config
+import train_config
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -109,8 +108,6 @@ def check_image(video_name, train_dir, label, count):
     file_name = str(count) + FLAGS.extension
     folder_path = os.path.join("image", video_name)
     full_path = os.path.join(folder_path, file_name)
-    #print(full_path)
-    output = binary_convert.convert(full_path)
 
     """
     # Make Dirs
@@ -122,7 +119,7 @@ def check_image(video_name, train_dir, label, count):
         os.makedirs(os.path.join(folder_path, "etc"))
     """
 
-    precision = compare.evaluate(output, train_dir)
+    precision = label_image.run(full_path, train_dir)
 
 
     #print(precision)
