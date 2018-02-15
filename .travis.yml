@@ -4,4 +4,4 @@ python :
 install :
     -  pip install -r travis_requirements.txt
 script :
-  - python config.py
+  - python train_config.py
