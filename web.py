@@ -3,7 +3,8 @@ from __future__ import division
 from __future__ import print_function
 import json
 import os
-
+import face_recognition
+import cv2
 from flask import Flask, jsonify, request
 
 # from convert import convert_image, convert_images
@@ -23,18 +24,28 @@ def train():
     train_dir = makeDir(train_dir)
 
     #  if retrain.run(data_dir=data_dir, train_dir=train_dir):
-   #ProtoBuf
+    # ProtoBuf
     print('train end')
     return 'true'
 
 
-@app.route('/upload', methods=['POST'])
+@app.route('/tracker')
 def upload():
-    image_dir = request.form['image_dir']
-    directory = makeDir(image_dir)
-    for image in request.files.getlist('images'):
-        path = os.path.join(directory, image.filename)
-        image.save(path)
+    image_path = request.args.get('path').split(os.sep)[1:]
+    image_path=os.sep.join(image_path)
+    image_name = os.path.basename(image_path)
+    print(image_path, image_name)
+    image = cv2.imread(image_path)
+    faces = face_recognition.face_locations(image, number_of_times_to_upsample=0, model="cnn")
+    index = 0
+    for (top, right, bottom, left) in faces:
+        imgFace = image[top:bottom, left:right]
+        img_output = cv2.resize(imgFace, (32,32), interpolation=cv2.INTER_AREA)
+        face_path = os.path.join("image", str(index)+image_name )
+        index += 1
+        cv2.imwrite(face_path, img_output)
+    os.remove(image_path)
+    print('finished')
     return 'true'
 
 

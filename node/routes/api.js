@@ -179,7 +179,15 @@ router.get('/train', (req,res,next)=> {
 
 
 router.post('/upload', upload.single('file'), (req,res,next)=> {
-  res.json('good')
+  var data={
+  'path':req.file.path
+  }
+  axios.get(pythonServer + 'tracker', {
+    params: data
+  }).then((response)=> {
+    console.log(response.data)
+    res.json(response.data)
+  })
 })
 
 router.post('/videoUpload', upload.single('file'), (req,res,next)=> {
