@@ -178,15 +178,15 @@ router.get('/train', (req, res, next) => {
         filedetail.name = file
         fs.readdir(path.join(Path, file), (error, filess)=> {
           filedetail.amount = filess.length;
-          for (i = 0; i < filess.length; i++) {
-            size += Math.floor(parseInt(filestat.size) / 1024, 0)
-          }
-          filedetail.size = size
           result.push(filedetail)
-
+          console.log(filedetail)
+          callback(null)
         })
       }
+      else {
         callback(null)
+      }
+
     }, function() {
       res.send(train_view({
         files: result

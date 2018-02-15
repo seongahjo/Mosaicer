@@ -8,9 +8,7 @@ import face_recognition
 import tensorflow as tf
 import label_image
 import binary_convert
-import train_config
 
-FLAGS = tf.app.flags.FLAGS
 
 
 def capture(video_path, train_dir, label=None):
@@ -27,7 +25,8 @@ def capture(video_path, train_dir, label=None):
     result_dir = os.path.join(video_dir, 'result')  # directory to save result of digitization
     file_name = os.path.splitext(filename)[0]
     file_path = os.path.join("image", file_name)  # image/video_name is a directory to save images
-
+    skip_frame=30
+    image_size=32
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     if not os.path.exists(result_dir):
@@ -51,7 +50,7 @@ def capture(video_path, train_dir, label=None):
         if not ret:  # finished
             break
 
-        if index % FLAGS.skip_frame == 0:
+        if index % skip_frame == 0:
             faces = face_recognition.face_locations(frame, number_of_times_to_upsample=0, model="cnn")
         for (top, right, bottom, left) in faces:
             imgFace = frame[top:bottom, left:right]
@@ -62,8 +61,8 @@ def capture(video_path, train_dir, label=None):
 
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
-            img_output2 = cv2.resize(img_output, (FLAGS.image_size, FLAGS.image_size), interpolation=cv2.INTER_AREA)
-            face_path = os.path.join(file_path, str(face_count) + FLAGS.extension)
+            img_output2 = cv2.resize(img_output, (image_size,image_size), interpolation=cv2.INTER_AREA)
+            face_path = os.path.join(file_path, str(face_count) + ".jpg")
             cv2.imwrite(face_path, img_output2)
 
             # Mosaic Process
@@ -72,7 +71,7 @@ def capture(video_path, train_dir, label=None):
                 frame = digitize(frame=frame, x=left, y=top, w=right - left, h=bottom - top)
 
             if index % fps == 0:  # save face per 1 sec
-                shutil.move(face_path,os.path.join(file_path,'face'+str(face_count)+FLAGS.extension))  # temp
+                shutil.move(face_path, os.path.join(file_path, 'face' + str(face_count) + ".jpg"))  # temp
                 face_count += 1
         index += 1
         out.write(frame)
@@ -104,8 +103,8 @@ def check_image(video_name, train_dir, label, count):
         count : save face or not
 
     """
-    threshold = FLAGS.threshold
-    file_name = str(count) + FLAGS.extension
+    threshold = 0.7
+    file_name = str(count) + ".jpg"
     folder_path = os.path.join("image", video_name)
     full_path = os.path.join(folder_path, file_name)
 
@@ -121,9 +120,7 @@ def check_image(video_name, train_dir, label, count):
 
     precision = label_image.run(full_path, train_dir)
 
-
-    #print(precision)
-
+    # print(precision)
 
     if precision[label] > threshold:
         return True
@@ -136,9 +133,10 @@ def classify(src, des):
         os.remove(des)
     shutil.move(src, des)
 
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print('[Error] ./%s [filename]' % sys.argv[0])
     else:
-        path = os.path.join(FLAGS.video_dir, sys.argv[1])
-        capture(video_path=path, train_dir=FLAGS.train_dir, label=FLAGS.target_label)
+        path = os.path.join('video', sys.argv[1])
+        capture(video_path=path, train_dir='model/temp', label=9)

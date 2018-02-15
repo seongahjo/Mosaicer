@@ -1,5 +1,5 @@
 *.pyc
 *.png
 *.zip
-.idea/
-vcs.xml
+.idea/*
+video/*

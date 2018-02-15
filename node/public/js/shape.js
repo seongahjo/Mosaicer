@@ -38,6 +38,16 @@ function getModel(){
   })
 }
 
+function getVideo(){
+  $.ajax({
+    url: 'file/video_upload',
+    method: 'GET',
+  }).done(function(data) {
+    $("#main").html(data)
+      video_load()
+  })
+}
+
 function getMosaic() {
   $.ajax({
     url: 'file/mosaic',

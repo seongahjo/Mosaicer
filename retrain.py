@@ -145,25 +145,27 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
       A dictionary containing an entry for each label subfolder, with images split
       into training, testing, and validation sets within each label.
     """
-    if not gfile.Exists(image_dir):
-        tf.logging.error("Image directory '" + image_dir + "' not found.")
-        return None
+    #if not gfile.Exists(image_dir):
+    #    tf.logging.error("Image directory '" + image_dir + "' not found.")
+    #    return None
+    print(image_dir)
     result = {}
-    sub_dirs = [x[0] for x in gfile.Walk(image_dir)]
+    #sub_dirs = [x[0] for x in gfile.Walk(image_dir)]
     # The root directory comes first, so skip it.
-    is_root_dir = True
-    for sub_dir in sub_dirs:
-        if is_root_dir:
-            is_root_dir = False
-            continue
+    #is_root_dir = True
+    for sub_dir in image_dir:
+    #    if is_root_dir:
+    #        is_root_dir = False
+    #        continue
         extensions = ['jpg', 'jpeg', 'JPG', 'JPEG']
         file_list = []
-        dir_name = os.path.basename(sub_dir)
-        if dir_name == image_dir:
-            continue
+        dir_name= sub_dir
+        sub_dir = os.path.join('image',sub_dir)
+        #if dir_name == image_dir:
+        #    continue
         tf.logging.info("Looking for images in '" + dir_name + "'")
         for extension in extensions:
-            file_glob = os.path.join(image_dir, dir_name, '*.' + extension)
+            file_glob = os.path.join(sub_dir, '*.' + extension)
             file_list.extend(gfile.Glob(file_glob))
         if not file_list:
             tf.logging.warning('No files found')
@@ -244,7 +246,7 @@ def get_image_path(image_lists, label_name, index, image_dir, category):
     mod_index = index % len(category_list)
     base_name = category_list[mod_index]
     sub_dir = label_lists['dir']
-    full_path = os.path.join(image_dir, sub_dir, base_name)
+    full_path = os.path.join('image', sub_dir, base_name)
     return full_path
 
 
@@ -280,7 +282,7 @@ def create_model_graph(model_info):
       manipulating.
     """
     with tf.Graph().as_default() as graph:
-        model_path = os.path.join(FLAGS.model_dir, model_info['model_file_name'])
+        model_path = os.path.join(os.path.join(FLAGS.prefix_dir,FLAGS.model_dir), model_info['model_file_name'])
         print('Model path: ', model_path)
         with gfile.FastGFile(model_path, 'rb') as f:
             graph_def = tf.GraphDef()
@@ -330,7 +332,7 @@ def maybe_download_and_extract(data_url):
     Args:
       data_url: Web location of the tar file containing the pretrained model.
     """
-    dest_directory = FLAGS.model_dir
+    dest_directory = os.path.join(FLAGS.prefix_dir,FLAGS.model_dir)
     if not os.path.exists(dest_directory):
         os.makedirs(dest_directory)
     filename = data_url.split('/')[-1]
@@ -863,11 +865,11 @@ def save_graph_to_file(sess, graph, graph_file_name):
 
 def prepare_file_system():
     # Setup the directory we'll write summaries to for TensorBoard
-    if tf.gfile.Exists(FLAGS.summaries_dir):
-        tf.gfile.DeleteRecursively(FLAGS.summaries_dir)
-    tf.gfile.MakeDirs(FLAGS.summaries_dir)
+    if tf.gfile.Exists(os.path.join(FLAGS.prefix_dir,FLAGS.summaries_dir)):
+        tf.gfile.DeleteRecursively(os.path.join(FLAGS.prefix_dir,FLAGS.summaries_dir))
+    tf.gfile.MakeDirs(os.path.join(FLAGS.prefix_dir,FLAGS.summaries_dir))
     if FLAGS.intermediate_store_frequency > 0:
-        ensure_dir_exists(FLAGS.intermediate_output_graphs_dir)
+        ensure_dir_exists(os.path.join(FLAGS.prefix_dir,FLAGS.intermediate_output_graphs_dir))
     return
 
 
@@ -1006,7 +1008,7 @@ def add_jpeg_decoding(input_width, input_height, input_depth, input_mean,
     return jpeg_data, mul_image
 
 
-def main(_):
+def run(image_dir,model_dir):
 
     # Needed to make sure the logging output is visible.
     # See https://github.com/tensorflow/tensorflow/issues/3047
@@ -1027,15 +1029,15 @@ def main(_):
         create_model_graph(model_info))
 
     # Look at the folder structure, and create lists of all the images.
-    image_lists = create_image_lists(FLAGS.image_dir, FLAGS.testing_percentage,
+    image_lists = create_image_lists(image_dir, FLAGS.testing_percentage,
                                      FLAGS.validation_percentage)
     class_count = len(image_lists.keys())
     if class_count == 0:
-        tf.logging.error('No valid folders of images found at ' + FLAGS.image_dir)
+        tf.logging.error('No valid folders of images found at ' + image_dir)
         return -1
     if class_count == 1:
         tf.logging.error('Only one valid folder of images found at ' +
-                         FLAGS.image_dir +
+                         image_dir +
                          ' - multiple classes are needed for classification.')
         return -1
 
@@ -1062,8 +1064,8 @@ def main(_):
         else:
             # We'll make sure we've calculated the 'bottleneck' image summaries and
             # cached them on disk.
-            cache_bottlenecks(sess, image_lists, FLAGS.image_dir,
-                              FLAGS.bottleneck_dir, jpeg_data_tensor,
+            cache_bottlenecks(sess, image_lists, image_dir,
+                              os.path.join(FLAGS.prefix_dir,FLAGS.bottleneck_dir), jpeg_data_tensor,
                               decoded_image_tensor, resized_image_tensor,
                               bottleneck_tensor, FLAGS.architecture)
 
@@ -1079,11 +1081,11 @@ def main(_):
 
         # Merge all the summaries and write them out to the summaries_dir
         merged = tf.summary.merge_all()
-        train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/train',
+        train_writer = tf.summary.FileWriter(os.path.join(model_dir,FLAGS.summaries_dir,'train'),
                                              sess.graph)
 
         validation_writer = tf.summary.FileWriter(
-            FLAGS.summaries_dir + '/validation')
+            os.path.join(model_dir,FLAGS.summaries_dir,'validation'))
 
         # Set up all our weights to their initial default values.
         init = tf.global_variables_initializer()
@@ -1097,13 +1099,13 @@ def main(_):
                 (train_bottlenecks,
                  train_ground_truth) = get_random_distorted_bottlenecks(
                     sess, image_lists, FLAGS.train_batch_size, 'training',
-                    FLAGS.image_dir, distorted_jpeg_data_tensor,
+                    image_dir, distorted_jpeg_data_tensor,
                     distorted_image_tensor, resized_image_tensor, bottleneck_tensor)
             else:
                 (train_bottlenecks,
                  train_ground_truth, _) = get_random_cached_bottlenecks(
                     sess, image_lists, FLAGS.train_batch_size, 'training',
-                    FLAGS.bottleneck_dir, FLAGS.image_dir, jpeg_data_tensor,
+                    os.path.join(FLAGS.prefix_dir,FLAGS.bottleneck_dir), image_dir, jpeg_data_tensor,
                     decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
                     FLAGS.architecture)
             # Feed the bottlenecks and ground truth into the graph, and run a training
@@ -1128,7 +1130,7 @@ def main(_):
                 validation_bottlenecks, validation_ground_truth, _ = (
                     get_random_cached_bottlenecks(
                         sess, image_lists, FLAGS.validation_batch_size, 'validation',
-                        FLAGS.bottleneck_dir, FLAGS.image_dir, jpeg_data_tensor,
+                        os.path.join(FLAGS.prefix_dir,FLAGS.bottleneck_dir), image_dir, jpeg_data_tensor,
                         decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
                         FLAGS.architecture))
                 # Run a validation step and capture training summaries for TensorBoard
@@ -1151,14 +1153,14 @@ def main(_):
                                           'intermediate_' + str(i) + '.pb')
                 tf.logging.info('Save intermediate result to : ' +
                                 intermediate_file_name)
-                save_graph_to_file(sess, graph, intermediate_file_name)
+                save_graph_to_file(sess, graph, os.path.join(model_dir,intermediate_file_name))
 
         # We've completed all our training, so run a final test evaluation on
         # some new images we haven't used before.
         test_bottlenecks, test_ground_truth, test_filenames = (
             get_random_cached_bottlenecks(
                 sess, image_lists, FLAGS.test_batch_size, 'testing',
-                FLAGS.bottleneck_dir, FLAGS.image_dir, jpeg_data_tensor,
+                os.path.join(FLAGS.prefix_dir,FLAGS.bottleneck_dir), image_dir, jpeg_data_tensor,
                 decoded_image_tensor, resized_image_tensor, bottleneck_tensor,
                 FLAGS.architecture))
         if test_bottlenecks and test_ground_truth:
@@ -1169,7 +1171,7 @@ def main(_):
             tf.logging.info('Final test accuracy = %.1f%% (N=%d)' %
                             (test_accuracy * 100, len(test_bottlenecks)))
         else:
-            tf.logging.info('FInal test end')
+            tf.logging.info('Final test end')
 
         if FLAGS.print_misclassified_test_images:
             tf.logging.info('=== MISCLASSIFIED TEST IMAGES ===')
@@ -1181,9 +1183,11 @@ def main(_):
 
         # Write out the trained graph and labels with the weights stored as
         # constants.
-        save_graph_to_file(sess, graph, FLAGS.output_graph)
-        with gfile.FastGFile(FLAGS.output_labels, 'w') as f:
+        save_graph_to_file(sess, graph, os.path.join(model_dir,FLAGS.output_graph))
+        with gfile.FastGFile(os.path.join(model_dir,FLAGS.output_labels), 'w') as f:
             f.write('\n'.join(image_lists.keys()) + '\n')
+def main(_):
+    run(image_dir=FLAGS.image_dir,model_dir="model/temp")
 
 
 if __name__ == '__main__':

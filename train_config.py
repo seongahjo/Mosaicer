@@ -1,14 +1,21 @@
 import tensorflow as tf
-
+tf.app.flags.DEFINE_string('prefix_dir','\\tmp\\',"""Directory Prefix""")
 tf.app.flags.DEFINE_string('image_dir', '', """Path to folders of labeled images.""")
-tf.app.flags.DEFINE_string('output_graph', '/tmp/output_graph.pb', """Where to save the trained graph.""")
-tf.app.flags.DEFINE_string('intermediate_output_graphs_dir', '/tm/intermediate_graph',
+tf.app.flags.DEFINE_string('output_graph', 'output_graph.pb', """Where to save the trained graph.""")
+tf.app.flags.DEFINE_string('summaries_dir', 'retrain_logs', """Where to save summary logs for TensorBoard.""")
+tf.app.flags.DEFINE_string('intermediate_output_graphs_dir', 'intermediate_graph',
                            """Where to save the intermediate graphs.""")
+tf.app.flags.DEFINE_string('model_dir', 'imagenet', """\
+      Path to classify_image_graph_def.pb,
+      imagenet_synset_to_human_label_map.txt, and
+      imagenet_2012_challenge_label_map_proto.pbtxt.\
+      """)
+tf.app.flags.DEFINE_string('bottleneck_dir', 'bottleneck', """Path to cache bottlenectk layer values as files.""")
+
 tf.app.flags.DEFINE_integer('intermediate_store_frequency', 0,
                             """How many steps to store intermediate graph. If "0" then will not store""")
-tf.app.flags.DEFINE_string('output_labels', '/tmp/output_labels.txt', """Where to save the trained graph\'s labels.""")
-tf.app.flags.DEFINE_string('summaries_dir', '/tmp/retrain_logs', """Where to save summary logs for TensorBoard.""")
-tf.app.flags.DEFINE_integer('how_many_training_steps', 4000, """How many training steps to run before ending.""")
+tf.app.flags.DEFINE_string('output_labels', 'output_labels.txt', """Where to save the trained graph\'s labels.""")
+tf.app.flags.DEFINE_integer('how_many_training_steps', 100, """How many training steps to run before ending.""")
 tf.app.flags.DEFINE_float('learning_rate', 0.01, """How large a learning rate to use when training.""")
 tf.app.flags.DEFINE_integer('testing_percentage', 10, """What percentage of images to use as a test set.""")
 tf.app.flags.DEFINE_integer('validation_percentage', 10, """What percentage of images to use as a validation set.""")
@@ -31,12 +38,7 @@ tf.app.flags.DEFINE_integer('validation_batch_size', 100, """\
 tf.app.flags.DEFINE_boolean('print_misclassified_test_images', False, """\
 Whether to print out a list of all misclassified test images. \
 """)
-tf.app.flags.DEFINE_string('model_dir', '/tmp/imagenet', """\
-      Path to classify_image_graph_def.pb,
-      imagenet_synset_to_human_label_map.txt, and
-      imagenet_2012_challenge_label_map_proto.pbtxt.\
-      """)
-tf.app.flags.DEFINE_string('bottleneck_dir', '/tmp/bottleneck', """Path to cache bottlenectk layer values as files.""")
+
 tf.app.flags.DEFINE_string('final_tensor_name', 'final_result',
                            """The name of the output classification layer in the retrained graph.""")
 tf.app.flags.DEFINE_boolean('flip_left_right', False,

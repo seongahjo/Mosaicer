@@ -18,7 +18,7 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
-
+import os
 import numpy as np
 import tensorflow as tf
 
@@ -72,11 +72,14 @@ def load_labels(label_file):
     return label
 
 
-def run(image_name, model_file, label_file, args=None):
+def run(image_name, model_dir, args=None):
+    result={}
     input_height = 299
     input_width = 299
     input_mean = 0
     input_std = 255
+    model_file = os.path.join(model_dir, 'output_graph.pb')
+    label_file = os.path.join(model_dir, 'output_labels.txt')
 
     if args:
         if args.graph:
@@ -94,7 +97,6 @@ def run(image_name, model_file, label_file, args=None):
             input_mean = args.input_mean
         if args.input_std:
             input_std = args.input_std
-
     graph = load_graph(model_file)
     t = read_tensor_from_image_file(
         image_name,
@@ -117,15 +119,12 @@ def run(image_name, model_file, label_file, args=None):
     top_k = results.argsort()[-5:][::-1]
     labels = load_labels(label_file)
     for i in top_k:
-        print(labels[i], results[i])
+        result[labels[i]]=results[i]
+    return result
 
 
 if __name__ == "__main__":
     file_name = "tensorflow/examples/label_image/data/grace_hopper.jpg"
-    model_file = \
-        "/tmp/output_graph.pb"
-    label_file = "/tmp/output_labels.txt"
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--image", help="image to be processed")
     parser.add_argument("--graph", help="graph/model to be executed")
@@ -136,4 +135,4 @@ if __name__ == "__main__":
     parser.add_argument("--input_std", type=int, help="input std")
     args = parser.parse_args()
 
-    run(file_name, model_file, label_file, args)
+    run(file_name, "temp", args)

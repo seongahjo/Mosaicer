@@ -108,24 +108,17 @@ function model(name) {
   }
   var count=0;
   modelFile = name
-  $.ajax({
-    url: 'file/video_upload',
-    method: 'GET',
-  }).done(function(data) {
-    $("#main").addClass("animated fadeOutRight")
-    $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-    function(){
-      if(count==0){
-      $("#main").removeClass("animated fadeOutRight")
-      $("#main").addClass("animated fadeInRight")
-      $("#main").html(data)
-      console.log('twice?')
-      video_load()
-      count+=1
-      }
-    }
-  );
-  })
+  $("#main").addClass("animated fadeOutRight")
+  $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+  function(){
+  if(count==0){
+  $("#main").removeClass("animated fadeOutRight")
+  $("#main").addClass("animated fadeInRight")
+  getMosaicButton()
+  count+=1
+  }
+  }
+);
 }
 
 function folder(video,name){
