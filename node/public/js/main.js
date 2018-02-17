@@ -7,6 +7,7 @@ var uploadFile=[]
 var cp_src=[]
 var videoName='' // after upload
 var folderName='' // choose folder
+var labels=[]
 var alertlist=[]
 function removeList(list,file){
   var i = list.indexOf(file);
@@ -100,6 +101,13 @@ else{
   })
 }
 }
+function label(labelName){
+  if(labels.includes(labelName)){
+    removeList(labels,labelName)
+  }else{
+    labels.push(labelName)
+  }
+}
 
 function model(name) {
   if(name==undefined || name==""){
@@ -114,7 +122,8 @@ function model(name) {
   if(count==0){
   $("#main").removeClass("animated fadeOutRight")
   $("#main").addClass("animated fadeInRight")
-  getMosaicButton()
+  getLabels()
+  //getMosaicButton()
   count+=1
   }
   }

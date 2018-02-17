@@ -13,7 +13,7 @@ function getTrain() {
     method: 'GET',
   }).done(function(data) {
     $("#lists").html(data)
-  //$("input").iCheck();
+    $('.chk').iCheck({checkboxClass : 'icheckbox_flat-green'})
     $('input').on('ifChecked', function(event) {
       trainFolder.push(event.currentTarget.value)
       console.log(trainFolder)
@@ -72,6 +72,18 @@ function getMosaicButton(){
     url: 'file/mosaic_button',
     method: 'GET',
   }).done(function(data) {
+    $("#main").html(data)
+  })
+}
+
+function getLabels(){
+  $.ajax({
+    url:'file/mosaic_label',
+    method:'GET',
+    data:{
+      model : modelFile
+    }
+  }).done(function(data){
     $("#main").html(data)
   })
 }

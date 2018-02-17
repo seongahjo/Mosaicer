@@ -6,7 +6,7 @@ var jade = require('jade');
 var mime = require('../util/mime');
 var fu=require('../util/file')
 var async = require('async')
-
+var readline=require('readline')
 
 
 var file_view = jade.compile([
@@ -62,7 +62,7 @@ var train_view = jade.compile([
   '- each file in files',
   '  tr',
   '    td',
-  '      input.flat(type="checkbox",value="#{file.name}")',
+  '      input.flat.chk(type="checkbox",value="#{file.name}")',
   '    td',
   '      i.fa.fa-folder',
   '      |#{file.name}',
@@ -79,7 +79,7 @@ var model_view = jade.compile([
   '  tr',
   '    td.last(onClick="model(\'#{file.name}\')")',
   '      i.fa.fa-folder',
-  '      |#{file.name}',
+  '      |  #{file.name}',
 ].join('\n'))
 
 
@@ -368,6 +368,38 @@ router.get('/folder', (req, res, next) => {
   })
 })
 
+var mosaic_label_view= jade.compile([
+  '- each label in labels',
+  '  tr',
+  '    td.last(onClick="label(\'#{label}\')")',
+  '      i.fa.fa-tags',
+  '      |  #{label}',
+].join('\n'))
+
+router.get('/mosaic_label',(req,res,next)=>{
+  console.log('mosaic_label')
+  let model = req.query.model
+  let labeltext='output_labels.txt'
+  console.log(model)
+  let model_path=path.join('../model',model,labeltext)
+  console.log(model_path)
+  let labels=[]
+  var lr=readline.createInterface({
+    input:fs.createReadStream(model_path)
+  })
+  lr.on('line',(line)=>{
+    console.log(`add line ${line}`)
+    labels.push(line)
+  })
+  lr.on('close',()=>{
+    console.log(`${labels}`)
+    if(labels && labels.length){
+    res.send(mosaic_label_view({'labels': labels}))
+    }
+    else
+    res.sendStatus(400)
+  })
+})
 
 
 var mosaic_button_view = jade.compile([
