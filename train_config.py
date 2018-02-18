@@ -17,8 +17,8 @@ tf.app.flags.DEFINE_integer('intermediate_store_frequency', 0,
 tf.app.flags.DEFINE_string('output_labels', 'output_labels.txt', """Where to save the trained graph\'s labels.""")
 tf.app.flags.DEFINE_integer('how_many_training_steps', 100, """How many training steps to run before ending.""")
 tf.app.flags.DEFINE_float('learning_rate', 0.01, """How large a learning rate to use when training.""")
-tf.app.flags.DEFINE_integer('testing_percentage', 10, """What percentage of images to use as a test set.""")
-tf.app.flags.DEFINE_integer('validation_percentage', 10, """What percentage of images to use as a validation set.""")
+tf.app.flags.DEFINE_integer('testing_percentage', 30, """What percentage of images to use as a test set.""")
+tf.app.flags.DEFINE_integer('validation_percentage', 35, """What percentage of images to use as a validation set.""")
 tf.app.flags.DEFINE_integer('eval_step_interval', 10, """How often to evaluate the training results.""")
 tf.app.flags.DEFINE_integer('train_batch_size', 100, """How many images to train on at a time.""")
 tf.app.flags.DEFINE_integer('test_batch_size', -1, """\

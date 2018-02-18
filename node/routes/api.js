@@ -119,7 +119,7 @@ router.get('/paste', (req,res,next)=> {
   res.sendStatus(200)
 })
 
-
+/*
 router.get('/train', (req,res,next)=> {
   var name = req.query.name
   var folders = req.query.folder
@@ -145,7 +145,7 @@ router.get('/train', (req,res,next)=> {
         res.json(response.data)
       })
     })
-
+*/
 
 router.post('/upload', upload.single('file'), (req,res,next)=> {
   var data={
@@ -165,22 +165,34 @@ router.post('/videoUpload', upload.single('file'), (req,res,next)=> {
 
 router.get('/mosaic', (req,res,next)=> {
   var filename = req.query.filename
-  var model = req.query.model
-  var label = 9
-  var trainDir = path.join('model', model)
+  var label = req.query.labels
+  console.log(label)
+  var trainDir='model'
   var videoPath = path.join('video', filename)
   var data = {
     'train_dir': trainDir,
     'video_path': videoPath,
     'label': label
   }
-  axios.get(pythonServer + 'mosaic', {
-    params: data
+  var trainData={
+    'data_dir' : 'image',
+    'train_dir' : trainDir
+  }
+  console.log(filename + ' '+label)
+  axios.get(pythonServer + 'train', {
+    params:trainData,
   }).then((response)=> {
-    console.log(response.data)
-    res.json(response.data)
+    axios.get(pythonServer + 'mosaic', {
+      params: data
+    }).then((response)=> {
+      console.log(response.data)
+      res.json(response.data)
+    })
   })
 })
+
+
+
 
 router.get('/download', (req,res,next)=> {
   var filename = req.query.filename

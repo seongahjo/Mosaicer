@@ -19,7 +19,7 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'image')
 @app.route('/train')
 def train():
     print('train start')
-    data_dir = request.args.getlist('data_dir[]',None)
+    data_dir = request.args.get('data_dir')
     print(data_dir)
     train_dir = request.args.get('train_dir')
     retrain.run(image_dir=data_dir, model_dir=train_dir)
@@ -54,7 +54,7 @@ def mosaic():
     print('mosaic start')
     video_path = request.args.get('video_path')
     train_dir = request.args.get('train_dir')
-    label = request.args.get('label')
+    label = request.args.getlist('label[]')
     value = mosaicer.capture(video_path=video_path, train_dir=train_dir, label=label)
     print('mosaic end')
     return value

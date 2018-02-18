@@ -58,53 +58,6 @@ router.get('/', (req, res, next) => {
 
 
 
-var train_view = jade.compile([
-  '- each file in files',
-  '  tr',
-  '    td',
-  '      input.flat.chk(type="checkbox",value="#{file.name}")',
-  '    td',
-  '      i.fa.fa-folder',
-  '      |#{file.name}',
-  '    td',
-  '      |#{file.amount}',
-  '    td.last',
-  '      |#{file.size} KB',
-].join('\n'))
-
-
-
-var model_view = jade.compile([
-  '- each file in files',
-  '  tr',
-  '    td.last(onClick="model(\'#{file.name}\')")',
-  '      i.fa.fa-folder',
-  '      |  #{file.name}',
-].join('\n'))
-
-
-
-router.get('/model', (req, res, next) => {
-  var Path = path.join('../', 'model')
-  var result = []
-  fu.make(Path)
-
-  fs.readdir(Path, (error, files) => {
-    async.eachSeries(files, (file, callback) => {
-      var filedetail = {} // file detail info
-      var stat = fs.statSync(path.join(Path, file))
-      if (stat.isDirectory()) {
-        filedetail.name = file
-        result.push(filedetail)
-      }
-        callback(null)
-    }, function() {
-      res.send(model_view({
-        files: result
-      }))
-    });
-  })
-})
 
 
 var video_upload_view = jade.compile([
@@ -161,6 +114,25 @@ router.get('/video', (req, res, next) => {
 })
 
 
+/*
+
+var train_view = jade.compile([
+  '- each file in files',
+  '  tr',
+  '    td',
+  '      input.flat.chk(type="checkbox",value="#{file.name}")',
+  '    td',
+  '      i.fa.fa-folder',
+  '      |#{file.name}',
+  '    td',
+  '      |#{file.amount}',
+  '    td.last',
+  '      |#{file.size} KB',
+].join('\n'))
+
+
+
+
 router.get('/train', (req, res, next) => {
   var Path = path.join('../', 'image')
 
@@ -196,7 +168,7 @@ router.get('/train', (req, res, next) => {
 
   })
 })
-
+*/
 
 var mosaic_view = jade.compile([
   '- each file in files',
@@ -368,12 +340,52 @@ router.get('/folder', (req, res, next) => {
   })
 })
 
+
+var model_view = jade.compile([
+  '- each file in files',
+  '  tr(id="label-"+file.name)',
+  '    td(onClick="label(\'#{file.name}\')")',
+  '      i.fa.fa-folder',
+  '      |  #{file.name}',
+  'tr',
+  '  td.last',
+  '    button#compose.btn.btn-lg.btn-success.btn-block(type="button", onClick="mosaic()") MOSAIC',
+].join('\n'))
+
+
+
+router.get('/model', (req, res, next) => {
+  var Path = path.join('../', 'image')
+  var result = []
+  fu.make(Path)
+
+  fs.readdir(Path, (error, files) => {
+    async.eachSeries(files, (file, callback) => {
+      var filedetail = {} // file detail info
+      var stat = fs.statSync(path.join(Path, file))
+      if (stat.isDirectory()) {
+        filedetail.name = file
+        result.push(filedetail)
+      }
+        callback(null)
+    }, function() {
+      res.send(model_view({
+        files: result
+      }))
+    });
+  })
+})
+
+
+
+/*
 var mosaic_label_view= jade.compile([
   '- each label in labels',
-  '  tr',
-  '    td.last(onClick="label(\'#{label}\')")',
+  '  tr(id="label-"+label)',
+  '    td(onClick="label(\'#{label}\')")',
   '      i.fa.fa-tags',
   '      |  #{label}',
+
 ].join('\n'))
 
 router.get('/mosaic_label',(req,res,next)=>{
@@ -382,7 +394,7 @@ router.get('/mosaic_label',(req,res,next)=>{
   let labeltext='output_labels.txt'
   console.log(model)
   let model_path=path.join('../model',model,labeltext)
-  console.log(model_path)
+  console.log(model_path+' ')
   let labels=[]
   var lr=readline.createInterface({
     input:fs.createReadStream(model_path)
@@ -400,7 +412,7 @@ router.get('/mosaic_label',(req,res,next)=>{
     res.sendStatus(400)
   })
 })
-
+*/
 
 var mosaic_button_view = jade.compile([
   'button#compose.btn.btn-lg.btn-success.btn-block(type="button", onClick="mosaic()") MOSAIC'

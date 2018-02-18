@@ -101,7 +101,9 @@ else{
   })
 }
 }
+
 function label(labelName){
+    $("#label-"+labelName).toggleClass("selected")
   if(labels.includes(labelName)){
     removeList(labels,labelName)
   }else{
@@ -109,6 +111,7 @@ function label(labelName){
   }
 }
 
+/*
 function model(name) {
   if(name==undefined || name==""){
     error("empty")
@@ -129,7 +132,7 @@ function model(name) {
   }
 );
 }
-
+*/
 function folder(video,name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
@@ -186,8 +189,8 @@ function train() {
 
 function mosaic() {
   var data = {
-    'model':modelFile,
     'filename': videoName,
+    'labels':labels,
   }
   var notice=wait('mosaic')
   $.ajax({
