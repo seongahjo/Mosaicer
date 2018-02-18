@@ -7,6 +7,7 @@ var uploadFile=[]
 var cp_src=[]
 var videoName='' // after upload
 var folderName='' // choose folder
+var labels=[]
 var alertlist=[]
 function removeList(list,file){
   var i = list.indexOf(file);
@@ -101,6 +102,16 @@ else{
 }
 }
 
+function label(labelName){
+    $("#label-"+labelName).toggleClass("selected")
+  if(labels.includes(labelName)){
+    removeList(labels,labelName)
+  }else{
+    labels.push(labelName)
+  }
+}
+
+/*
 function model(name) {
   if(name==undefined || name==""){
     error("empty")
@@ -108,26 +119,20 @@ function model(name) {
   }
   var count=0;
   modelFile = name
-  $.ajax({
-    url: 'file/video_upload',
-    method: 'GET',
-  }).done(function(data) {
-    $("#main").addClass("animated fadeOutRight")
-    $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-    function(){
-      if(count==0){
-      $("#main").removeClass("animated fadeOutRight")
-      $("#main").addClass("animated fadeInRight")
-      $("#main").html(data)
-      console.log('twice?')
-      video_load()
-      count+=1
-      }
-    }
-  );
-  })
+  $("#main").addClass("animated fadeOutRight")
+  $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
+  function(){
+  if(count==0){
+  $("#main").removeClass("animated fadeOutRight")
+  $("#main").addClass("animated fadeInRight")
+  getLabels()
+  //getMosaicButton()
+  count+=1
+  }
+  }
+);
 }
-
+*/
 function folder(video,name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
@@ -184,8 +189,8 @@ function train() {
 
 function mosaic() {
   var data = {
-    'model':modelFile,
     'filename': videoName,
+    'labels':labels,
   }
   var notice=wait('mosaic')
   $.ajax({

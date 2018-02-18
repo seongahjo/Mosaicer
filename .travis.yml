@@ -4,7 +4,4 @@ python :
 install :
     -  pip install -r travis_requirements.txt
 script :
-  - python binary_convert.py 0 nam
-  - python binary_convert.py 1 jo
-  - python train.py
-  - python mosaicer.py test.avi
+  - python train_config.py

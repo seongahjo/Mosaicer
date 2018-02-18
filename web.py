@@ -3,15 +3,14 @@ from __future__ import division
 from __future__ import print_function
 import json
 import os
-
+import face_recognition
+import cv2
 from flask import Flask, jsonify, request
 
 # from convert import convert_image, convert_images
-import binary_convert as bc
-import compare
+
 import mosaicer
-from train import train_data
-import train_gpu
+import retrain
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'image')
@@ -21,58 +20,32 @@ app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'image')
 def train():
     print('train start')
     data_dir = request.args.get('data_dir')
+    print(data_dir)
     train_dir = request.args.get('train_dir')
-    train_dir = makeDir(train_dir)
-
-    if train_gpu.train(data_dir=data_dir, train_dir=train_dir):
-        json_path = os.path.join(data_dir, 'state.json')
-        json_state = {"names": []}
-        filenames = os.listdir(data_dir)
-        for filename in filenames:
-            extension = os.path.splitext(filename)[1][1:].strip()
-            if extension == 'bin':
-                json_temp = {"name": filename}
-                json_state['names'].append(json_temp)
-        with open(json_path, "w") as outfile:
-            json.dump(json_state, outfile)
-            print(json_state)
-        print('train end')
-        return 'true'
-
-
-@app.route('/upload', methods=['POST'])
-def upload():
-    image_dir = request.form['image_dir']
-    directory = makeDir(image_dir)
-    for image in request.files.getlist('images'):
-        path = os.path.join(directory, image.filename)
-        image.save(path)
+    retrain.run(image_dir=data_dir, model_dir=train_dir)
+    # ProtoBuf
+    print('train end')
     return 'true'
 
 
-# Convert Images to binary files
-@app.route('/convert')
-def convert():
-    print('convert start')
-    image_dir = request.args.get('image_dir')
-    data_dir = request.args.get('data_dir')
-    label = request.args.get('label')
-    print('image ', image_dir)
-    data_dir = makeDir(data_dir)
-    bc.convert_global(image_dir=image_dir, data_dir=data_dir, label=label)
+@app.route('/tracker')
+def upload():
+    print('tracker start')
+    image_path = request.args.get('path').split(os.sep)[1:]
+    image_path = os.sep.join(image_path)
+    image_name = os.path.basename(image_path)
+    image = cv2.imread(image_path)
+    faces = face_recognition.face_locations(image, number_of_times_to_upsample=0, model="cnn")
+    index = 0
 
-    json_path = os.path.join(data_dir, 'label.json')
-    json_state = {"names": []}
-    filenames = os.listdir(data_dir)
-    for filename in filenames:
-        extension = os.path.splitext(filename)[1][1:].strip()
-        if extension == 'bin':
-            json_temp = {"name": filename}
-            json_state['names'].append(json_temp)
-    with open(json_path, "w") as outfile:
-        json.dump(json_state, outfile)
-        print(json_state)
-    print('convert finished')
+    for (top, right, bottom, left) in faces:
+        imgFace = image[top:bottom, left:right]
+        img_output = cv2.resize(imgFace, (32, 32), interpolation=cv2.INTER_AREA)
+        face_path = os.path.join("image", str(index) + image_name)
+        index += 1
+        cv2.imwrite(face_path, img_output)
+    os.remove(image_path)
+    print('tracker end')
     return 'true'
 
 
@@ -81,7 +54,7 @@ def mosaic():
     print('mosaic start')
     video_path = request.args.get('video_path')
     train_dir = request.args.get('train_dir')
-    label = request.args.get('label')
+    label = request.args.getlist('label[]')
     value = mosaicer.capture(video_path=video_path, train_dir=train_dir, label=label)
     print('mosaic end')
     return value

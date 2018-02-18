@@ -1,0 +1,10 @@
+syntax="proto3";
+
+message VideoResponse{
+  repeated Video videos=1;
+}
+
+message Video{
+     string name=1;
+     string date=2;
+  }

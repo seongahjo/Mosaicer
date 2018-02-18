@@ -119,67 +119,44 @@ router.get('/paste', (req,res,next)=> {
   res.sendStatus(200)
 })
 
-
+/*
 router.get('/train', (req,res,next)=> {
   var name = req.query.name
   var folders = req.query.folder
   console.log(folders)
   var trainDir = path.join('../', 'model')
-  var dataDir = path.join('data');
   fu.make(trainDir)
-  fu.make(dataDir)
   if (!name) {
     // no default name
     res.sendStatus(400)
   }
   trainDir = path.join('model', name)
-  dataDir = path.join(dataDir, name)
-  fu.make(dataDir)
-
+  console.log('train ing..')
   var index = 0;
   var trainData = {
     'train_dir': trainDir,
-    'data_dir': dataDir
+    'data_dir': folders
   }
-  async.waterfall([
-    function(callback) {
-
-      async.eachSeries(folders, (folder,fcallback)=> {
-        console.log('convert inside ' + folder)
-        folder = path.join('image', folder)
-        console.log('folder ' + folder)
-        var convertData = {
-          'image_dir': folder,
-          'data_dir': dataDir,
-          'label': index
-        }
-
-        axios.get(pythonServer + 'convert', {
-          params: convertData
-        }).then((response)=> {
-          console.log('convert finished')
-          index += 1
-          fcallback()
-          if (index == folders.length) {
-            callback(null)
-          }
-        })
+  console.log('send ' +trainData)
+      axios.get(pythonServer + 'train', {
+        params: trainData
+      }).then((response)=> {
+        console.log(response.data)
+        res.json(response.data)
       })
-
-    },
-  ], function(err, result) {
-    axios.get(pythonServer + 'train', {
-      params: trainData
-    }).then((response)=> {
-      console.log(response.data)
-      res.json(response.data)
     })
-  });
-})
-
+*/
 
 router.post('/upload', upload.single('file'), (req,res,next)=> {
-  res.json('good')
+  var data={
+  'path':req.file.path
+  }
+  axios.get(pythonServer + 'tracker', {
+    params: data
+  }).then((response)=> {
+    console.log(response.data)
+    res.json(response.data)
+  })
 })
 
 router.post('/videoUpload', upload.single('file'), (req,res,next)=> {
@@ -188,22 +165,34 @@ router.post('/videoUpload', upload.single('file'), (req,res,next)=> {
 
 router.get('/mosaic', (req,res,next)=> {
   var filename = req.query.filename
-  var model = req.query.model
-  var label = 9
-  var trainDir = path.join('model', model)
+  var label = req.query.labels
+  console.log(label)
+  var trainDir='model'
   var videoPath = path.join('video', filename)
   var data = {
     'train_dir': trainDir,
     'video_path': videoPath,
     'label': label
   }
-  axios.get(pythonServer + 'mosaic', {
-    params: data
+  var trainData={
+    'data_dir' : 'image',
+    'train_dir' : trainDir
+  }
+  console.log(filename + ' '+label)
+  axios.get(pythonServer + 'train', {
+    params:trainData,
   }).then((response)=> {
-    console.log(response.data)
-    res.json(response.data)
+    axios.get(pythonServer + 'mosaic', {
+      params: data
+    }).then((response)=> {
+      console.log(response.data)
+      res.json(response.data)
+    })
   })
 })
+
+
+
 
 router.get('/download', (req,res,next)=> {
   var filename = req.query.filename

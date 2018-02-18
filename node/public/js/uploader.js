@@ -101,7 +101,7 @@ var videoUpload = $("#video-upload").dmUploader({
         $("#main").addClass("animated fadeInRight")
         up.remove()
         videoName=data
-        getMosaicButton()
+        getModel()
         count+=1
         }
       })

@@ -27,7 +27,7 @@ html(lang='en')
     link(href='css/custom.min.css', rel='stylesheet')
     // file style
     link(href='css/file.css', rel='stylesheet')
-    
+
     link(href= 'css/animate.min.css',rel='stylesheet')
     link(href= 'css/animation.imgcheckbox.min.css',rel='stylesheet')
     link(href='css/pnotify.custom.min.css',rel='stylesheet')
@@ -37,11 +37,14 @@ html(lang='en')
     script(src='js/bootstrap.min.js')
     // iCheck
     script(src='js/icheck.min.js')
+    // dmuploader
+    script(src='js/dmuploader.min.js')
     script.
       var defaultId='#{user.id}'
     // Main
     script(src='js/main.js')
     script(src='js/file.js')
+    script(src='js/uploader.js')
     script(src='js/shape.js')
     script(src='js/alert.js')
     script(src="js/holder.min.js")
@@ -133,7 +136,7 @@ html(lang='en')
 
         footer
           .pull-right
-          | Mosaicer Cloud by 
+          | Mosaicer Cloud by
           a(href='https://github.com/seongahjo')  seongahjo
           .clearfix
 // /footer content
@@ -153,12 +156,8 @@ script(src='js/date.js')
 // bootstrap-daterangepicker
 script(src='js/moment.min.js')
 script(src='js/daterangepicker.js')
-// dmuploader
-script(src='js/dmuploader.min.js')
 // Custom Theme Scripts
 script(src='js/custom.min.js')
-// script for Mosaic
-script(src='js/uploader.js')
 script(src='js/util.js')
 //
   Not used now

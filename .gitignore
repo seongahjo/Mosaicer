@@ -1,3 +1,5 @@
 *.pyc
 *.png
 *.zip
+.idea
+video/*.avi
