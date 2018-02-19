@@ -13,7 +13,7 @@ exports.stat= function(folder, file) {
         name: path.basename(file, path.extname(file)),
         dir: folder,
     }
-    ext = path.extname(file).substr(1)
+    ext = path.extname(file).substr(1).toLowerCase()
     result.type = 'blank'
     if (!ext){
         result.type = 'folder' // change required

@@ -176,6 +176,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
         training_images = []
         testing_images = []
         validation_images = []
+        index = 1
         for file_name in file_list:
             base_name = os.path.basename(file_name)
             # We want to ignore anything after '_nohash_' in the file name when
@@ -196,13 +197,26 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
                                 (MAX_NUM_IMAGES_PER_CLASS + 1)) *
                                (100.0 / MAX_NUM_IMAGES_PER_CLASS))
 
-            if percentage_hash < validation_percentage:
-                validation_images.append(base_name)
-            elif percentage_hash < (testing_percentage + validation_percentage):
-                testing_images.append(base_name)
-            else:
-                training_images.append(base_name)
+            if len(file_list) >= 20:
+                if percentage_hash < validation_percentage:
+                    validation_images.append(base_name)
+                elif percentage_hash < (testing_percentage + validation_percentage):
+                    testing_images.append(base_name)
+                else:
+                    training_images.append(base_name)
 
+        if len(file_list) < 20:
+            random.shuffle(file_list)
+            size = len(file_list)
+            for idx, file_name in enumerate(file_list):
+                base_name = os.path.basename(file_name)
+                if idx < size / 3 * 2:
+                    training_images.append(base_name)
+                else:
+                    if idx % 2 == 0:
+                        testing_images.append(base_name)
+                    else:
+                        validation_images.append(base_name)
         result[label_name] = {
             'dir': dir_name,
             'training': training_images,
@@ -1180,7 +1194,7 @@ def run(image_dir, model_dir):
 
 
 def main(_):
-    run(image_dir=FLAGS.image_dir, model_dir="model/temp")
+    run(image_dir=FLAGS.image_dir, model_dir="model")
 
 
 if __name__ == '__main__':

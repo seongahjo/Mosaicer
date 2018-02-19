@@ -6,6 +6,7 @@ import time
 import cv2
 import face_recognition
 import tensorflow as tf
+import numpy as np
 import label_image
 import binary_convert
 
@@ -21,117 +22,95 @@ def capture(video_path, train_dir, label=None):
         label : label
     """
     images = []
+    frames = []
+    positions = []
     video_dir, filename = os.path.split(video_path)
+    feedback_dir = 'feedback'
     result_dir = os.path.join(video_dir, 'result')  # directory to save result of digitization
+
     file_name = os.path.splitext(filename)[0]
-    file_path = os.path.join("image", file_name)  # image/video_name is a directory to save images
     skip_frame = 30
-    image_size = 32
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+    image_size = 299
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
-
+    if not os.path.exists(feedback_dir):
+        os.makedirs(feedback_dir)
     index = 0
     cap = cv2.VideoCapture(video_path)
+    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))  # total frames
     fps = 30.0
     width = int(cap.get(3))
     height = int(cap.get(4))
     start_time = time.time()
+    feedback = []
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir, filename), foc, fps, (width, height))
-
+    face_count = [0] * length * 100
     while (cap.isOpened()):
+
         ret, frame = cap.read()
         if not ret:  # finished
             break
+        position = []
 
         if index % skip_frame == 0:
             faces = face_recognition.face_locations(frame, number_of_times_to_upsample=0, model="cnn")
         for (top, right, bottom, left) in faces:
-            imgFace = frame[top:bottom, left:right]
-            images.append(imgFace)
-            """else:
-                orb = cv2.ORB_create()
-                chk = False
-                _, des2 = orb.detectAndCompute(imgFace, None)
-                for image in images:
-                    _, des1 = orb.detectAndCompute(image, None)
-                    # create BFMatcher object
-                    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-                    # Match descriptors.
-                    matches = bf.match(des2, des1)
-                    # Sort them in the order of their distance.
-                    matches = sorted(matches, key=lambda x: x.distance)
-                    retval = 0
-                    for m in matches[:10]:
-                        if m.distance < 50:
-                            retval = retval + 1
-                    if retval > 5:
-                        chk = False
-                        continue
-                    else:
-                        chk = True
-                if chk:
-                    images.append(imgFace)"""
-            img_yuv = cv2.cvtColor(imgFace, cv2.COLOR_BGR2YUV)
-
+            img_face = frame[top:bottom, left:right]
+            img_yuv = cv2.cvtColor(img_face, cv2.COLOR_BGR2YUV)
+            face_count[index] += 1
             # equalize the histogram of the Y channel
             img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
 
             # convert the YUV image back to RGB format
             img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
             img_output2 = cv2.resize(img_output, (image_size, image_size), interpolation=cv2.INTER_AREA)
-            face_path = os.path.join(file_path, "temp.jpg")
-            cv2.imwrite(face_path, img_output2)
+            images.append(img_output2)  # faces
+            positions.append((top, right, bottom, left))
 
-            # Mosaic Process
-            if label is not None and check_image(video_name=file_name, train_dir=train_dir, label=label[0]):
-                frame = digitize(frame=frame, x=left, y=top, w=right - left, h=bottom - top)
-
-                # if index % fps == 0:  # save face per 1 sec
-                #    shutil.move(face_path, os.path.join(file_path, 'face' + str(face_count) + ".jpg"))  # temp
-                #    face_count += 1
         index += 1
-        out.write(frame)
-
+        frames.append(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    end_time = time.time()
+
     cap.release()
+    if label is not None:
+        cnt = 0
+        chk, feedback = check_image(images=images, train_dir=train_dir, label=label)
+        for idx, frame in enumerate(frames):
+            for i in range(face_count[idx]):
+                if chk[cnt]:
+                    (top, right, bottom, left) = positions[cnt]
+                    frame = digitize(frame, top, right, bottom, left)
+                cnt += 1
+            out.write(frame)
     out.release()
+    end_time = time.time()
     print('time : {0}'.format(end_time - start_time))
+
     count = 0
-    for image in images:
+    for image in feedback:
         count += 1
-        cv2.imwrite(os.path.join('image', 'test', 'face' + str(count) + '.jpg'), image)
+        cv2.imwrite(os.path.join('feedback', file_name + '_face' + str(count) + '.jpg'), image)
     return 'finish'
 
 
-def digitize(frame, x, y, w, h):
-    blur = cv2.blur(frame[y:y + h, x:x + w, :], (70, 70))
-    frame[y:y + h, x:x + w, :] = blur
+def digitize(frame, top, right, bottom, left):
+    blur = cv2.blur(frame[top:bottom, left:right], (70, 70))
+    frame[top:bottom, left:right] = blur
     return frame
 
 
-def check_image(video_name, train_dir, label):
+def check_image(images, train_dir, label):
     """
 
     function to check if a image is the one that I want to digitize
 
     Args:
-        video_name : video name
+        images : images to check
         train_dir : directory stores result of train
         label : label
-        count : save face or not
-
     """
-    threshold = 0.7
-    file_name = "temp.jpg"
-    folder_path = os.path.join("test", video_name)
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-    full_path = os.path.join(folder_path, file_name)
 
     """
     # Make Dirs
@@ -142,13 +121,25 @@ def check_image(video_name, train_dir, label):
     if not os.path.exists(os.path.join(folder_path, "etc")):
         os.makedirs(os.path.join(folder_path, "etc"))
     """
+    chk = []
+    precisions = label_image.run(images, train_dir)
+    feedback = []
+    for idx, precision in enumerate(precisions):
+        biggest = max(precision, key=(lambda key: precision[key]))
+        if biggest in label:
+            chk.append(False)
+        else:
+            chk.append(True)
+        temp = []
+        for data in precision.values():
+            temp.append(data)
+        temp = np.array(temp)
 
-    precision = label_image.run(full_path, train_dir)
-    print(precision)
-    if max(precision, key=(lambda key: precision[key])) == label:
-        return False
-    else:
-        return True
+        std = np.std(temp)
+        if 0 <= std < 1:
+            print(std)
+            feedback.append(images[idx])
+    return chk, feedback
 
 
 def classify(src, des):
@@ -162,4 +153,4 @@ if __name__ == "__main__":
         print('[Error] ./%s [filename]' % sys.argv[0])
     else:
         path = os.path.join('video', sys.argv[1])
-        capture(video_path=path, train_dir='model/test2', label="nam")
+        capture(video_path=path, train_dir='model', label="jo")

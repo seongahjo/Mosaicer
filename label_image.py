@@ -21,6 +21,7 @@ import argparse
 import os
 import numpy as np
 import tensorflow as tf
+import time
 
 
 def load_graph(model_file):
@@ -35,33 +36,22 @@ def load_graph(model_file):
     return graph
 
 
-def read_tensor_from_image_file(file_name,
-                                input_height=299,
-                                input_width=299,
-                                input_mean=0,
-                                input_std=255):
+def read_tensor_from_image(
+        input_height=299,
+        input_width=299,
+        input_mean=0,
+        input_std=255):
     input_name = "file_reader"
     output_name = "normalized"
-    file_reader = tf.read_file(file_name, input_name)
-    if file_name.endswith(".png"):
-        image_reader = tf.image.decode_png(
-            file_reader, channels=3, name="png_reader")
-    elif file_name.endswith(".gif"):
-        image_reader = tf.squeeze(
-            tf.image.decode_gif(file_reader, name="gif_reader"))
-    elif file_name.endswith(".bmp"):
-        image_reader = tf.image.decode_bmp(file_reader, name="bmp_reader")
-    else:
-        image_reader = tf.image.decode_jpeg(
-            file_reader, channels=3, name="jpeg_reader")
-    float_caster = tf.cast(image_reader, tf.float32)
+    # file_reader = tf.read_file(file_name, input_name)
+    # image_reader = tf.image.decode_jpeg(image_tensor, channels=3, name="jpeg_reader")
+    image_tensor = tf.placeholder(dtype=np.uint8, shape=[299, 299, 3], name="image_tensor")
+    float_caster = tf.cast(image_tensor, tf.float32)
     dims_expander = tf.expand_dims(float_caster, 0)
     resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
     normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
-    sess = tf.Session()
-    result = sess.run(normalized)
 
-    return result
+    return normalized, image_tensor
 
 
 def load_labels(label_file):
@@ -72,8 +62,8 @@ def load_labels(label_file):
     return label
 
 
-def run(image_name, model_dir, args=None):
-    result={}
+def run(faces, model_dir, args=None):
+    result = {}
     input_height = 299
     input_width = 299
     input_mean = 0
@@ -98,29 +88,36 @@ def run(image_name, model_dir, args=None):
         if args.input_std:
             input_std = args.input_std
     graph = load_graph(model_file)
-    t = read_tensor_from_image_file(
-        image_name,
-        input_height=input_height,
-        input_width=input_width,
-        input_mean=input_mean,
-        input_std=input_std)
 
     input_name = "import/Mul"
     output_name = "import/final_result"
     input_operation = graph.get_operation_by_name(input_name)
     output_operation = graph.get_operation_by_name(output_name)
+    results = []
+    precisions = []
 
-    with tf.Session(graph=graph) as sess:
-        results = sess.run(output_operation.outputs[0], {
-            input_operation.outputs[0]: t
-        })
-    results = np.squeeze(results)
+    with graph.as_default() as g:
+        with tf.Session(graph=g) as sess:
+            for face in faces:
+                    image_op, image_tensor = read_tensor_from_image(
+                        input_height=input_height,
+                        input_width=input_width,
+                        input_mean=input_mean,
+                        input_std=input_std)
+                    t = sess.run(image_op, feed_dict={image_tensor: face})
+                    results.append(sess.run(output_operation.outputs[0], {
+                        input_operation.outputs[0]: t
+                    }))
 
-    top_k = results.argsort()[-5:][::-1]
-    labels = load_labels(label_file)
-    for i in top_k:
-        result[labels[i]]=results[i]
-    return result
+    for result in results:
+        result = np.squeeze(result)
+        top_k = result.argsort()[-5:][::-1]
+        labels = load_labels(label_file)
+        precision = {}
+        for i in top_k:
+            precision.update({labels[i]: result[i]})  # desc
+        precisions.append(precision)
+    return precisions
 
 
 if __name__ == "__main__":
@@ -135,4 +132,4 @@ if __name__ == "__main__":
     parser.add_argument("--input_std", type=int, help="input std")
     args = parser.parse_args()
 
-    run(file_name, "temp", args)
+    #run(file_name, "temp", args)
