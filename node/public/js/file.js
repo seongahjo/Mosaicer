@@ -34,7 +34,9 @@ function readFile(dir) {
         e.stopPropagation();
       },
       'dblclick': function(e) {
+
         currentfolder = $(this).attr("dir")
+        console.log(currentfolder)
         readFile(currentfolder)
         $('#uploader').data('dmUploader').settings.extraData = {
           folder: currentfolder

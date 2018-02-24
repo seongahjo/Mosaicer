@@ -114,62 +114,6 @@ router.get('/video', (req, res, next) => {
 })
 
 
-/*
-
-var train_view = jade.compile([
-  '- each file in files',
-  '  tr',
-  '    td',
-  '      input.flat.chk(type="checkbox",value="#{file.name}")',
-  '    td',
-  '      i.fa.fa-folder',
-  '      |#{file.name}',
-  '    td',
-  '      |#{file.amount}',
-  '    td.last',
-  '      |#{file.size} KB',
-].join('\n'))
-
-
-
-
-router.get('/train', (req, res, next) => {
-  var Path = path.join('../', 'image')
-
-  //var Path = path.join('/tmp/', id, 'upload')
-  var result = []
-  var size = 0;
-  fu.make(Path)
-
-  fs.readdir(Path, (error, files) => {
-    async.eachSeries(files, (file, callback) => {
-      var filedetail = {} // file detail info
-      var stat = fs.statSync(path.join(Path, file))
-      size = 0
-      if (stat.isDirectory()) {
-        filedetail.name = file
-        fs.readdir(path.join(Path, file), (error, filess)=> {
-          filedetail.amount = filess.length;
-          result.push(filedetail)
-          console.log(filedetail)
-          callback(null)
-        })
-      }
-      else {
-        callback(null)
-      }
-
-    }, function() {
-      res.send(train_view({
-        files: result
-      }))
-    });
-
-
-  })
-})
-*/
-
 var mosaic_view = jade.compile([
   '- each file in files',
   '  tr',
@@ -263,26 +207,23 @@ var feedback_face_view = jade.compile([
   '- each file in files',
   '  figure.imgcheckbox',
   '    .figure-content',
-  '      img.face(src="util/img?folder=#{file.video}/etc&file=#{file.name}",data-src="holder.js/64x64")',
+  '      img.face(src="util/img?folder=feedback&file=#{file.name}",data-src="holder.js/64x64")',
   '    figcaption',
   '      i.fa.fa-check.fa-5x',
   '    label',
-  '      input(type="checkbox",id="feedback" name="#{file.video}/etc/#{file.name}")',
+  '      input(type="checkbox",id="feedback" name="feedback/#{file.name}")',
   '      |  Label',
 ].join('\n'))
 
 router.get('/feedback_face', (req, res, next) => {
-  var file_name = req.query.filename
-  var Path = path.join('../image', file_name, 'etc')
+  var Path = path.join('../feedback')
   var result = []
-  console.log(Path)
   fs.readdir(Path, (error, files) => {
     async.eachSeries(files, (file, callback) => {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
       if (!stat.isDirectory()) {
         filedetail.name = path.basename(file, path.extname(file))
-        filedetail.video = file_name
       }
       result.push(filedetail)
       callback()
@@ -302,7 +243,7 @@ router.get('/feedback_face', (req, res, next) => {
 
 var folder_view = jade.compile([
   '- each file in files',
-  '  a(href="#" onClick="folder(\'#{video}\',\'#{file.name}\')")',
+  '  a(href="#" onClick="folder(\'#{file.name}\')")',
   '    .mail_list',
   '      .left',
   '        i.fa.fa-folder',
@@ -316,8 +257,6 @@ var folder_view = jade.compile([
 router.get('/folder', (req, res, next) => {
   var Path = path.join('../', 'image')
   var result = []
-  var video = req.query.video
-
   fu.make(Path)
   // Path => function(err,files)
   // (files,function )
@@ -333,8 +272,7 @@ router.get('/folder', (req, res, next) => {
         callback(null)
     }, function() {
       res.send(folder_view({
-        files: result,
-        video: video
+        files: result
       }))
     });
   })
@@ -376,43 +314,6 @@ router.get('/model', (req, res, next) => {
   })
 })
 
-
-
-/*
-var mosaic_label_view= jade.compile([
-  '- each label in labels',
-  '  tr(id="label-"+label)',
-  '    td(onClick="label(\'#{label}\')")',
-  '      i.fa.fa-tags',
-  '      |  #{label}',
-
-].join('\n'))
-
-router.get('/mosaic_label',(req,res,next)=>{
-  console.log('mosaic_label')
-  let model = req.query.model
-  let labeltext='output_labels.txt'
-  console.log(model)
-  let model_path=path.join('../model',model,labeltext)
-  console.log(model_path+' ')
-  let labels=[]
-  var lr=readline.createInterface({
-    input:fs.createReadStream(model_path)
-  })
-  lr.on('line',(line)=>{
-    console.log(`add line ${line}`)
-    labels.push(line)
-  })
-  lr.on('close',()=>{
-    console.log(`${labels}`)
-    if(labels && labels.length){
-    res.send(mosaic_label_view({'labels': labels}))
-    }
-    else
-    res.sendStatus(400)
-  })
-})
-*/
 
 var mosaic_button_view = jade.compile([
   'button#compose.btn.btn-lg.btn-success.btn-block(type="button", onClick="mosaic()") MOSAIC'

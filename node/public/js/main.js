@@ -20,6 +20,7 @@ function removeList(list,file){
 
 $(document).ready(function() {
   Holder.run()
+
 })
 
 function load(){
@@ -36,11 +37,11 @@ function load(){
 
 
 
-function FeedbackFiles(video){
+function FeedbackFiles(){
 console.log(uploadFile+" to "+folderName)
 
 var data={
-  'video' : video,
+
   'files' : uploadFile,
   'to' : folderName
 }
@@ -52,7 +53,7 @@ $.ajax({
   data:data
 }).done(function(response){
   notice.remove()
-  getFeedback_face(response)
+  getFeedback_face()
 })
 
 }
@@ -82,20 +83,16 @@ function goLeft() {
 
 
 
-function image_load(video){
-  var data={
-	'video':video
-}
+function image_load(){
 
   if(!(uploadFile &&uploadFile.length)){
-	FeedbackFiles(video)
+	FeedbackFiles()
 	return
 }
 else{
   $.ajax({
     url: 'file/folder',
     method: 'GET',
-    data : data,
   }).done(function(data) {
     $("#ModalContent").html(data)
   })
@@ -133,11 +130,11 @@ function model(name) {
 );
 }
 */
-function folder(video,name){
+function folder(name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
 //if(uploadFile && uploadFile.length){
-  FeedbackFiles(video)
+  FeedbackFiles()
 //}
 //else
 //error("empty")

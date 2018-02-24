@@ -7,6 +7,18 @@ function getConvert() {
   })
 }
 
+function getMarket(){
+  var $grid = $('.grid').masonry({
+    itemSelector:'.grid-item',
+    columnWidth:60,
+});
+  $grid.imagesLoaded( function() {
+    $grid.masonry('layout');
+  });
+
+}
+
+
 function getTrain() {
   $.ajax({
     url: 'file/train',
@@ -88,14 +100,11 @@ function getLabels(){
   })
 }
 
-function getFeedback_face(filename) {
-  var data = {
-    'filename': filename
-  }
+function getFeedback_face() {
+
   $.ajax({
     url: 'file/feedback_face',
     method: 'GET',
-    data: data,
   }).done(function(data) {
     $("#feedback").html(data)
     $('.imgcheckbox').imgCheckbox({

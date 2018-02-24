@@ -50,7 +50,6 @@ router.get('/makeFolder', (req,res,next)=> {
   console.log('makeFolder ing...')
   fu.make(dir)
 
-
   console.log('makeFolder : ' + dir)
   res.sendStatus(200)
   //res.send(dir)
@@ -70,33 +69,19 @@ router.get('/delete', (req,res,next)=> {
 
 
 router.get('/feedback', (req,res,next)=> {
-  var video = req.query.video
   var files = req.query.files
-  var etc_path = path.join('image', video, 'etc')
   var dest = req.query.to
   var dataDir = 'data'
+  var from = 'feedback'
   dest = path.join('../', 'image', dest, '/')
   console.log(files + ' to ' + dest)
   try {
     async.eachSeries(files, (file,fcallback)=> {
-      var Path = path.join('../', 'image', file)
+      var Path = path.join('../', file)
       fu.move(Path,path.join(dest, path.basename(file)),{overwrite:true})
       fcallback()
     })
-
-    var convertData = {
-      'image_dir': etc_path,
-      'data_dir': dataDir,
-      'label': 9
-    }
-    axios.get(pythonServer + 'convert', {
-      params: convertData
-    }).then((response)=> {
-      fu.empty('../' + etc_path)
-      console.log('convert finished')
-    })
-
-    res.send(video)
+    res.sendStatus(200)
   } catch (err) {
     console.log(err)
   }

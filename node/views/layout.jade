@@ -27,6 +27,7 @@ html(lang='en')
     link(href='css/custom.min.css', rel='stylesheet')
     // file style
     link(href='css/file.css', rel='stylesheet')
+    link(href='css/masonry.css',rel='stylesheet')
 
     link(href= 'css/animate.min.css',rel='stylesheet')
     link(href= 'css/animation.imgcheckbox.min.css',rel='stylesheet')
@@ -39,7 +40,9 @@ html(lang='en')
     script(src='js/icheck.min.js')
     // dmuploader
     script(src='js/dmuploader.min.js')
-    script.
+    //masonry
+    script(src='js/imagesloaded.pkgd.min.js')
+    script(src='js/masonry.pkgd.min.js')
       var defaultId='#{user.id}'
     // Main
     script(src='js/main.js')
@@ -79,12 +82,6 @@ html(lang='en')
                     a(href='upload')
                       i.fa.fa-upload
                       |  Upload
-
-                  li
-                    a(href='train')
-                      i.fa.fa-graduation-cap
-                      |  Train
-
                   li
                     a(href='mosaic')
                       i.fa.fa-magic
@@ -93,6 +90,10 @@ html(lang='en')
                     a(href='feedback')
                       i.fa.fa-comment
                       |  Feedback
+                  li
+                    a(href='market')
+                      i.fa.fa-shopping-cart
+                      |  Market
                   li
                     a(href='setting')
                       i.fa.fa-wrench

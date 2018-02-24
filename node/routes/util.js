@@ -6,8 +6,12 @@ var path = require('path')
 router.get('/img', (req,res,next)=>{
   var folder_name = req.query.folder
   var file_name = req.query.file;
+  var p=''
+  if(folder_name=='feedback')
+  p=path.join('../',folder_name)
+  else
+  p = path.join('../', 'image', folder_name)
 
-  var p = path.join('../', 'image', folder_name)
   var filename = path.join(p, file_name+".jpg")
 
   console.log('folder '+folder_name + 'file :' +file_name)

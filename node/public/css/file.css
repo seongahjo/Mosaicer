@@ -9,6 +9,7 @@
 .files {
     margin: 5px;
 }
+
 img.box{
   max-width: 100%;
   vertical-align: middle;
@@ -108,7 +109,7 @@ figure{
 
 .mail_list h3{
   padding-left:3px;
-  
+
 }
 .uploader div.browser input {
 	position: absolute;
