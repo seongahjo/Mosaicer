@@ -8,7 +8,26 @@ import face_recognition
 import tensorflow as tf
 import numpy as np
 import label_image
-import binary_convert
+
+
+def batch_job(frames, images, positions, face_counts, batch_size):
+    batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0,
+                                                                    batch_size=batch_size)
+
+    for frame, faces in zip(frames, batch_of_face_locations):
+        position = []
+        for (top, right, bottom, left) in faces:
+            img_face = frame[top:bottom, left:right]
+            img_yuv = cv2.cvtColor(img_face, cv2.COLOR_BGR2YUV)
+            # equalize the histogram of the Y channel
+            img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
+            # convert the YUV image back to RGB format
+            img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
+            img_output2 = cv2.resize(img_output, (299, 299), interpolation=cv2.INTER_AREA)
+            images.append(img_output2)  # faces
+            position.append((top, right, bottom, left))
+        face_counts.append(len(faces))
+        positions.append(position)
 
 
 def capture(video_path, train_dir, label=None):
@@ -24,65 +43,53 @@ def capture(video_path, train_dir, label=None):
     images = []
     frames = []
     positions = []
+
     video_dir, filename = os.path.split(video_path)
     feedback_dir = 'feedback'
     result_dir = os.path.join(video_dir, 'result')  # directory to save result of digitization
 
     file_name = os.path.splitext(filename)[0]
-    skip_frame = 30
-    image_size = 299
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
     if not os.path.exists(feedback_dir):
         os.makedirs(feedback_dir)
-    index = 0
+
     cap = cv2.VideoCapture(video_path)
-    length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))  # total frames
     fps = 30.0
     width = int(cap.get(3))
     height = int(cap.get(4))
     start_time = time.time()
     feedback = []
+    face_counts = []
     foc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(os.path.join(result_dir, filename), foc, fps, (width, height))
-    face_count = [0] * length * 100
-    while (cap.isOpened()):
+
+    temp = []
+    while cap.isOpened():
 
         ret, frame = cap.read()
         if not ret:  # finished
             break
-        position = []
-
-        if index % skip_frame == 0:
-            faces = face_recognition.face_locations(frame, number_of_times_to_upsample=0, model="cnn")
-        for (top, right, bottom, left) in faces:
-            img_face = frame[top:bottom, left:right]
-            img_yuv = cv2.cvtColor(img_face, cv2.COLOR_BGR2YUV)
-            face_count[index] += 1
-            # equalize the histogram of the Y channel
-            img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
-
-            # convert the YUV image back to RGB format
-            img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
-            img_output2 = cv2.resize(img_output, (image_size, image_size), interpolation=cv2.INTER_AREA)
-            images.append(img_output2)  # faces
-            positions.append((top, right, bottom, left))
-
-        index += 1
-        frames.append(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
+        temp.append(frame)
+        frames.append(frame)
+        if len(temp) == 32:
+            batch_job(frames=temp, images=images, positions=positions, face_counts=face_counts, batch_size=32)
+            temp = []
     cap.release()
+    if len(temp) != 0:
+        batch_job(frames=temp, images=images, positions=positions, face_counts=face_counts, batch_size=len(temp))
+        temp = []
+
     if label is not None:
-        cnt = 0
-        chk, feedback = check_image(images=images, train_dir=train_dir, label=label)
-        for idx, frame in enumerate(frames):
-            for i in range(face_count[idx]):
-                if chk[cnt]:
-                    (top, right, bottom, left) = positions[cnt]
+        chks, feedback = check_image(images=images, train_dir=train_dir, face_count=face_counts, label=label)
+        print(len(chks), len(frames), len(positions), len(face_counts))
+        for chk, frame, position, face_count in zip(chks, frames, positions, face_counts):  # per frame
+            for flag, pos in zip(chk, position):
+                if flag:
+                    (top, right, bottom, left) = pos
                     frame = digitize(frame, top, right, bottom, left)
-                cnt += 1
             out.write(frame)
     out.release()
     end_time = time.time()
@@ -95,13 +102,31 @@ def capture(video_path, train_dir, label=None):
     return 'finish'
 
 
+def compare_face(images, new_image):
+    if not images:
+        return False
+
+    image_encodings = []
+    result = []
+    for image in images:
+        image_encodings.append(face_recognition.face_encodings(image)[0])
+
+    unknown_encoding = face_recognition.face_encodings(new_image)[0]
+    print(image_encodings, new_image)
+    face_distances = face_recognition.face_distance(image_encodings, unknown_encoding)
+    for face_distance in face_distances:
+        result.append(any(face < 0.4 for face in face_distance))
+    print(result)
+    return any(result)
+
+
 def digitize(frame, top, right, bottom, left):
     blur = cv2.blur(frame[top:bottom, left:right], (70, 70))
     frame[top:bottom, left:right] = blur
     return frame
 
 
-def check_image(images, train_dir, label):
+def check_image(images, train_dir, face_count, label):
     """
 
     function to check if a image is the one that I want to digitize
@@ -109,6 +134,7 @@ def check_image(images, train_dir, label):
     Args:
         images : images to check
         train_dir : directory stores result of train
+        face_count : count of faces
         label : label
     """
 
@@ -121,25 +147,38 @@ def check_image(images, train_dir, label):
     if not os.path.exists(os.path.join(folder_path, "etc")):
         os.makedirs(os.path.join(folder_path, "etc"))
     """
-    chk = []
+    chks = []
     precisions = label_image.run(images, train_dir)
     feedback = []
-    for idx, precision in enumerate(precisions):
+    now_frame = 0
+    count_image = 0
+    chk = []
+
+    for image, precision in zip(images, precisions):
+        count_image += 1
+
         biggest = max(precision, key=(lambda key: precision[key]))
+        print(biggest)
         if biggest in label:
             chk.append(False)
         else:
             chk.append(True)
+
+        if count_image == face_count[now_frame]:
+            count_image = 0
+            now_frame += 1
+            chks.append(chk)
+            chk = []
+
         temp = []
         for data in precision.values():
             temp.append(data)
         temp = np.array(temp)
-
         std = np.std(temp)
-        if 0 <= std < 1:
-            print(std)
-            feedback.append(images[idx])
-    return chk, feedback
+        if 0 <= std < 0.2:
+            if not compare_face(feedback, image):
+                feedback.append(image)
+    return chks, feedback
 
 
 def classify(src, des):
