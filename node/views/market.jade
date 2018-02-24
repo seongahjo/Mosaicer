@@ -18,49 +18,24 @@ block content
           div
             .grid
             .grid-sizer
-              .grid-item.w2
-                .hovereffect
-                  img(src='util/img?folder=nam&file=0nam2')
-                  .overlay
-                    h2 Effect 12
-                    p.set1
-                      a(href='#')
-                        i.fa.fa-twitter
-                      a(href='#')
-                        i.fa.fa-facebook
-                    hr
-                    hr
-                    p.set2
-                      a(href='#')
-                        i.fa.fa-instagram
-                      a(href='#')
-                        i.fa.fa-dribbble
-              .grid-item.w2
-                img(src='util/img?folder=nam&file=0nam3')
-              .grid-item.h2
-                img(src='util/img?folder=nam&file=0nam4')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
-              .grid-item
-                img(src='util/img?folder=nam&file=0nam2')
+              - each data in datas
+                  .grid-item.w2
+                    .hovereffect
+                      img(src='util/img?folder=#{data.path}&file=#{data.name}')
+                      .overlay
+                        h2 Effect 12
+                        p.set1
+                          a(href='#')
+                            i.fa.fa-twitter
+                          a(href='#')
+                            i.fa.fa-facebook
+                        hr
+                        hr
+                        p.set2
+                          a(href='#')
+                            i.fa.fa-instagram
+                          a(href='#')
+                            i.fa.fa-dribbble
     script.
       getMarket()
 // .fileview

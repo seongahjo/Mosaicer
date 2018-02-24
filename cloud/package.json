@@ -1,0 +1,18 @@
+{
+  "name": "mosaicer-cloud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "seongahjo",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.0",
+    "mkdirp": "^0.5.1",
+    "sha-1": "^0.1.1",
+    "socket.io": "^2.0.4",
+    "socket.io-stream": "^0.9.1"
+  }
+}

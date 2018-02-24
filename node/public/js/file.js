@@ -48,6 +48,19 @@ function readFile(dir) {
 
 }
 
+function shareFiles(){
+  var data={
+    'label':uploadFile
+  }
+  $.ajax({
+    url:'socket/share',
+    method:'GET',
+    data:data,
+  }).done(function(response){
+      done("share")
+    console.log('share finish good')
+  })
+}
 
 function cpFiles(){
   cp_src=[]

@@ -13,7 +13,9 @@ router.get('/img', (req,res,next)=>{
   p = path.join('../', 'image', folder_name)
 
   var filename = path.join(p, file_name+".jpg")
-
+  if(file_name=='empty'){
+      filename="empty.jpg"
+  }
   console.log('folder '+folder_name + 'file :' +file_name)
   if(!fs.existsSync(filename)){
   res.sendStatus(404)
