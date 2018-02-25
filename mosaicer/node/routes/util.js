@@ -1,39 +1,40 @@
 var express = require('express');
-var fs = require('fs')
+var fs = require('fs');
 var router = express.Router();
-var path = require('path')
+var path = require('path');
 /* GET  listing. */
-router.get('/img', (req,res,next)=>{
-  var folder_name = req.query.folder
-  var file_name = req.query.file;
-  var market= folder_name.split('/')
-  var p=''
-  if(market[0]=="market"){
-    p=path.join('../','cloud','image',market[1])
+router.get('/img', (req,res)=>{
+  'use strict';
+  var folderName = req.query.folder;
+  var fileName = req.query.file;
+  var market= folderName.split('/');
+  var p='';
+  if(market[0]==='market'){
+    p=path.join('../','cloud','image',market[1]);
   }
-  else if(folder_name=='feedback')
-  p=path.join('../',folder_name)
+  else if(folderName==='feedback')
+  p=path.join('../',folderName);
   else
-  p = path.join('../', 'image', folder_name)
+  p = path.join('../', 'image', folderName);
 
-  var filename = path.join(p, file_name+".jpg")
-  if(file_name=='empty'){
-      filename="empty.jpg"
+  var filePath = path.join(p, fileName+'.jpg');
+  if(fileName==='empty'){
+      filePath='empty.jpg';
   }
-  console.log('folder '+folder_name + 'file :' +file_name)
-  if(!fs.existsSync(filename)){
-  res.sendStatus(404)
-  return
+  console.log('folder '+folderName + 'file :' +fileName);
+  if(!fs.existsSync(filePath)){
+  res.sendStatus(404);
+  return;
   }
   try {
-    fs.readFile(filename, (err,data)=> {
+    fs.readFile(filePath, (err,data)=> {
       res.writeHead(200, {
         'Content-Type': 'text/html'
-      })
-      res.end(data)
-    })
+      });
+      res.end(data);
+    });
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 });
 

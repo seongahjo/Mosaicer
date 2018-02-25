@@ -1,15 +1,16 @@
-var io = require('socket.io-client')
-  var url = 'http://localhost:1234'
+var io = require('socket.io-client');
+  var url = 'http://localhost:1234';
 exports.connect=(cb)=>{
-var socket = io.connect(url)
+  'use strict';
+var socket = io.connect(url);
 socket.on('connect', ()=>{
-  console.log('connected')
-  cb(null,socket)
-})
+  console.log('connected');
+  cb(null,socket);
+});
 socket.on('connect_error', () => {
-  socket.close()
+  socket.close();
 
-    console.log('connect failed')
-  cb(new Error('connect_error'))
-})
-}
+    console.log('connect failed');
+  cb(new Error('connect_error'));
+});
+};
