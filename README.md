@@ -20,7 +20,11 @@ $ ./run.sh</code></pre>
 + `Docker`
 <pre><code>$ docker build --tag mosaicer .
 $ docker run -d --name Mosaicer mosaicer -p 3000:3000 /bin/sh -c 'cd mosaicer && python3 web.py; cd node && npm start' </code></pre>
-
++ `EXE`
+  + For non-developers, To Run these two servers
+    + [Mosaicer](https://drive.google.com/file/d/1c-2UIK3GLOxfw7QwLXUCxJGECoyJVFE4/view?usp=sharing)
+    + [Mosaicer Web](https://drive.google.com/file/d/1btJPcxyZ0sf9gxk4JbAd2F8afyyHFDp2/view?usp=sharing)
+  
 Then connect to http://localhost:3000
 
 ## Demo
