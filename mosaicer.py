@@ -5,7 +5,6 @@ import time
 
 import cv2
 import face_recognition
-import tensorflow as tf
 import numpy as np
 import label_image
 
@@ -80,7 +79,6 @@ def capture(video_path, train_dir, label=None):
     cap.release()
     if len(temp) != 0:
         batch_job(frames=temp, images=images, positions=positions, face_counts=face_counts, batch_size=len(temp))
-        temp = []
 
     if label is not None:
         chks, feedback = check_image(images=images, train_dir=train_dir, face_count=face_counts, label=label)
@@ -98,7 +96,9 @@ def capture(video_path, train_dir, label=None):
     count = 0
     for image in feedback:
         count += 1
-        cv2.imwrite(os.path.join('feedback', file_name + '_face' + str(count) + '.jpg'), image)
+        name = file_name + '_face' + str(count)
+        file_path = os.path.join('feedback', name + '.jpg')
+        cv2.imwrite(file_path, image)
     return 'finish'
 
 
@@ -107,17 +107,18 @@ def compare_face(images, new_image):
         return False
 
     image_encodings = []
-    result = []
     for image in images:
-        image_encodings.append(face_recognition.face_encodings(image)[0])
+        image_encoding = face_recognition.face_encodings(image)
+        if image_encoding:
+            image_encodings.append(image_encoding[0])
+    unknown_encoding = face_recognition.face_encodings(new_image)
+    if not unknown_encoding:
+        return False
 
-    unknown_encoding = face_recognition.face_encodings(new_image)[0]
-    print(image_encodings, new_image)
+    unknown_encoding = unknown_encoding[0]
     face_distances = face_recognition.face_distance(image_encodings, unknown_encoding)
-    for face_distance in face_distances:
-        result.append(any(face < 0.4 for face in face_distance))
-    print(result)
-    return any(result)
+    print(face_distances)
+    return any(face_distance > 0.1 for face_distance in face_distances)
 
 
 def digitize(frame, top, right, bottom, left):
@@ -158,7 +159,6 @@ def check_image(images, train_dir, face_count, label):
         count_image += 1
 
         biggest = max(precision, key=(lambda key: precision[key]))
-        print(biggest)
         if biggest in label:
             chk.append(False)
         else:
