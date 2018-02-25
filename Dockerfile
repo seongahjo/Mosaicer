@@ -10,7 +10,7 @@ RUN apt-get -y install libgtk2.0-dev \
 && apt-get -y install cmake \
 && apt-get -y install git \
 && apt-get -y install nodejs npm
-RUN git clone -b dev https://github.com/seongahjo/Mosaicer.git
+RUN git clone https://github.com/seongahjo/Mosaicer.git
 WORKDIR Mosaicer
 RUN pip3 install --upgrade pip \
 && pip3 install -r requirements.txt
