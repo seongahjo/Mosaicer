@@ -19,9 +19,9 @@ block content
             .grid
             .grid-sizer
               - each data in datas
-                  .grid-item.w2
+                  .grid-item.w2(onClick="share_download(\'#{data.path}\')")
                     .hovereffect
-                      img(src='util/img?folder=#{data.path}&file=#{data.name}')
+                      img(src='util/img?folder=market/#{data.path}&file=#{data.name}')
                       .overlay
                         h2 Effect 12
                         p.set1

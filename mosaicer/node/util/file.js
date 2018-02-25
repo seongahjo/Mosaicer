@@ -7,7 +7,6 @@ exports.make=(Path)=>{
   fs.mkdirSync(Path)
 }
 else {
-  console.log('already exists')
 }
 }
 

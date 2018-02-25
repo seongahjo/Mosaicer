@@ -15,13 +15,12 @@ io.on('connection', (socket) => {
     var dirname = path.join('image', data.label)
     if (!fs.existsSync(dirname))
       mkdirp.sync(dirname, (err) => {})
-
     var filename = path.basename(data.name)
-
     stream.pipe(fs.createWriteStream(path.join(dirname, filename)))
   })
 
-  ss(socket).on('download-images', (label) => {
+  socket.on('download-images', (label) => {
+    console.log('donwload-image start')
     data_dir = path.join('image', label)
     async.waterfall([
       (cb) => {
@@ -79,7 +78,7 @@ io.on('connection', (socket) => {
       }
     ], (err) => {
       err && console.trace(err)
-      console.log(result)
+      //console.log(result)
       socket.emit('receive-view', result)
     })
   })

@@ -17,7 +17,6 @@ function removeList(list,file){
   }
 }
 
-
 $(document).ready(function() {
   Holder.run()
 
@@ -108,28 +107,7 @@ function label(labelName){
   }
 }
 
-/*
-function model(name) {
-  if(name==undefined || name==""){
-    error("empty")
-    return
-  }
-  var count=0;
-  modelFile = name
-  $("#main").addClass("animated fadeOutRight")
-  $('#main').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',
-  function(){
-  if(count==0){
-  $("#main").removeClass("animated fadeOutRight")
-  $("#main").addClass("animated fadeInRight")
-  getLabels()
-  //getMosaicButton()
-  count+=1
-  }
-  }
-);
-}
-*/
+
 function folder(name){
 folderName=name
 $(".bs-example-modal-lg").modal('hide')
@@ -155,34 +133,19 @@ function video(name) {
 }
 
 
-function train() {
 
-  var folder=$("#folder-id").val()
-  if(folder==""){
-    error("empty")
-  return
-  }
-  if(!(trainFolder &&trainFolder.length)){
-    error("empty")
-  return
-  }
+function share_download(label){
   var data = {
-    'folder': trainFolder,
-    'name' : folder
+    'label': label
   }
-  var notice=wait("train")
   $.ajax({
-    url: 'api/train',
+    url: 'socket/share-download',
     method: 'GET',
     data: data,
-    timeout:7200000,
-  }).done(function(response) {
-    notice.remove()
-    getTrain()
+  }).done(function(response){
+    console.log('good')
   })
-
 }
-
 
 function mosaic() {
   var data = {

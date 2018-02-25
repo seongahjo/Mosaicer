@@ -6,8 +6,12 @@ var path = require('path')
 router.get('/img', (req,res,next)=>{
   var folder_name = req.query.folder
   var file_name = req.query.file;
+  var market= folder_name.split('/')
   var p=''
-  if(folder_name=='feedback')
+  if(market[0]=="market"){
+    p=path.join('../','cloud','image',market[1])
+  }
+  else if(folder_name=='feedback')
   p=path.join('../',folder_name)
   else
   p = path.join('../', 'image', folder_name)
