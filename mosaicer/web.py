@@ -15,19 +15,6 @@ import retrain
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'image')
 
-
-@app.route('/train')
-def train():
-    print('train start')
-    data_dir = request.args.get('data_dir')
-    print(data_dir)
-    train_dir = request.args.get('train_dir')
-    retrain.run(image_dir=data_dir, model_dir=train_dir)
-    # ProtoBuf
-    print('train end')
-    return 'true'
-
-
 @app.route('/tracker')
 def upload():
     print('tracker start')
