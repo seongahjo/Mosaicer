@@ -7,6 +7,14 @@ var map = {
     'text': ['txt', 'md', ''],
     'movie': ['mkv', 'avi', 'rmvb'],
 }
+exports.ext=(file)=>{
+  ext = path.extname(file).substr(1).toLowerCase()
+   for (var key in map) {
+    if (_.include(map[key], ext)) {
+        return key
+    }
+}
+}
 
 exports.stat= function(folder, file) {
     result = {

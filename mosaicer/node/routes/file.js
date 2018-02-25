@@ -176,30 +176,6 @@ var feedback_view = jade.compile([
 ].join('\n'))
 
 
-router.get('/feedback', (req, res, next) => {
-  var Path = path.join('../', 'video')
-  var result = []
-  fs.readdir(Path, (error, files) => {
-    async.eachSeries(files, (file, callback) => {
-      var filedetail = {} // file detail info
-      var stat = fs.statSync(path.join(Path, file))
-      if (!stat.isDirectory() && path.extname(file) == '.avi') {
-        filedetail.name = file
-        filedetail.path = path.basename(file, path.extname(file))
-      }
-      if (JSON.stringify(filedetail) != '{}') // json null check
-        result.push(filedetail)
-      callback()
-    }, function() {
-      res.send(feedback_view({
-        files: result
-      }))
-
-    })
-  })
-})
-
-
 
 
 
@@ -222,10 +198,12 @@ router.get('/feedback_face', (req, res, next) => {
     async.eachSeries(files, (file, callback) => {
       var filedetail = {} // file detail info
       var stat = fs.statSync(path.join(Path, file))
-      if (!stat.isDirectory()) {
+      console.log(mime.ext(file))
+      if (!stat.isDirectory() && mime.ext(file)=='image') {
         filedetail.name = path.basename(file, path.extname(file))
+        result.push(filedetail)
       }
-      result.push(filedetail)
+
       callback()
     }, function() {
       res.send(feedback_face_view({
