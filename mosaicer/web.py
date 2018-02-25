@@ -1,11 +1,10 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-import json
 import os
 import face_recognition
 import cv2
-from flask import Flask, jsonify, request
+from flask import Flask, request
 
 # from convert import convert_image, convert_images
 
@@ -36,6 +35,17 @@ def upload():
         cv2.imwrite(face_path, img_output)
     os.remove(image_path)
     print('tracker end')
+    return 'true'
+
+@app.route('/train')
+def train():
+    print('train start')
+    data_dir = request.args.get('data_dir')
+    print(data_dir)
+    train_dir = request.args.get('train_dir')
+    retrain.run(image_dir=data_dir, model_dir=train_dir)
+    # ProtoBuf
+    print('train end')
     return 'true'
 
 
