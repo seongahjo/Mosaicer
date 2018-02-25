@@ -208,15 +208,20 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
         if len(file_list) < 20:
             random.shuffle(file_list)
             size = len(file_list)
-            for idx, file_name in enumerate(file_list):
-                base_name = os.path.basename(file_name)
-                if idx < size / 3 * 2:
-                    training_images.append(base_name)
-                else:
-                    if idx % 2 == 0:
-                        testing_images.append(base_name)
+            if size == 3:
+                training_images.append(os.path.basename(file_list[0]))
+                testing_images.append(os.path.basename(file_list[1]))
+                validation_images.append(os.path.basename(file_list[2]))
+            else:
+                for idx, file_name in enumerate(file_list):
+                    base_name = os.path.basename(file_name)
+                    if idx < size / 3 * 2:
+                        training_images.append(base_name)
                     else:
-                        validation_images.append(base_name)
+                        if idx % 2 == 0:
+                            testing_images.append(base_name)
+                        else:
+                            validation_images.append(base_name)
         result[label_name] = {
             'dir': dir_name,
             'training': training_images,
