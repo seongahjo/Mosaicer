@@ -27,7 +27,7 @@ tf.app.flags.DEFINE_integer('test_batch_size', -1, """\
       A value of -1 causes the entire test set to be used, which leads to more
       stable results across runs.\
 """)
-tf.app.flags.DEFINE_integer('validation_batch_size', 3, """\
+tf.app.flags.DEFINE_integer('validation_batch_size', 10, """\
       How many images to use in an evaluation batch. This validation set is
       used much more often than the test set, and is an early indicator of how
       accurate the model is during training.
