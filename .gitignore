@@ -2,4 +2,8 @@
 *.png
 *.zip
 .idea
+node_modules
+mosaicer/feedback/*.jpg
+mosaicer/cloud/image
+mosaicer/cloud/node_modules
 video/*.avi

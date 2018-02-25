@@ -1,7 +1,11 @@
 language : python
 python :
    - "3.5"
+cache: pip
 install :
     -  pip install -r travis_requirements.txt
+before_script:
+  - cd mosaicer
 script :
-  - python train_config.py
+  - python retrain.py --how_many_training_steps=10
+  - python mosaicer.py test.avi

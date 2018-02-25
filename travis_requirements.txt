@@ -6,7 +6,7 @@ click==6.7
 decorator==4.2.1
 dlib==19.9.0
 enum34==1.1.6
-face-recognition==1.0.0
+face-recognition==1.2.1
 face-recognition-models==0.3.0
 Flask==0.12.2
 html5lib==0.9999999
@@ -16,7 +16,7 @@ Jinja2==2.10
 Markdown==2.6.11
 MarkupSafe==1.0
 Mastodon.py==1.2.1
-numpy==1.14.0
+numpy==1.14.1
 opencv-python==3.4.0.12
 Pillow==5.0.0
 protobuf==3.5.1

@@ -1,0 +1,185 @@
+doctype html
+html(lang='en')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    // Meta, title, CSS, favicons, etc.
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title  Mosaicer
+    // Bootstrap
+    link(href='css/bootstrap.min.css', rel='stylesheet')
+    // Font Awesome
+    link(href='css/font-awesome.min.css', rel='stylesheet')
+    // NProgress
+    link(href='css/nprogress.css', rel='stylesheet')
+    // iCheck
+    link(href='css/iCheck/green.css', rel='stylesheet')
+    // bootstrap-progressbar
+    link(href='css/bootstrap-progressbar-3.3.4.min.css', rel='stylesheet')
+    // JQVMap
+    link(href='css/jqvmap.min.css', rel='stylesheet')
+    // contextmenu
+    link(href='css/jquery.contextMenu.css', rel='stylesheet')
+    // bootstrap-daterangepicker
+    link(href='css/daterangepicker.css', rel='stylesheet')
+    // Custom Theme Style
+    link(href='css/custom.min.css', rel='stylesheet')
+    // file style
+    link(href='css/file.css', rel='stylesheet')
+    link(href='css/masonry.css',rel='stylesheet')
+
+    link(href= 'css/animate.min.css',rel='stylesheet')
+    link(href= 'css/animation.imgcheckbox.min.css',rel='stylesheet')
+    link(href='css/pnotify.custom.min.css',rel='stylesheet')
+    // jQuery
+    script(src='js/jquery.min.js')
+    // Bootstrap
+    script(src='js/bootstrap.min.js')
+    // iCheck
+    script(src='js/icheck.min.js')
+    // dmuploader
+    script(src='js/dmuploader.min.js')
+    //masonry
+    script(src='js/imagesloaded.pkgd.min.js')
+    script(src='js/masonry.pkgd.min.js')
+      var defaultId='#{user.id}'
+    // Main
+    script(src='js/main.js')
+    script(src='js/file.js')
+    script(src='js/uploader.js')
+    script(src='js/shape.js')
+    script(src='js/alert.js')
+    script(src="js/holder.min.js")
+    script(src='js/jquery.imgcheckbox.min.js')
+    script(src='js/pnotify.custom.min.js')
+
+  body.nav-md
+    .container.body
+      .main_container
+        .col-md-3.left_col
+          .left_col.scroll-view
+            .navbar.nav_title(style='border: 0;')
+              a.site_title(href='/')
+                i.fa.fa-cloud-upload
+                span  Mosaicer
+            .clearfix
+            // menu profile quick info
+            .profile.clearfix
+              .profile_pic
+                img.img-circle.profile_img(src='img/default.jpg', alt='...')
+              .profile_info
+                span Welcome,
+                h2 #{user.id}
+            // /menu profile quick info
+            br
+            // sidebar menu
+            #sidebar-menu.main_menu_side.hidden-print.main_menu
+              .menu_section
+                h3 General
+                ul.nav.side-menu
+                  li
+                    a(href='upload')
+                      i.fa.fa-upload
+                      |  Upload
+                  li
+                    a(href='mosaic')
+                      i.fa.fa-magic
+                      |  Mosaic
+                  li
+                    a(href='feedback')
+                      i.fa.fa-comment
+                      |  Feedback
+                  li
+                    a(href='market')
+                      i.fa.fa-shopping-cart
+                      |  Market
+                  li
+                    a(href='setting')
+                      i.fa.fa-wrench
+                      |  Setting
+
+
+            // /sidebar menu
+            // /menu footer buttons
+            .sidebar-footer.hidden-small
+              a(data-toggle='tooltip', data-placement='top', title='Settings')
+                span.glyphicon.glyphicon-cog(aria-hidden='true')
+              a(data-toggle='tooltip', data-placement='top', title='FullScreen')
+                span.glyphicon.glyphicon-fullscreen(aria-hidden='true')
+              a(data-toggle='tooltip', data-placement='top', title='Lock')
+                span.glyphicon.glyphicon-eye-close(aria-hidden='true')
+              a(href="../",data-toggle='tooltip', data-placement='top', title='Logout')
+                span.glyphicon.glyphicon-off(aria-hidden='true')
+            // /menu footer buttons
+        // top navigation
+        .top_nav
+          .nav_menu
+            nav
+              .nav.toggle
+                a#menu_toggle
+                  i.fa.fa-bars
+              ul.nav.navbar-nav.navbar-right
+                li
+                  a.user-profile.dropdown-toggle(href='javascript:;', data-toggle='dropdown', aria-expanded='false')
+                    img(src='img/default.jpg', alt='')
+                    | #{user.id}
+                    span.fa.fa-angle-down
+                  ul.dropdown-menu.dropdown-usermenu.pull-right
+                    li
+                      a(href='javascript:;') Help
+                    li
+                      a(href='../')
+                        i.fa.fa-sign-out.pull-right
+                        |  Log Out
+        //top navigation
+        block content
+
+        footer
+          .pull-right
+          | Mosaicer Cloud by
+          a(href='https://github.com/seongahjo')  seongahjo
+          .clearfix
+// /footer content
+
+
+// FastClick
+script(src='js/fastclick.js')
+// NProgress
+script(src='js/nprogress.js')
+// gauge.js
+script(src='js/gauge.min.js')
+// bootstrap-progressbar
+script(src='js/bootstrap-progressbar.min.js')
+// DateJS
+script(src='js/date.js')
+
+// bootstrap-daterangepicker
+script(src='js/moment.min.js')
+script(src='js/daterangepicker.js')
+// Custom Theme Scripts
+script(src='js/custom.min.js')
+script(src='js/util.js')
+//
+  Not used now
+  // Chart.js
+  script(src='js/Chart.min.js')
+  // Skycons
+  script(src='js/skycons.js')
+  // Flot
+  script(src='js/jquery.flot.js')
+  script(src='js/jquery.flot.pie.js')
+  script(src='js/jquery.flot.time.js')
+  script(src='js/jquery.flot.stack.js')
+  script(src='js/jquery.flot.resize.js')
+  // context-menu
+  script(src='js/jquery.ui.position.js')
+  script(src='js/jquery.contextMenu.js')
+  // Flot plugins
+  script(src='js/jquery.flot.orderBars.js')
+  script(src='js/jquery.flot.spline.min.js')
+  script(src='js/curvedLines.js')
+  // JQVMap
+  script(src='js/jquery.vmap.js')
+  script(src='js/jquery.vmap.world.js')
+  script(src='js/jquery.vmap.sampledata.js')

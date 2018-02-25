@@ -19,7 +19,7 @@ Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</st
 $ ./run.sh</code></pre>
 + `Docker`
 <pre><code>$ docker build --tag mosaicer .
-$ docker run -d --name Mosaicer mosaicer -p 3000:3000 /bin/sh -c 'python3 web.py; cd node && npm start' </code></pre>
+$ docker run -d --name Mosaicer mosaicer -p 3000:3000 /bin/sh -c 'cd mosaicer && python3 web.py; cd node && npm start' </code></pre>
 
 Then connect to http://localhost:3000
 
