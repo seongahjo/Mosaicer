@@ -8,7 +8,6 @@ var async = require('async');
 var mime = require('../util/mime');
 var fu = require('../util/file');
 
-
 var uploadstorage = multer.diskStorage({
   destination: (req, file, cb) => {
     'use strict';

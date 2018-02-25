@@ -197,7 +197,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
                                 (MAX_NUM_IMAGES_PER_CLASS + 1)) *
                                (100.0 / MAX_NUM_IMAGES_PER_CLASS))
 
-            if len(file_list) >= 20:
+            if len(file_list) >= 40:
                 if percentage_hash < validation_percentage:
                     validation_images.append(base_name)
                 elif percentage_hash < (testing_percentage + validation_percentage):
@@ -205,7 +205,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
                 else:
                     training_images.append(base_name)
 
-        if len(file_list) < 20:
+        if len(file_list) < 40:
             random.shuffle(file_list)
             size = len(file_list)
             if size == 3:
@@ -926,7 +926,7 @@ def create_model_info(architecture):
             return None
         version_string = parts[1]
         if (version_string != '1.0' and version_string != '0.75' and
-                    version_string != '0.50' and version_string != '0.25'):
+                version_string != '0.50' and version_string != '0.25'):
             tf.logging.error(
                 """"The Mobilenet version should be '1.0', '0.75', '0.50', or '0.25',
         but found '%s' for architecture '%s'""",
@@ -934,7 +934,7 @@ def create_model_info(architecture):
             return None
         size_string = parts[2]
         if (size_string != '224' and size_string != '192' and
-                    size_string != '160' and size_string != '128'):
+                size_string != '160' and size_string != '128'):
             tf.logging.error(
                 """The Mobilenet input size should be '224', '192', '160', or '128',
        but found '%s' for architecture '%s'""",
@@ -1057,8 +1057,10 @@ def run(image_dir, model_dir):
     do_distort_images = should_distort_images(
         FLAGS.flip_left_right, FLAGS.random_crop, FLAGS.random_scale,
         FLAGS.random_brightness)
+    config = tf.ConfigProto()
+    config.gpu_options.allow_growth = True
 
-    with tf.Session(graph=graph) as sess:
+    with tf.Session(graph=graph, config=config) as sess:
         # Set up the image decoding sub-graph.
         jpeg_data_tensor, decoded_image_tensor = add_jpeg_decoding(
             model_info['input_width'], model_info['input_height'],
@@ -1160,7 +1162,7 @@ def run(image_dir, model_dir):
             intermediate_frequency = FLAGS.intermediate_store_frequency
 
             if (intermediate_frequency > 0 and (i % intermediate_frequency == 0)
-                and i > 0):
+                    and i > 0):
                 intermediate_file_name = (FLAGS.intermediate_output_graphs_dir +
                                           'intermediate_' + str(i) + '.pb')
                 tf.logging.info('Save intermediate result to : ' +
