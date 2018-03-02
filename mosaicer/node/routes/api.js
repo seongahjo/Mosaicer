@@ -1,57 +1,51 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-var axios = require('axios');
-var multer = require('multer');
-var pythonServer = 'http://localhost:9999/';
-var async = require('async');
-var mime = require('../util/mime');
-var fu = require('../util/file');
+const express = require('express');
 
-var uploadstorage = multer.diskStorage({
+const router = express.Router();
+const path = require('path');
+const axios = require('axios');
+const multer = require('multer');
+
+const pythonServer = 'http://localhost:9999/';
+const async = require('async');
+const mime = require('../util/mime');
+const fu = require('../util/file');
+
+const uploadstorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    'use strict';
-    var folder = '';
-    var result = mime.stat(req.body.folder, file.originalname);
+    let folder = '';
+    const result = mime.stat(req.body.folder, file.originalname);
     console.log(result);
-    if (result.type === 'image')
-      folder = path.join('../', 'image', req.body.folder);
-    else if (result.type === 'movie')
-      folder = path.join('../', 'video');
-    console.log('upload to ' + folder);
+    if (result.type === 'image') { folder = path.join('../', 'image', req.body.folder); } else if (result.type === 'movie') { folder = path.join('../', 'video'); }
+    console.log(`upload to ${folder}`);
     cb(null, folder);
   },
   filename: (req, file, cb) => {
-    'use strict';
     cb(null, file.originalname);
-  }
+  },
 });
 
-var upload = multer({
-  storage: uploadstorage
+const upload = multer({
+  storage: uploadstorage,
 });
 
 
 router.get('/makeFolder', (req, res) => {
-  'use strict';
   console.log('makeFolder start');
-  var folder = req.query.folder;
-  var dir = path.join('../', 'image', folder);
+  const dir = path.join('../', 'image', req.query.folder);
   console.log('makeFolder ing...');
   fu.make(dir);
 
-  console.log('makeFolder : ' + dir);
+  console.log(`makeFolder : ${dir}`);
   res.sendStatus(200);
-  //res.send(dir)
+  // res.send(dir)
 });
 
 
 router.get('/delete', (req, res) => {
-  'use strict';
-  var files = req.query.files;
-  console.log(files + ' to delete');
+  const { files } = req.query;
+  console.log(`${files} to delete`);
   async.eachSeries(files, (file, fcallback) => {
-    var Path = path.join('../', 'image', file);
+    const Path = path.join('../', 'image', file);
     fu.remove(Path);
     fcallback();
   });
@@ -60,16 +54,15 @@ router.get('/delete', (req, res) => {
 
 
 router.get('/feedback', (req, res) => {
-  'use strict';
-  var files = req.query.files;
-  var dest = req.query.to;
+  const { files } = req.query;
+  let dest = req.query.to;
   dest = path.join('../', 'image', dest, '/');
-  console.log(files + ' to ' + dest);
+  console.log(`${files} to ${dest}`);
   try {
     async.eachSeries(files, (file, fcallback) => {
-      var Path = path.join('../', file);
+      const Path = path.join('../', file);
       fu.move(Path, path.join(dest, path.basename(file)), {
-        overwrite: true
+        overwrite: true,
       });
       fcallback();
     });
@@ -80,14 +73,13 @@ router.get('/feedback', (req, res) => {
 });
 
 router.get('/paste', (req, res) => {
-  'use strict';
-  var srcs = req.query.src;
-  var dest = req.query.to;
+  const srcs = req.query.src;
+  let dest = req.query.to;
   dest = path.join('../', 'image', dest, '/');
-  console.log(srcs + ' to ' + dest);
+  console.log(`${srcs} to ${dest}`);
   try {
     async.eachSeries(srcs, (src, fcallback) => {
-      var Path = path.join('../', 'image', src);
+      const Path = path.join('../', 'image', src);
       fu.copy(Path, path.join(dest, path.basename(src)));
       fcallback();
     });
@@ -98,12 +90,11 @@ router.get('/paste', (req, res) => {
 });
 
 router.post('/upload', upload.single('file'), (req, res) => {
-  'use strict';
-  var data = {
-    'path': req.file.path
+  const data = {
+    path: req.file.path,
   };
-  axios.get(pythonServer + 'tracker', {
-    params: data
+  axios.get(`${pythonServer}tracker`, {
+    params: data,
   }).then((response) => {
     console.log(response.data);
     res.json(response.data);
@@ -111,32 +102,30 @@ router.post('/upload', upload.single('file'), (req, res) => {
 });
 
 router.post('/videoUpload', upload.single('file'), (req, res) => {
-  'use strict';
   res.json(req.file.originalname);
 });
 
 router.get('/mosaic', (req, res) => {
-  'use strict';
-  var filename = req.query.filename;
-  var label = req.query.labels;
+  const { filename } = req.query;
+  const label = req.query.labels;
   console.log(label);
-  var trainDir = 'model';
-  var videoPath = path.join('video', filename);
-  var data = {
-    'train_dir': trainDir,
-    'video_path': videoPath,
-    'label': label
+  const trainDir = 'model';
+  const videoPath = path.join('video', filename);
+  const data = {
+    train_dir: trainDir,
+    video_path: videoPath,
+    label,
   };
-  var trainData = {
-    'data_dir': 'image',
-    'train_dir': trainDir
+  const trainData = {
+    data_dir: 'image',
+    train_dir: trainDir,
   };
-  console.log(filename + ' ' + label);
-  axios.get(pythonServer + 'train', {
+  console.log(`${filename} ${label}`);
+  axios.get(`${pythonServer}train`, {
     params: trainData,
   }).then(() => {
-    axios.get(pythonServer + 'mosaic', {
-      params: data
+    axios.get(`${pythonServer}mosaic`, {
+      params: data,
     }).then((response) => {
       console.log(response.data);
       res.json(response.data);
@@ -146,9 +135,8 @@ router.get('/mosaic', (req, res) => {
 
 
 router.get('/download', (req, res) => {
-  'use strict';
-  var filename = req.query.filename;
-  var Path = path.join('../', 'video', 'result', filename);
+  const { filename } = req.query;
+  const Path = path.join('../', 'video', 'result', filename);
   console.log(Path);
   res.download(Path);
 });

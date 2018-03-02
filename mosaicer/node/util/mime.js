@@ -1,16 +1,16 @@
-var _ = require('underscore');
-var path = require('path');
+const _ = require('underscore');
+const path = require('path');
 
 
-var map = {
+const map = {
     'image': ['jpg', 'jpeg', 'png', 'gif', 'bmp'],
     'text': ['txt', 'md', ''],
     'movie': ['mkv', 'avi', 'rmvb'],
 };
 exports.ext=(file)=>{
   'use strict';
-  var ext = path.extname(file).substr(1).toLowerCase();
-   for (var key in map) {
+  const ext = path.extname(file).substr(1).toLowerCase();
+   for (let key in map) {
     if (_.include(map[key], ext)) {
         return key;
     }
@@ -19,18 +19,18 @@ exports.ext=(file)=>{
 
 exports.stat= function(folder, file) {
   'use strict';
-    var result = {
+    const result = {
         name: path.basename(file, path.extname(file)),
         dir: folder,
     };
-    var ext = path.extname(file).substr(1).toLowerCase();
+    const ext = path.extname(file).substr(1).toLowerCase();
     result.type = 'blank';
     if (!ext){
         result.type = 'folder'; // change required
         result.dir=path.join(folder, file);
       }
     else {
-        for (var key in map) {
+        for (let key in map) {
             if (_.include(map[key], ext)) {
                 result.type = key;
                 break;

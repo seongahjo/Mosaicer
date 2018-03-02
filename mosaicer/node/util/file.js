@@ -1,5 +1,5 @@
-var fs=require('fs');
-var fse=require('fs-extra');
+const fs=require('fs');
+const fse=require('fs-extra');
 
 exports.make=(Path)=>{
   'use strict';
