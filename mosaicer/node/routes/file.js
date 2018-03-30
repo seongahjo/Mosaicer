@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 const router = express.Router();
 const view = require('../util/view');
@@ -8,55 +9,26 @@ const mime = require('../util/mime');
 const fu = require('../util/file');
 const async = require('async');
 
+const readdir = util.promisify(fs.readdir);
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { folder } = req.query;
   const realPath = path.join('../', 'image', folder);
   const newFile = [];
-  fs.readdir(realPath, (error, files) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-
-    for (let i = 0; i < files.length; i += 1) {
-      newFile.push(mime.stat(folder, files[i]));
-    }
-    console.log(newFile);
-    res.send(view.fileView({
-      newFile,
-      folder,
-    }));
-  });
+  const files = await readdir(realPath);
+  for (let i = 0; i < files.length; i += 1) {
+    newFile.push(mime.stat(folder, files[i]));
+  }
+  console.log(newFile);
+  res.send(view.fileView({
+    newFile,
+    folder,
+  }));
 });
 
 router.get('/video_upload', (req, res) => {
   res.send(view.videoUploadView());
 });
-
-
-router.get('/video', (req, res) => {
-  const Path = path.join('../', 'video');
-  const result = [];
-  fu.make(Path);
-
-  fs.readdir(Path, (error, files) => {
-    async.eachSeries(files, (file, callback) => {
-      const filedetail = {}; // file detail info
-      const stat = fs.statSync(path.join(Path, file));
-      if (!stat.isDirectory() && file !== '.temp') {
-        filedetail.name = file;
-        result.push(filedetail);
-      }
-      callback(null);
-    }, () => {
-      res.send(view.videoView({
-        files: result,
-      }));
-    });
-  });
-});
-
 
 router.get('/mosaic', (req, res) => {
   // var Path = path.join('/tmp/', id, 'video')

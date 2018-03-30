@@ -38,14 +38,6 @@ exports.videoUploadView = jade.compile([
   '        input(type="file", name="files[]", multiple="multiple", title="Click to add Files")',
 ].join('\n'));
 
-exports.videoView = jade.compile([
-  '- each file in files',
-  '  tr',
-  '    td.last(onClick="video(\'#{file.name}\')")',
-  '      i.fa.fa-file-video-o',
-  '      |#{file.name}',
-].join('\n'));
-
 exports.mosaicView = jade.compile([
   '- each file in files',
   '  tr',
