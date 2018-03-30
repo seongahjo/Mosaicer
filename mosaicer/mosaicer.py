@@ -155,19 +155,6 @@ def check_image(images, train_dir, face_count, label):
 
     for image, precision in zip(images, precisions):
         count_image += 1
-
-        biggest = max(precision, key=(lambda key: precision[key]))
-        if biggest in label:
-            chk.append(False)
-        else:
-            chk.append(True)
-
-        if count_image == face_count[now_frame]:
-            count_image = 0
-            now_frame += 1
-            chks.append(chk)
-            chk = []
-
         temp = []
         for data in precision.values():
             temp.append(data)
@@ -176,6 +163,20 @@ def check_image(images, train_dir, face_count, label):
         if 0 <= std < 0.2:
             if not compare_face(feedback, image):
                 feedback.append(image)
+            chk.append(False)
+        else:
+            biggest = max(precision, key=(lambda key: precision[key]))
+            if biggest in label:
+                chk.append(False)
+            else:
+                chk.append(True)
+
+        if count_image == face_count[now_frame]:
+            count_image = 0
+            now_frame += 1
+            chks.append(chk)
+            chk = []
+
     return chks, feedback
 
 
