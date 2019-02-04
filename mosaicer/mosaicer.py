@@ -21,8 +21,9 @@ def batch_job(frames, images, positions, face_counts, batch_size):
             # equalize the histogram of the Y channel
             img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
             # convert the YUV image back to RGB format
-            img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2BGR)
-            img_output2 = cv2.resize(img_output, (299, 299), interpolation=cv2.INTER_AREA)
+            img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2RGB)
+            img_output2 = cv2.resize(
+                img_output, (299, 299), interpolation=cv2.INTER_AREA)
             images.append(img_output2)  # faces
             position.append((top, right, bottom, left))
         face_counts.append(len(faces))
@@ -45,7 +46,8 @@ def capture(video_path, train_dir, label=None):
 
     video_dir, filename = os.path.split(video_path)
     feedback_dir = 'feedback'
-    result_dir = os.path.join(video_dir, 'result')  # directory to save result of digitization
+    # directory to save result of digitization
+    result_dir = os.path.join(video_dir, 'result')
 
     file_name = os.path.splitext(filename)[0]
     if not os.path.exists(result_dir):
@@ -61,7 +63,8 @@ def capture(video_path, train_dir, label=None):
     feedback = []
     face_counts = []
     foc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(os.path.join(result_dir, filename), foc, fps, (width, height))
+    out = cv2.VideoWriter(os.path.join(
+        result_dir, filename), foc, fps, (width, height))
     batch_size = 20
     temp = []
     while cap.isOpened():
@@ -71,18 +74,24 @@ def capture(video_path, train_dir, label=None):
             break
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
         temp.append(frame)
         frames.append(frame)
+
         if len(temp) == batch_size:
-            batch_job(frames=temp, images=images, positions=positions, face_counts=face_counts, batch_size=batch_size)
+            batch_job(frames=temp, images=images, positions=positions,
+                      face_counts=face_counts, batch_size=batch_size)
             temp = []
     cap.release()
     if len(temp) != 0:
-        batch_job(frames=temp, images=images, positions=positions, face_counts=face_counts, batch_size=len(temp))
+        batch_job(frames=temp, images=images, positions=positions,
+                  face_counts=face_counts, batch_size=len(temp))
 
     if label is not None:
-        chks, feedback = check_image(images=images, train_dir=train_dir, face_count=face_counts, label=label)
-        for chk, frame, position, face_count in zip(chks, frames, positions, face_counts):  # per frame
+        chks, feedback = check_image(
+            images=images, train_dir=train_dir, face_count=face_counts, label=label)
+        # per frame
+        for chk, frame, position, face_count in zip(chks, frames, positions, face_counts):
             for flag, pos in zip(chk, position):
                 if flag:
                     (top, right, bottom, left) = pos
@@ -115,7 +124,8 @@ def compare_face(images, new_image):
         return False
 
     unknown_encoding = unknown_encoding[0]
-    face_distances = face_recognition.face_distance(image_encodings, unknown_encoding)
+    face_distances = face_recognition.face_distance(
+        image_encodings, unknown_encoding)
     return any(face_distance > 0.1 for face_distance in face_distances)
 
 
@@ -190,4 +200,4 @@ if __name__ == "__main__":
         print('[Error] ./%s [filename]' % sys.argv[0])
     else:
         path = os.path.join('video', sys.argv[1])
-        capture(video_path=path, train_dir='model', label="an")
+        capture(video_path=path, train_dir='model', label="nam")
