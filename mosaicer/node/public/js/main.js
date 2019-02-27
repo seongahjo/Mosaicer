@@ -119,20 +119,6 @@ $(".bs-example-modal-lg").modal('hide')
 
 }
 
-function video(name) {
-  if(name==undefined || name==""){
-    error("empty")
-    return
-  }
-  videoFile = name
-  var data = {
-    'model': modelFile,
-    'filename': videoFile,
-  }
-  console.log(data)
-}
-
-
 
 function share_download(label){
   var data = {
