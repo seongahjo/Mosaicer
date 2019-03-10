@@ -4,39 +4,22 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 from keras.applications import InceptionV3, VGG16, MobileNet
 from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
-from keras.engine.saving import load_model
 from keras.layers import np, Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Model
-from keras.preprocessing import image
 from keras_applications.inception_v3 import preprocess_input
 from keras_preprocessing.image import ImageDataGenerator
 
 MODEL = "inceptionv3"
 MODEL_SAVE_FOLDER_PATH = './model/'
-model_path = MODEL_SAVE_FOLDER_PATH + 'test.h5'
+model_path = MODEL_SAVE_FOLDER_PATH + 'test2.h5'
 IMAGE_SIZE = (299, 299)
 IMAGE_PATH = './image'
 BATCH_SIZE = 10
 LOG_DIRECTORY_ROOT = 'log'
+STEPS_PER_EPOCH = 10
+VALIDATION_STEP = 5
 EPOCHS = 5
 CLASSES = 2
-
-
-def visualize_data(positive_images, negative_images):
-    figure = plt.figure()
-    count = 0
-    for i in range(positive_images.shape[0]):
-        count += 1
-        figure.add_subplot(2, positive_images.shape[0], count)
-        plt.imshow((positive_images[i, :, :] * 255).astype(np.uint8))
-        plt.axis('off')
-        plt.title("1")
-
-        figure.add_subplot(1, negative_images.shape[0], count)
-        plt.imshow((negative_images[i, :, :] * 255).astype(np.uint8))
-        plt.axis('off')
-        plt.title("0")
-    plt.show()
 
 
 def load_image():
@@ -106,10 +89,27 @@ def train():
     history = model.fit_generator(generator[0],
                                   validation_data=generator[1],
                                   epochs=EPOCHS,
-                                  steps_per_epoch=10,
-                                  validation_steps=5,
+                                  steps_per_epoch=STEPS_PER_EPOCH,
+                                  validation_steps=VALIDATION_STEP,
                                   callbacks=[cb_early_stopping, cb_checkpoint, tensorboard])
     plot_training(history)
+
+
+def visualize_data(positive_images, negative_images):
+    figure = plt.figure()
+    count = 0
+    for i in range(positive_images.shape[0]):
+        count += 1
+        figure.add_subplot(2, positive_images.shape[0], count)
+        plt.imshow((positive_images[i, :, :] * 255).astype(np.uint8))
+        plt.axis('off')
+        plt.title("1")
+
+        figure.add_subplot(1, negative_images.shape[0], count)
+        plt.imshow((negative_images[i, :, :] * 255).astype(np.uint8))
+        plt.axis('off')
+        plt.title("0")
+    plt.show()
 
 
 def plot_training(history):
@@ -128,21 +128,6 @@ def plot_training(history):
     plt.plot(epochs, val_loss, 'r-')
     plt.title('Training and validation loss')
     plt.show()
-
-
-def predict(model, img):
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    preds = model.predict(x)
-    return preds[0]
-
-
-def test():
-    model = load_model(model_path)
-    img = image.load_img('image/jo/irene.jpg', target_size=IMAGE_SIZE)
-    preds = predict(model, img)
-    print(preds)
 
 
 if __name__ == "__main__":
