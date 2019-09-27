@@ -4,26 +4,22 @@
 
 <img width="234" alt="2018-01-10 12 47 25" src="https://user-images.githubusercontent.com/10272119/34729417-f20aa9bc-f59f-11e7-8059-bb4acf7c432a.png">
 
-Using OpenCV & Tensorflow Digitize One's face on Video <strong>Automatically</strong>
+Deep Learning Digitize One's face on Video
 
 * Slideshare : https://www.slideshare.net/SuekyeongNam/mosaicer-82561931
 * Youtube : https://www.youtube.com/watch?v=c5qYdZi6Dpk
 
 ## Features
-+ No need to use Photoshop to extract face, <strong>JUST UPLOAD YOUR PHOTO</strong>
-+ Quick installation & implementation
++ Seamless Data Preprocessing
++ Quick 
++ Quick Installation & Implementation
 
 ## Installation
 + `Python 3.5+` 
 <pre><code>$ pip install -r requirements.txt
 $ ./run.sh</code></pre>
-+ `Docker`
-<pre><code>$ docker build --tag mosaicer .
-$ docker run -d --name Mosaicer mosaicer -p 3000:3000 /bin/sh -c 'cd mosaicer && python3 web.py; cd node && npm start' </code></pre>
-+ `EXE`
-  + For non-developers, To Run these two servers
-    + [Mosaicer](https://drive.google.com/file/d/1c-2UIK3GLOxfw7QwLXUCxJGECoyJVFE4/view?usp=sharing)
-    + [Mosaicer Web](https://drive.google.com/file/d/1btJPcxyZ0sf9gxk4JbAd2F8afyyHFDp2/view?usp=sharing)
++ ~~Docker~~
++ ~~EXE~~
   
 Then connect to http://localhost:3000
 
