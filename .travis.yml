@@ -7,5 +7,4 @@ install :
 before_script:
   - cd mosaicer
 script :
-  - python retrain.py --how_many_training_steps=10
-  - python mosaicer.py test.avi
+  - python mosaicer.py
