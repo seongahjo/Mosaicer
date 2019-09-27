@@ -1,192 +1,135 @@
+import math
 import os
 import shutil
-import sys
 import time
 
 import cv2
 import face_recognition
-import numpy as np
-import label_image
+
+FPS = 30
 
 
-def batch_job(frames, images, positions, face_counts, batch_size):
-    batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0,
-                                                                    batch_size=batch_size)
-
-    for frame, faces in zip(frames, batch_of_face_locations):
-        position = []
-        for (top, right, bottom, left) in faces:
-            img_face = frame[top:bottom, left:right]
-            img_yuv = cv2.cvtColor(img_face, cv2.COLOR_BGR2YUV)
-            # equalize the histogram of the Y channel
-            img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
-            # convert the YUV image back to RGB format
-            img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2RGB)
-            img_output2 = cv2.resize(
-                img_output, (299, 299), interpolation=cv2.INTER_AREA)
-            images.append(img_output2)  # faces
-            position.append((top, right, bottom, left))
-        face_counts.append(len(faces))
-        positions.append(position)
+def frame_pre_processing(img):
+    img_yuv = cv2.cvtColor(img, cv2.COLOR_BGR2YUV)
+    img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
+    img_output = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2RGB)
+    return img_output
 
 
-def capture(video_path, train_dir, label=None):
-    """
+class Mosaicer(object):
+    """ Do Digitize """
 
-    To extract face from video and digitize it
+    def __init__(self, batch_size):
+        self.batch_size = batch_size
+        self.image_size = (224, 224)
 
-    Args:
-        video_path : directory + name of video
-        train_dir : directory stores result of train
-        label : label
-    """
-    images = []
-    frames = []
-    positions = []
+    def _face_recognition(self, frames):
+        """ 얼굴 찾기
 
-    video_dir, filename = os.path.split(video_path)
-    feedback_dir = 'feedback'
-    # directory to save result of digitization
-    result_dir = os.path.join(video_dir, 'result')
+        :param frames: 입력된 동영상 프레임들
+        :return:
+            faces: 얼굴 이미지 배열, (frame_size, face_count)
+            positions: 동영상 얼굴 위치 배열, (frame_size, face_count)
+        """
 
-    file_name = os.path.splitext(filename)[0]
-    if not os.path.exists(result_dir):
-        os.makedirs(result_dir)
-    if not os.path.exists(feedback_dir):
-        os.makedirs(feedback_dir)
+        def fn_batch(now_frames, face_locations):
+            face_images = []
+            positions = []
 
-    cap = cv2.VideoCapture(video_path)
-    fps = 30.0
-    width = int(cap.get(3))
-    height = int(cap.get(4))
-    start_time = time.time()
-    feedback = []
-    face_counts = []
-    foc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(os.path.join(
-        result_dir, filename), foc, fps, (width, height))
-    batch_size = 20
-    temp = []
-    while cap.isOpened():
+            for frame, faces in zip(now_frames, face_locations):
+                position = []
+                each_face = []
+                for (top, right, bottom, left) in faces:
+                    img_face = frame[top:bottom, left:right]
+                    img_output = frame_pre_processing(img_face)
+                    each_face.append(cv2.resize(
+                        img_output, self.image_size, interpolation=cv2.INTER_AREA))
+                    position.append((top, right, bottom, left))
+                face_images.append(each_face)  # faces
+                positions.append(position)
+            return face_images, positions
 
-        ret, frame = cap.read()
-        if not ret:  # finished
-            break
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        frame_size = len(frames)
+        epoch = math.ceil(frame_size / self.batch_size)
 
-        temp.append(frame)
-        frames.append(frame)
+        batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0,
+                                                                        batch_size=self.batch_size)
+        for i in range(epoch):
+            epoch_from = i * self.batch_size
+            epoch_to = (i + 1) * self.batch_size if i < epoch - 1 else frame_size
 
-        if len(temp) == batch_size:
-            batch_job(frames=temp, images=images, positions=positions,
-                      face_counts=face_counts, batch_size=batch_size)
-            temp = []
-    cap.release()
-    if len(temp) != 0:
-        batch_job(frames=temp, images=images, positions=positions,
-                  face_counts=face_counts, batch_size=len(temp))
+            faces, positions = fn_batch(frames[epoch_from:epoch_to], batch_of_face_locations[epoch_from: epoch_to])
+            print('epoch {} found {} faces in {} frames'.format(i, len(faces), epoch_to - epoch_from))
 
-    if label is not None:
-        chks, feedback = check_image(
-            images=images, train_dir=train_dir, face_count=face_counts, label=label)
-        # per frame
-        for chk, frame, position, face_count in zip(chks, frames, positions, face_counts):
-            for flag, pos in zip(chk, position):
-                if flag:
-                    (top, right, bottom, left) = pos
-                    frame = digitize(frame, top, right, bottom, left)
+        return faces, positions
+
+    def _write(self, frames, video_size, result_path='video/result.avi'):
+        """
+        모자이크 처리된 동영상 쓰기
+        :param frames: 모자이크 처리된 프레임
+        :param video_size: 비디오 크기
+        :param result_path: 모자이크 처리된 동영상이 저장될 위치
+        :return:
+        """
+        foc = cv2.VideoWriter_fourcc(*'XVID')
+        out = cv2.VideoWriter(result_path, foc, FPS, video_size)
+        for frame in frames:
             out.write(frame)
-    out.release()
-    end_time = time.time()
-    print('time : {0}'.format(end_time - start_time))
+        out.release()
+        print('video digitized : {} '.format(result_path))
 
-    count = 0
-    for image in feedback:
-        count += 1
-        name = file_name + '_face' + str(count)
-        file_path = os.path.join('feedback', name + '.jpg')
-        cv2.imwrite(file_path, image)
-    return 'finish'
+    def _digitize(self, frames, list_pos):
+        """
+        프레임 모자이크
+        :param frames: 동영상 프레임 배열
+        :param list_pos: 얼굴 위치 배열
+        :return:
+            digitize_frames: 모자이크 처리된 동영상 프레임
+        """
 
+        def fn_digitize(f, p):
+            (top, right, bottom, left) = p
+            blur = cv2.blur(f[top:bottom, left:right], (70, 70))
+            f[top:bottom, left:right] = blur
+            return f
 
-def compare_face(images, new_image):
-    if not images:
-        return False
+        digitize_frames = []
+        for frame, frame_pos in zip(frames, list_pos):
+            now_frame = frame
+            for pos in frame_pos:
+                now_frame = fn_digitize(now_frame, pos)
+            digitize_frames.append(now_frame)
 
-    image_encodings = []
-    for image in images:
-        image_encoding = face_recognition.face_encodings(image)
-        if image_encoding:
-            image_encodings.append(image_encoding[0])
-    unknown_encoding = face_recognition.face_encodings(new_image)
-    if not unknown_encoding:
-        return False
+        return digitize_frames
 
-    unknown_encoding = unknown_encoding[0]
-    face_distances = face_recognition.face_distance(
-        image_encodings, unknown_encoding)
-    return any(face_distance > 0.1 for face_distance in face_distances)
+    def _capture(self, video_path):
+        """
+        동영상 읽기
+        :param video_path:
+        :return:
+            frames: 동영상의 프레임들
+            video_size: 비디오 크기
+        """
+        cap = cv2.VideoCapture(video_path)
+        width = int(cap.get(3))
+        height = int(cap.get(4))
+        start_time = time.time()
+        frames = []
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret or cv2.waitKey(1) & 0xFF == ord('q'):  # finished
+                break
+            frames.append(frame)
+        cap.release()
+        print('frames : {0}'.format(len(frames)))
+        end_time = time.time()
+        print('time : {0}'.format(end_time - start_time))
+        return frames, (width, height)
 
-
-def digitize(frame, top, right, bottom, left):
-    blur = cv2.blur(frame[top:bottom, left:right], (70, 70))
-    frame[top:bottom, left:right] = blur
-    return frame
-
-
-def check_image(images, train_dir, face_count, label):
-    """
-
-    function to check if a image is the one that I want to digitize
-
-    Args:
-        images : images to check
-        train_dir : directory stores result of train
-        face_count : count of faces
-        label : label
-    """
-
-    """
-    # Make Dirs
-    if not os.path.exists(os.path.join(folder_path, str(label))):
-        os.makedirs(os.path.join(folder_path, str(label)))
-    if not os.path.exists(os.path.join(folder_path, str(0))):
-        os.makedirs(os.path.join(folder_path, str(0)))
-    if not os.path.exists(os.path.join(folder_path, "etc")):
-        os.makedirs(os.path.join(folder_path, "etc"))
-    """
-    chks = []
-    precisions = label_image.run(images, train_dir)
-    feedback = []
-    now_frame = 0
-    count_image = 0
-    chk = []
-
-    for image, precision in zip(images, precisions):
-        count_image += 1
-
-        biggest = max(precision, key=(lambda key: precision[key]))
-        if biggest in label:
-            chk.append(False)
-        else:
-            chk.append(True)
-
-        if count_image == face_count[now_frame]:
-            count_image = 0
-            now_frame += 1
-            chks.append(chk)
-            chk = []
-
-        temp = []
-        for data in precision.values():
-            temp.append(data)
-        temp = np.array(temp)
-        std = np.std(temp)
-        if 0 <= std < 0.2:
-            if not compare_face(feedback, image):
-                feedback.append(image)
-    return chks, feedback
+    def run(self, video_path):
+        frames, video_size = self._capture(video_path)
+        faces, positions = self._face_recognition(frames)
+        self._write(self._digitize(frames, positions), video_size=video_size)
 
 
 def classify(src, des):
@@ -196,8 +139,5 @@ def classify(src, des):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print('[Error] ./%s [filename]' % sys.argv[0])
-    else:
-        path = os.path.join('video', sys.argv[1])
-        capture(video_path=path, train_dir='model', label="nam")
+    mosaicer = Mosaicer(batch_size=20)
+    mosaicer.run(video_path='video/test.avi')
